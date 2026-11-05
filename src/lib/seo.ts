@@ -42,24 +42,25 @@ export function alternates(locale: Locale, path = '/') {
   return { canonical: absolute(`/${locale}${normalizePath(path)}`), languages: languageAlternates(path) }
 }
 
+/** The tab title is the company name on every route, in every language. */
+export const SITE_TITLE = '上海集培优信息科技有限公司'
+
 /** Shared per-page metadata so every route ships canonical, hreflang and Open Graph. */
 export function pageMetadata({
   locale,
   path = '/',
-  title,
   description,
 }: {
   locale: Locale
   path?: string
-  title: string
   description: string
 }): Metadata {
   return {
-    title,
+    title: SITE_TITLE,
     description,
     alternates: alternates(locale, path),
     openGraph: {
-      title,
+      title: SITE_TITLE,
       description,
       url: absolute(`/${locale}${normalizePath(path)}`),
       locale: hreflang[locale],

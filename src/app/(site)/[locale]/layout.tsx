@@ -32,12 +32,19 @@ export async function generateMetadata({
     ...pageMetadata({
       locale: isLocale(locale) ? locale : defaultLocale,
       path: '/',
-      title: d.meta.title,
       description: d.meta.description,
     }),
     metadataBase: siteUrl ? new URL(siteUrl) : undefined,
     applicationName: 'COREFIX PRO',
-    icons: { icon: '/icon.svg' },
+    icons: {
+      icon: [
+        { url: '/favicon.ico', sizes: '16x16 32x32 48x48', type: 'image/x-icon' },
+        { url: '/icon-32.png', sizes: '32x32', type: 'image/png' },
+        { url: '/icon-192.png', sizes: '192x192', type: 'image/png' },
+      ],
+      shortcut: '/favicon.ico',
+      apple: { url: '/apple-touch-icon.png', sizes: '180x180', type: 'image/png' },
+    },
   }
 }
 

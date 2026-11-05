@@ -55,6 +55,7 @@ npm run clean        # 删掉 .next / out
 - 语言列表：`src/lib/i18n.ts`（`locales = ['zh-cn','zh-tw','en']`）。
 - 文案：`src/content/zh-cn.ts` 为类型基准（`types.ts` 定义 `Dict`），`zh-tw.ts` / `en.ts` 实现同一结构，缺字段会直接 TS 报错。
 - 新增语言：在 `locales` 增加代码 → 复制一份字典 → 补 `localeLabel`。路由、`hreflang`、语言切换器、sitemap 会自动跟随。
+- 浏览器标签标题固定为「上海集培优信息科技有限公司」（`src/lib/seo.ts` 的 `SITE_TITLE`），三语、五个路由一致；页面只在 `description` 和正文上区分。
 - 每页 metadata 统一走 `src/lib/seo.ts` 的 `pageMetadata()`，输出 `canonical` + 三条 `hreflang` + Open Graph；子页不要再手写 `alternates`，否则会覆盖掉语言注解。
 - `src/app/sitemap.ts` 与 `src/app/robots.ts` 按路由表生成，不再手写 XML。
 - **域名**：配置 `NEXT_PUBLIC_SITE_URL`（见 `.env.example`）后，canonical / hreflang / og:url / sitemap 全部输出绝对地址；未配置时保持根相对路径。
@@ -95,7 +96,8 @@ npm run clean        # 删掉 .next / out
 - 导航与页脚统一使用官方 PNG：`public/logo-corefix.png`（231×231，透明底，菱形 G/P/U）。
 - 导航内尺寸 40×40，页脚 36×36，`object-contain` 保持比例；旁边保留中文名 + 拉丁字标，便于识别。
 - 已知限制：Logo 的深绿菱形在深色模式（`#0A0A0A`）下对比偏弱。若追求最佳效果，建议补一版反白 Logo，按主题切换 `src`。
-- `public/icon.svg` 仍是简化菱形，用作 favicon；可替换为官方图标。
+- 站点图标由 Logo 生成（白底圆角 + 居中 Logo，浅色/深色标签栏都能看清）：`public/favicon.ico`（16/32/48 多尺寸）、`icon-16/32/48/192/512.png`、`apple-touch-icon.png`。
+- 重新生成：改完 `public/logo-corefix.png` 后按同样比例重跑生成脚本即可，注意 `favicon.ico` 里塞的是这三个尺寸的 PNG 数据。
 
 ## 目录
 
@@ -116,7 +118,7 @@ src/
     ScrollEffects / ThemeToggle / LocaleSwitch
   content/              zh-cn / zh-tw / en + types
   lib/                  i18n.ts + seo.ts（canonical / hreflang / siteUrl）
-public/                 logo-corefix.png / icon.svg
+public/                 logo-corefix.png / favicon.ico / icon-*.png / apple-touch-icon.png
 design/                 Figma 稿（HTML 画板）
 eslint.config.mjs       flat config（next/core-web-vitals + next/typescript）
 ```

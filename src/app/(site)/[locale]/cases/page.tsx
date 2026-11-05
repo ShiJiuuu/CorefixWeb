@@ -20,7 +20,6 @@ export async function generateMetadata({
   return pageMetadata({
     locale: locale as Locale,
     path: '/cases/',
-    title: `${d.page.cases.title} · ${d.meta.title.split(' · ')[0]}`,
     description: d.page.cases.desc,
   })
 }

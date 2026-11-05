@@ -19,7 +19,6 @@ export async function generateMetadata({
   return pageMetadata({
     locale: locale as Locale,
     path: '/capability/',
-    title: `${d.page.capability.title} · ${d.meta.title.split(' · ')[0]}`,
     description: d.page.capability.desc,
   })
 }

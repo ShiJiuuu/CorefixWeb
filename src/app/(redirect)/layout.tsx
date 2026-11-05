@@ -1,7 +1,8 @@
 import type { Metadata, Viewport } from 'next'
+import { SITE_TITLE } from '@/lib/seo'
 
 export const metadata: Metadata = {
-  title: 'COREFIX PRO',
+  title: SITE_TITLE,
   robots: { index: false, follow: true },
 }
 

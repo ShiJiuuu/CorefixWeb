@@ -31,7 +31,7 @@ export type CtaButton = {
 }
 
 export type Dict = {
-  meta: { title: string; description: string }
+  meta: { description: string }
   nav: { links: { href: string; label: string }[]; cta: string }
   hero: {
     eyebrow: string

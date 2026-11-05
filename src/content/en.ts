@@ -2,7 +2,6 @@ import type { Dict } from './types'
 
 export const en: Dict = {
   meta: {
-    title: 'COREFIX PRO · GPU Repair, Maintenance & Tuning',
     description:
       'Shanghai CoreFix Pro Information Technology — component-level GPU repair, driver and firmware tuning, nationwide spare-parts network and on-site maintenance. 99.2% repair success rate, compute restored to 98%+ of factory baseline.',
   },

@@ -2,7 +2,6 @@ import type { Dict } from './types'
 
 export const zhTW: Dict = {
   meta: {
-    title: '集培優 COREFIX PRO · GPU 維修保養與算力硬體服務',
     description:
       '上海集培優信息科技有限公司，專注 GPU 晶片級維修、驅動與韌體調校、全國備件網路與駐場保養。維修成功率 99.2%，修復後算力回復至原廠 98% 以上。',
   },
