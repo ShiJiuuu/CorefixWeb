@@ -1,25 +1,22 @@
+import type { Dict } from '@/content/types'
+
 export function SectionHead({
   eyebrow,
-  index,
   title,
   children,
   more,
 }: {
   eyebrow: string
-  index?: string
   title: string
   children?: React.ReactNode
   more?: React.ReactNode
 }) {
   return (
     <div className="mb-10 border-b border-line2 pb-6 lg:mb-13">
-      <div className="flex flex-wrap items-end justify-between gap-6">
-        <div className="max-w-[720px]" data-reveal>
-          <p className="u-label">{eyebrow}</p>
-          <h2 className="mt-4 text-[clamp(30px,3.4vw,50px)] font-semibold">{title}</h2>
-          {children}
-        </div>
-        {index && <span className="u-mono pb-2 text-[11px] tracking-[0.16em] text-faint">{index}</span>}
+      <div className="max-w-[720px]" data-reveal>
+        <p className="u-label">{eyebrow}</p>
+        <h2 className="mt-4 text-[clamp(30px,3.4vw,50px)] font-semibold">{title}</h2>
+        {children}
       </div>
       {more}
     </div>
@@ -27,13 +24,11 @@ export function SectionHead({
 }
 
 export function PageHeader({
-  crumb,
   eyebrow,
   title,
   desc,
   aside,
 }: {
-  crumb: string
   eyebrow: string
   title: string
   desc?: string
@@ -42,18 +37,13 @@ export function PageHeader({
   return (
     <div className="border-b border-line2">
       <div className="u-container">
-        <div className="u-mono flex items-center gap-2.5 pt-7 text-[10.5px] tracking-[0.12em] text-faint">
-          <span>HOME</span>
-          <span>/</span>
-          <span className="text-ink">{crumb}</span>
-        </div>
-        <div className="flex flex-col justify-between gap-8 pb-9 pt-8 lg:flex-row lg:items-end lg:gap-16">
+        <div className="flex flex-col justify-between gap-8 pb-9 pt-12 lg:flex-row lg:items-end lg:gap-16 lg:pt-14">
           <div className="max-w-[820px]">
             <p className="u-label">{eyebrow}</p>
             <h1 className="mt-4 text-[clamp(34px,5vw,64px)] font-semibold">{title}</h1>
           </div>
           {desc ? (
-            <p className="max-w-[420px] text-[14.5px] leading-[1.95] text-muted lg:pb-2">{desc}</p>
+            <p className="max-w-[420px] text-[15.5px] leading-[1.95] text-muted lg:pb-2">{desc}</p>
           ) : (
             aside
           )}
@@ -61,6 +51,11 @@ export function PageHeader({
       </div>
     </div>
   )
+}
+
+/** Internal paths get the locale prefix; `tel:` / `mailto:` / `https:` are used as-is. */
+function resolveHref(href: string, locale: string) {
+  return /^(tel:|mailto:|https?:)/.test(href) ? href : `/${locale}${href}`
 }
 
 export function CtaBand({
@@ -73,7 +68,7 @@ export function CtaBand({
   eyebrow: string
   title: string[]
   sub: string
-  buttons: string[]
+  buttons: Dict['cta']['buttons']
   locale: string
 }) {
   return (
@@ -86,21 +81,19 @@ export function CtaBand({
             <br />
             <span className="text-muted">{title[1]}</span>
           </h2>
-          <p className="mt-6 max-w-[520px] text-[15px] leading-relaxed text-muted">{sub}</p>
+          <p className="mt-6 max-w-[520px] text-[16px] leading-relaxed text-muted">{sub}</p>
         </div>
         <div className="flex flex-col gap-3" data-reveal="0.1">
-          <a href={`tel:${buttons[2]}`} className="u-btn u-btn-solid w-full">
-            {buttons[0]}
-            <span className="u-mono text-[13px]">→</span>
-          </a>
-          <a href={`/${locale}/cases/`} className="u-btn u-btn-line w-full">
-            {buttons[1]}
-            <span className="u-mono text-[13px]">↓</span>
-          </a>
-          <a href={`tel:${buttons[2]}`} className="u-btn u-btn-line w-full">
-            {buttons[2]}
-            <span className="u-mono text-[13px]">☏</span>
-          </a>
+          {buttons.map((b, i) => (
+            <a
+              key={`${b.label}-${i}`}
+              href={resolveHref(b.href, locale)}
+              className={`u-btn w-full ${i === 0 ? 'u-btn-solid' : 'u-btn-line'}`}
+            >
+              {b.label}
+              <span className="u-mono text-[13px]">{b.href.startsWith('tel:') ? '☏' : '→'}</span>
+            </a>
+          ))}
         </div>
       </div>
     </section>

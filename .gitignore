@@ -5,3 +5,7 @@ out
 *.tsbuildinfo
 .env.local
 .env*.local
+
+# editors / IDE
+.idea/
+.vscode/

@@ -12,7 +12,7 @@ export default function WorkOrder({ wo }: { wo: Dict['wo'] }) {
         {wo.rows.map((r) => (
           <div
             key={r.k}
-            className="flex justify-between gap-5 border-b border-line py-3 text-[12.5px] last:border-b-0"
+            className="flex justify-between gap-5 border-b border-line py-3 text-[13.5px] last:border-b-0"
           >
             <span className="u-mono pt-0.5 text-[10px] tracking-[0.08em] text-faint">{r.k}</span>
             <span className="max-w-[280px] text-right leading-relaxed">{r.v}</span>
@@ -24,8 +24,8 @@ export default function WorkOrder({ wo }: { wo: Dict['wo'] }) {
         <p className="u-mono mb-4 text-[10px] tracking-[0.16em] text-faint">{wo.trackLabel}</p>
         <div className="flex items-center">
           {wo.track.map((t, i) => {
-            const done = i < 3
-            const now = i === 3
+            const done = i < wo.trackCurrent
+            const now = i === wo.trackCurrent
             return (
               <div key={t} className="relative flex-1 text-center">
                 {i < wo.track.length - 1 && (

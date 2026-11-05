@@ -1,7 +1,8 @@
 import Link from 'next/link'
 import type { Metadata } from 'next'
-import { locales } from '@/lib/i18n'
+import { locales, type Locale } from '@/lib/i18n'
 import { getDict } from '@/content'
+import { pageMetadata } from '@/lib/seo'
 import { PageHeader, CtaBand } from '@/components/Sections'
 
 export function generateStaticParams() {
@@ -15,11 +16,12 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { locale } = await params
   const d = getDict(locale)
-  return {
+  return pageMetadata({
+    locale: locale as Locale,
+    path: '/capability/',
     title: `${d.page.capability.title} · ${d.meta.title.split(' · ')[0]}`,
     description: d.page.capability.desc,
-    alternates: { canonical: `/${locale}/capability/` },
-  }
+  })
 }
 
 export default async function CapabilityPage({ params }: { params: Promise<{ locale: string }> }) {
@@ -29,17 +31,11 @@ export default async function CapabilityPage({ params }: { params: Promise<{ loc
 
   return (
     <>
-      <PageHeader
-        crumb={d.nav.links[0].label}
-        eyebrow={p.eyebrow}
-        title={p.title}
-        desc={p.desc}
-      />
+      <PageHeader eyebrow={p.eyebrow} title={p.title} desc={p.desc} />
 
       <section className="u-container">
-        <div className="flex items-baseline justify-between border-b border-line py-5">
+        <div className="border-b border-line py-5">
           <span className="u-label">{p.detail}</span>
-          <span className="u-mono text-[10px] tracking-[0.14em] text-faint">01 — 05</span>
         </div>
 
         {d.cap.items.map((c, i) => (
@@ -62,10 +58,10 @@ export default async function CapabilityPage({ params }: { params: Promise<{ loc
             </div>
 
             <div>
-              <p className="text-[14px] leading-[1.95] text-muted">{c.desc}</p>
+              <p className="text-[15px] leading-[1.95] text-muted">{c.desc}</p>
               <ul className="mt-5 grid gap-2 sm:grid-cols-2">
                 {c.points.map((pt) => (
-                  <li key={pt} className="flex items-start gap-2.5 text-[12.5px] text-ink2">
+                  <li key={pt} className="flex items-start gap-2.5 text-[13.5px] text-ink2">
                     <span className="mt-[9px] h-[3px] w-[10px] shrink-0 bg-ink" />
                     {pt}
                   </li>

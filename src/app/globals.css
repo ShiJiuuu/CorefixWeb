@@ -65,7 +65,7 @@
     background: var(--bg);
     color: var(--ink);
     font-family: var(--font-sans);
-    font-size: 15px;
+    font-size: 16px;
     line-height: 1.75;
     overflow-x: hidden;
   }
@@ -160,16 +160,6 @@ html.lenis body {
   }
   .u-btn-line:hover {
     background: var(--bg2);
-  }
-  .u-hero-title {
-    font-size: clamp(42px, 6vw, 84px);
-  }
-  html[lang='en'] .u-hero-title {
-    font-size: clamp(38px, 4.6vw, 64px);
-    letter-spacing: -0.03em;
-  }
-  html[lang='zh-tw'] .u-hero-title {
-    letter-spacing: -0.025em;
   }
   .u-hero-title {
     font-size: clamp(42px, 6vw, 84px);

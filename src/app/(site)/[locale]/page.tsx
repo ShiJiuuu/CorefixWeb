@@ -2,7 +2,7 @@ import Link from 'next/link'
 import { locales } from '@/lib/i18n'
 import { getDict } from '@/content'
 import WorkOrder from '@/components/WorkOrder'
-import CasesRail from '@/components/CasesRail'
+import { CaseGrid } from '@/components/CaseCards'
 import SlaTable from '@/components/SlaTable'
 import { SectionHead, CtaBand } from '@/components/Sections'
 
@@ -45,7 +45,7 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
               </span>
             </h1>
 
-            <p className="mt-7 max-w-[500px] text-[15.5px] leading-[1.95] text-muted" data-hero-fade>
+            <p className="mt-7 max-w-[500px] text-[16.5px] leading-[1.95] text-muted" data-hero-fade>
               {d.hero.sub}
             </p>
 
@@ -116,12 +116,8 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
 
       {/* ---------- capability ---------- */}
       <section className="u-container py-16 lg:py-24">
-        <SectionHead
-          eyebrow={`02 / ${d.cap.eyebrow}`}
-          index="02 — 05"
-          title={d.cap.title.join('')}
-        >
-          <p className="mt-4 max-w-[560px] text-[14px] leading-[1.9] text-muted">
+        <SectionHead eyebrow={d.cap.eyebrow} title={d.cap.title.join('')}>
+          <p className="mt-4 max-w-[560px] text-[15px] leading-[1.9] text-muted">
             {d.page.capability.intro}
           </p>
         </SectionHead>
@@ -143,7 +139,7 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
                   {c.en}
                 </small>
               </h3>
-              <p className="text-[13.5px] leading-[1.95] text-muted group-hover:text-invt/70">{c.desc}</p>
+              <p className="text-[14.5px] leading-[1.95] text-muted group-hover:text-invt/70">{c.desc}</p>
               <div className="lg:text-right">
                 <b className="u-mono block text-[22px] font-semibold tracking-tight group-hover:text-invt">
                   {c.metric}
@@ -169,15 +165,15 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
       {/* ---------- network + sla ---------- */}
       <section className="border-y border-line2 bg-bg2/40">
         <div className="u-container py-16 lg:py-24">
-          <SectionHead eyebrow={`03 / ${d.net.eyebrow}`} index="03 — 05" title={d.net.title}>
-            <p className="mt-4 max-w-[520px] text-[14px] leading-[1.9] text-muted">{d.net.sub}</p>
+          <SectionHead eyebrow={d.net.eyebrow} title={d.net.title}>
+            <p className="mt-4 max-w-[520px] text-[15px] leading-[1.9] text-muted">{d.net.sub}</p>
           </SectionHead>
 
           <div className="grid gap-12 lg:grid-cols-[1fr_1.15fr] lg:gap-16">
             <div data-reveal>
               {d.net.sites.slice(0, 5).map((s) => (
                 <div key={s.name} className="flex items-center justify-between border-b border-line py-4">
-                  <span className="text-[15px] font-medium">
+                  <span className="text-[16px] font-medium">
                     {s.name}
                     <em className="u-mono ml-2 not-italic text-[9.5px] tracking-[0.12em] text-faint">
                       {s.tag}
@@ -187,7 +183,7 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
                 </div>
               ))}
               <div className="flex items-center justify-between border-b border-line py-4 text-faint">
-                <span className="text-[15px] font-medium">
+                <span className="text-[16px] font-medium">
                   {d.net.sites
                     .slice(5)
                     .map((s) => s.name)
@@ -197,7 +193,7 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
                   </em>
                 </span>
               </div>
-              <p className="mt-5 max-w-[460px] text-[11.5px] leading-[1.9] text-faint">{d.net.note}</p>
+              <p className="mt-5 max-w-[460px] text-[12.5px] leading-[1.9] text-faint">{d.net.note}</p>
               <Link href={`/${locale}/network/`} className="u-link mt-6 inline-flex">
                 {d.net.cta} <span className="text-faint">→</span>
               </Link>
@@ -213,20 +209,22 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
 
       {/* ---------- cases ---------- */}
       <section id="cases" className="border-b border-line2">
-        <div className="u-container pt-16 lg:pt-24">
-          <SectionHead eyebrow={`04 / ${d.cases.eyebrow}`} index="04 — 05" title={d.cases.title} />
+        <div className="u-container py-16 lg:py-24">
+          <SectionHead eyebrow={d.cases.eyebrow} title={d.cases.title} />
+
+          <CaseGrid items={d.cases.items} />
+
+          <div className="mt-7 flex flex-wrap items-center justify-between gap-4">
+            <Link href={`/${locale}/cases/`} className="u-link">
+              {d.cases.all} <span className="text-faint">→</span>
+            </Link>
+          </div>
         </div>
-        <CasesRail
-          items={d.cases.items}
-          hint={d.cases.hint}
-          all={d.cases.all}
-          href={`/${locale}/cases/`}
-        />
       </section>
 
       {/* ---------- process ---------- */}
       <section id="process" className="u-container py-16 lg:py-24">
-        <SectionHead eyebrow={`05 / ${d.process.eyebrow}`} index="05 — 05" title={d.process.title} />
+        <SectionHead eyebrow={d.process.eyebrow} title={d.process.title} />
 
         <div className="relative">
           <div className="absolute inset-x-0 top-0 h-px bg-line2" />
@@ -236,7 +234,7 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
               <li key={s.no} className="lg:border-r lg:border-line lg:pr-5 lg:last:border-r-0" data-reveal>
                 <span className="u-mono text-[10px] tracking-[0.1em] text-faint">{s.no}</span>
                 <h3 className="mt-3 text-[16px] font-semibold">{s.t}</h3>
-                <p className="mt-2 text-[11.5px] leading-[1.8] text-muted">{s.d}</p>
+                <p className="mt-2 text-[12.5px] leading-[1.8] text-muted">{s.d}</p>
               </li>
             ))}
           </ol>
@@ -244,7 +242,7 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
       </section>
 
       <CtaBand
-        eyebrow={`06 / ${d.cta.eyebrow}`}
+        eyebrow={d.cta.eyebrow}
         title={d.cta.title}
         sub={d.cta.sub}
         buttons={d.cta.buttons}

@@ -1,7 +1,8 @@
 import Link from 'next/link'
 import type { Metadata } from 'next'
-import { locales } from '@/lib/i18n'
+import { locales, type Locale } from '@/lib/i18n'
 import { getDict } from '@/content'
+import { pageMetadata } from '@/lib/seo'
 import { PageHeader, CtaBand } from '@/components/Sections'
 
 export function generateStaticParams() {
@@ -15,11 +16,12 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { locale } = await params
   const d = getDict(locale)
-  return {
+  return pageMetadata({
+    locale: locale as Locale,
+    path: '/about/',
     title: `${d.page.about.title} · ${d.meta.title.split(' · ')[0]}`,
     description: d.page.about.desc,
-    alternates: { canonical: `/${locale}/about/` },
-  }
+  })
 }
 
 export default async function AboutPage({ params }: { params: Promise<{ locale: string }> }) {
@@ -29,16 +31,16 @@ export default async function AboutPage({ params }: { params: Promise<{ locale: 
 
   return (
     <>
-      <PageHeader crumb={d.nav.links[3].label} eyebrow={p.eyebrow} title={p.title} desc={p.desc} />
+      <PageHeader eyebrow={p.eyebrow} title={p.title} desc={p.desc} />
 
       <section className="u-container py-14 lg:py-20">
         <div className="grid gap-12 lg:grid-cols-[1fr_1fr] lg:gap-20">
           <div>
-            <p className="u-label mb-5">01 / COMPANY</p>
+            <p className="u-label mb-5">COMPANY</p>
             {p.paras.map((para, i) => (
               <p
                 key={i}
-                className={`text-[14px] leading-[2] ${i === 0 ? 'text-ink2' : 'mt-5 text-muted'}`}
+                className={`text-[15px] leading-[2] ${i === 0 ? 'text-ink2' : 'mt-5 text-muted'}`}
               >
                 {para}
               </p>
@@ -69,7 +71,7 @@ export default async function AboutPage({ params }: { params: Promise<{ locale: 
               {p.quals.map((q) => (
                 <li
                   key={q}
-                  className="flex items-center justify-between border-b border-line py-4 text-[13.5px]"
+                  className="flex items-center justify-between border-b border-line py-4 text-[14.5px]"
                 >
                   {q}
                   <span className="u-mono text-[10px] text-faint">✓</span>
@@ -87,7 +89,7 @@ export default async function AboutPage({ params }: { params: Promise<{ locale: 
               {p.contact.map((c) => (
                 <div key={c.k} className="flex justify-between gap-6 border-b border-line py-4">
                   <dt className="u-mono pt-1 text-[10px] tracking-[0.1em] text-faint">{c.k}</dt>
-                  <dd className="max-w-[320px] text-right text-[13px] leading-relaxed">{c.v}</dd>
+                  <dd className="max-w-[320px] text-right text-[14px] leading-relaxed">{c.v}</dd>
                 </div>
               ))}
             </dl>

@@ -12,9 +12,23 @@ export type Cap = {
 
 export type CaseItem = { k: string; h: string; p: string; b: string; c: string }
 
-export type Site = { name: string; tag: string; coverage: string; arrival: string; plan?: boolean }
+/** `id` is the stable lookup key (map coordinates, links); `name` is display text and is localized. */
+export type Site = {
+  id: string
+  name: string
+  tag: string
+  coverage: string
+  arrival: string
+  plan?: boolean
+}
 
 export type PageHero = { eyebrow: string; title: string; desc: string }
+
+export type CtaButton = {
+  label: string
+  /** Internal paths are prefixed with the active locale at render time; `tel:` / `https:` are used verbatim. */
+  href: string
+}
 
 export type Dict = {
   meta: { title: string; description: string }
@@ -33,6 +47,8 @@ export type Dict = {
     rows: { k: string; v: string }[]
     trackLabel: string
     track: string[]
+    /** Index of the step currently in progress; steps before it are done, the rest are pending. */
+    trackCurrent: number
     kpis: Metric[]
   }
   stats: Metric[]
@@ -55,9 +71,9 @@ export type Dict = {
     slaNote: string
     cta: string
   }
-  cases: { eyebrow: string; title: string; hint: string; items: CaseItem[]; all: string }
+  cases: { eyebrow: string; title: string; items: CaseItem[]; all: string }
   process: { eyebrow: string; title: string; steps: { no: string; t: string; d: string }[] }
-  cta: { eyebrow: string; title: string[]; sub: string; buttons: string[] }
+  cta: { eyebrow: string; title: string[]; sub: string; buttons: CtaButton[] }
   footer: {
     address: string[]
     phone: string
@@ -65,7 +81,7 @@ export type Dict = {
     copyright: string
     icp: string
   }
-  common: { home: string; back: string; next: string; nextLabel: string; phone: string; hoverHint: string }
+  common: { back: string; phone: string }
   page: {
     capability: PageHero & { intro: string; detail: string; cta: string }
     network: PageHero & {

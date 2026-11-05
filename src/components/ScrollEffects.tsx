@@ -71,7 +71,8 @@ export default function ScrollEffects() {
           gsap.set(el, { opacity: 1, y: 0 })
           return
         }
-        const delay = parseFloat(el.dataset.reveal || '0')
+        const parsed = parseFloat(el.dataset.reveal || '0')
+        const delay = Number.isFinite(parsed) ? parsed : 0
         gsap.fromTo(
           el,
           { y: 26, opacity: 0 },

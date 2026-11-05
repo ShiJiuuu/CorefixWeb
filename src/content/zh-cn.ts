@@ -41,6 +41,7 @@ export const zhCN: Dict = {
     ],
     trackLabel: 'REPAIR TRACK',
     track: ['接收', '检测', '维修', '压测', '交付'],
+    trackCurrent: 3,
     kpis: [
       { v: '98.6%', l: '算力恢复率' },
       { v: '12h', l: '满载压测' },
@@ -111,15 +112,15 @@ export const zhCN: Dict = {
     title: '双枢纽，覆盖全国',
     sub: '深圳总部与上海维修基地双城联动，5 个已建服务点 + 4 个在建服务点，服务半径内到场不超过 24 小时。',
     sites: [
-      { name: '深圳', tag: '总部', coverage: '5 省 · 61 城', arrival: '≤24H' },
-      { name: '上海', tag: '维修基地 2000㎡', coverage: '4 省 · 34 城', arrival: '≤24H' },
-      { name: '北京', tag: '服务点', coverage: '7 省 · 47 城', arrival: '≤24H' },
-      { name: '宁夏', tag: '服务点', coverage: '3 省 · 30 城', arrival: '≤48H' },
-      { name: '乌兰察布', tag: '服务点', coverage: '3 省 · 25 城', arrival: '≤48H' },
-      { name: '哈密', tag: '在建', coverage: '2026 年启用', arrival: '—', plan: true },
-      { name: '西宁', tag: '在建', coverage: '2026 年启用', arrival: '—', plan: true },
-      { name: '芜湖', tag: '在建', coverage: '2026 年启用', arrival: '—', plan: true },
-      { name: '贵州', tag: '在建', coverage: '2026 年启用', arrival: '—', plan: true },
+      { id: 'shenzhen', name: '深圳', tag: '总部', coverage: '5 省 · 61 城', arrival: '≤24H' },
+      { id: 'shanghai', name: '上海', tag: '维修基地 2000㎡', coverage: '4 省 · 34 城', arrival: '≤24H' },
+      { id: 'beijing', name: '北京', tag: '服务点', coverage: '7 省 · 47 城', arrival: '≤24H' },
+      { id: 'ningxia', name: '宁夏', tag: '服务点', coverage: '3 省 · 30 城', arrival: '≤48H' },
+      { id: 'ulanqab', name: '乌兰察布', tag: '服务点', coverage: '3 省 · 25 城', arrival: '≤48H' },
+      { id: 'hami', name: '哈密', tag: '在建', coverage: '2026 年启用', arrival: '—', plan: true },
+      { id: 'xining', name: '西宁', tag: '在建', coverage: '2026 年启用', arrival: '—', plan: true },
+      { id: 'wuhu', name: '芜湖', tag: '在建', coverage: '2026 年启用', arrival: '—', plan: true },
+      { id: 'guizhou', name: '贵州', tag: '在建', coverage: '2026 年启用', arrival: '—', plan: true },
     ],
     note: '已建服务点周边 800 公里内 ≤24 小时到场；800–1500 公里 ≤48 小时；1500 公里以上 ≤72 小时。支持按 P1–P4 分级定制 SLA。',
     slaTitle: '服务等级',
@@ -138,7 +139,6 @@ export const zhCN: Dict = {
   cases: {
     eyebrow: 'CASES',
     title: '修过的机器，会说话',
-    hint: 'SCROLL / DRAG',
     all: '查看全部案例',
     items: [
       {
@@ -201,7 +201,11 @@ export const zhCN: Dict = {
     eyebrow: 'CONTACT',
     title: ['机器停一天，', '业务就少一天。'],
     sub: '把故障现象、设备型号和所在城市发给我们，1 小时内给出初步判断与处理建议。',
-    buttons: ['预约检修', '下载服务手册', '021-5176-8787'],
+    buttons: [
+      { label: '预约检修', href: 'tel:021-5176-8787' },
+      { label: '查看服务能力', href: '/capability/' },
+      { label: '021-5176-8787', href: 'tel:021-5176-8787' },
+    ],
   },
   footer: {
     address: [
@@ -219,16 +223,12 @@ export const zhCN: Dict = {
     icp: '沪ICP备XXXXXXXX号 · 隐私政策',
   },
   common: {
-    home: '首页',
     back: '返回首页',
-    next: '下一页',
-    nextLabel: '客户案例',
     phone: '021-5176-8787',
-    hoverHint: '悬停服务点查看详情',
   },
   page: {
     capability: {
-      eyebrow: 'CAPABILITY / 02',
+      eyebrow: 'CAPABILITY',
       title: '从芯片到集群，一条完整的修复链路',
       desc: '五项能力互为上下游：拆、修、测、配、驻。同一套工程标准贯穿始终，所以修好的卡不只是「能亮」，而是能重新回到训练队列。',
       intro: '所有维修动作都在上海 2000㎡ 无尘实验室内完成，配备 X-RAY 检测与 BGA 返修台。',
@@ -236,7 +236,7 @@ export const zhCN: Dict = {
       cta: '预约方案沟通',
     },
     network: {
-      eyebrow: 'NETWORK / 03',
+      eyebrow: 'NETWORK',
       title: '双枢纽，覆盖全国',
       desc: '深圳总部与上海维修基地双城联动，5 个已建服务点 + 4 个在建服务点。悬停地图上的服务点，查看定位、覆盖范围与到场时效。',
       mapTitle: '服务网络覆盖',
@@ -246,7 +246,7 @@ export const zhCN: Dict = {
       slaTitle: '服务等级对照',
     },
     cases: {
-      eyebrow: 'CASES / 04',
+      eyebrow: 'CASES',
       title: '修过的机器，会说话',
       desc: '从单卡抢修到万卡集群年度维保，每一个数字都可以回溯到工单、诊断报告与压测记录。',
       metrics: [
@@ -258,7 +258,7 @@ export const zhCN: Dict = {
       cta: '聊聊你的集群规模',
     },
     about: {
-      eyebrow: 'ABOUT / 05',
+      eyebrow: 'ABOUT',
       title: '一家把 GPU 当精密器件的公司',
       desc: '上海集培优信息科技有限公司成立于 2025 年 9 月，注册资金 5000 万元，坐落于上海市长宁区，以专业 GPU 维修维保与调优技术服务为核心。',
       paras: [

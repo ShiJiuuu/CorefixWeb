@@ -41,6 +41,7 @@ export const en: Dict = {
     ],
     trackLabel: 'REPAIR TRACK',
     track: ['Intake', 'Diagnose', 'Repair', 'Stress', 'Deliver'],
+    trackCurrent: 3,
     kpis: [
       { v: '98.6%', l: 'Compute restored' },
       { v: '12h', l: 'Full-load stress' },
@@ -111,15 +112,15 @@ export const en: Dict = {
     title: 'Two hubs, national coverage',
     sub: 'Shenzhen HQ and the Shanghai repair base work as one network: 5 operating sites plus 4 under construction, with arrival inside 24 hours within the service radius.',
     sites: [
-      { name: 'Shenzhen', tag: 'HQ', coverage: '5 provinces · 61 cities', arrival: '≤24H' },
-      { name: 'Shanghai', tag: 'Repair base 2,000㎡', coverage: '4 provinces · 34 cities', arrival: '≤24H' },
-      { name: 'Beijing', tag: 'Service site', coverage: '7 provinces · 47 cities', arrival: '≤24H' },
-      { name: 'Ningxia', tag: 'Service site', coverage: '3 provinces · 30 cities', arrival: '≤48H' },
-      { name: 'Ulanqab', tag: 'Service site', coverage: '3 provinces · 25 cities', arrival: '≤48H' },
-      { name: 'Hami', tag: 'Opening 2026', coverage: 'Under construction', arrival: '—', plan: true },
-      { name: 'Xining', tag: 'Opening 2026', coverage: 'Under construction', arrival: '—', plan: true },
-      { name: 'Wuhu', tag: 'Opening 2026', coverage: 'Under construction', arrival: '—', plan: true },
-      { name: 'Guizhou', tag: 'Opening 2026', coverage: 'Under construction', arrival: '—', plan: true },
+      { id: 'shenzhen', name: 'Shenzhen', tag: 'HQ', coverage: '5 provinces · 61 cities', arrival: '≤24H' },
+      { id: 'shanghai', name: 'Shanghai', tag: 'Repair base 2,000㎡', coverage: '4 provinces · 34 cities', arrival: '≤24H' },
+      { id: 'beijing', name: 'Beijing', tag: 'Service site', coverage: '7 provinces · 47 cities', arrival: '≤24H' },
+      { id: 'ningxia', name: 'Ningxia', tag: 'Service site', coverage: '3 provinces · 30 cities', arrival: '≤48H' },
+      { id: 'ulanqab', name: 'Ulanqab', tag: 'Service site', coverage: '3 provinces · 25 cities', arrival: '≤48H' },
+      { id: 'hami', name: 'Hami', tag: 'Opening 2026', coverage: 'Under construction', arrival: '—', plan: true },
+      { id: 'xining', name: 'Xining', tag: 'Opening 2026', coverage: 'Under construction', arrival: '—', plan: true },
+      { id: 'wuhu', name: 'Wuhu', tag: 'Opening 2026', coverage: 'Under construction', arrival: '—', plan: true },
+      { id: 'guizhou', name: 'Guizhou', tag: 'Opening 2026', coverage: 'Under construction', arrival: '—', plan: true },
     ],
     note: 'Within 800 km of an operating site: ≤24h arrival. 800–1,500 km: ≤48h. Beyond 1,500 km: ≤72h. P1–P4 tiered SLAs available on request.',
     slaTitle: 'Service levels',
@@ -138,7 +139,6 @@ export const en: Dict = {
   cases: {
     eyebrow: 'CASES',
     title: 'Machines that came back',
-    hint: 'SCROLL / DRAG',
     all: 'View all cases',
     items: [
       {
@@ -201,7 +201,11 @@ export const en: Dict = {
     eyebrow: 'CONTACT',
     title: ['One day down', 'is one day lost.'],
     sub: 'Send us the symptom, the model and your city. We reply with an initial assessment within one hour.',
-    buttons: ['Book a repair', 'Download service guide', '021-5176-8787'],
+    buttons: [
+      { label: 'Book a repair', href: 'tel:021-5176-8787' },
+      { label: 'View capabilities', href: '/capability/' },
+      { label: '021-5176-8787', href: 'tel:021-5176-8787' },
+    ],
   },
   footer: {
     address: [
@@ -219,16 +223,12 @@ export const en: Dict = {
     icp: '沪ICP备XXXXXXXX号 · Privacy Policy',
   },
   common: {
-    home: 'Home',
     back: 'Back to home',
-    next: 'Next',
-    nextLabel: 'Cases',
     phone: '021-5176-8787',
-    hoverHint: 'Hover a site for details',
   },
   page: {
     capability: {
-      eyebrow: 'CAPABILITY / 02',
+      eyebrow: 'CAPABILITY',
       title: 'From silicon to cluster, one repair chain',
       desc: 'Five capabilities chain together: strip, repair, test, stock, stay. One engineering standard runs through all of them — so a repaired card does not just power on, it returns to the training queue.',
       intro: 'Every repair happens inside our 2,000㎡ cleanroom in Shanghai, equipped with X-ray inspection and BGA rework stations.',
@@ -236,7 +236,7 @@ export const en: Dict = {
       cta: 'Talk to an engineer',
     },
     network: {
-      eyebrow: 'NETWORK / 03',
+      eyebrow: 'NETWORK',
       title: 'Two hubs, national coverage',
       desc: 'Shenzhen HQ and the Shanghai repair base operate as one network, with 5 operating sites and 4 under construction. Hover a site to see its role, coverage and arrival time.',
       mapTitle: 'Coverage',
@@ -246,7 +246,7 @@ export const en: Dict = {
       slaTitle: 'Service level comparison',
     },
     cases: {
-      eyebrow: 'CASES / 04',
+      eyebrow: 'CASES',
       title: 'Machines that came back',
       desc: 'From a single-card emergency to annual maintenance on ten-thousand-GPU fleets — every number traces back to a work order, a diagnostic report and a stress log.',
       metrics: [
@@ -258,7 +258,7 @@ export const en: Dict = {
       cta: 'Tell us your fleet size',
     },
     about: {
-      eyebrow: 'ABOUT / 05',
+      eyebrow: 'ABOUT',
       title: 'We treat GPUs as precision instruments',
       desc: 'Founded in September 2025 with RMB 50 million in registered capital, Shanghai CoreFix Pro is based in Changning District and focuses on professional GPU repair, maintenance and tuning.',
       paras: [

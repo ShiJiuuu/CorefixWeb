@@ -19,11 +19,11 @@ export default function SlaTable({ net }: { net: Dict['net'] }) {
         <tbody>
           {net.sla.map((row) => (
             <tr key={row.k} className="border-b border-line last:border-b-0">
-              <td className="py-3.5 text-[12px] text-muted">{row.k}</td>
+              <td className="py-3.5 text-[13px] text-muted">{row.k}</td>
               {row.v.map((v, i) => (
                 <td
                   key={`${row.k}-${i}`}
-                  className={`u-mono py-3.5 text-right text-[13.5px] ${i === 2 ? 'font-semibold' : ''}`}
+                  className={`u-mono py-3.5 text-right text-[14.5px] ${i === 2 ? 'font-semibold' : ''}`}
                 >
                   {v}
                 </td>
@@ -32,7 +32,7 @@ export default function SlaTable({ net }: { net: Dict['net'] }) {
           ))}
         </tbody>
       </table>
-      <p className="mt-4 text-[11.5px] leading-[1.9] text-faint">{net.slaNote}</p>
+      <p className="mt-4 text-[12.5px] leading-[1.9] text-faint">{net.slaNote}</p>
     </div>
   )
 }

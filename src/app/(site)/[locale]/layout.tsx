@@ -1,8 +1,9 @@
 import type { Metadata, Viewport } from 'next'
-import '../globals.css'
+import '../../globals.css'
 import { notFound } from 'next/navigation'
-import { locales, isLocale, type Locale } from '@/lib/i18n'
+import { locales, isLocale, defaultLocale, type Locale } from '@/lib/i18n'
 import { getDict } from '@/content'
+import { pageMetadata, siteUrl } from '@/lib/seo'
 import Nav from '@/components/Nav'
 import Footer from '@/components/Footer'
 import ScrollEffects from '@/components/ScrollEffects'
@@ -28,23 +29,15 @@ export async function generateMetadata({
   const { locale } = await params
   const d = getDict(locale)
   return {
-    title: d.meta.title,
-    description: d.meta.description,
-    icons: { icon: '/icon.svg' },
-    alternates: {
-      canonical: `/${locale}/`,
-      languages: {
-        'zh-CN': '/zh-cn/',
-        'zh-TW': '/zh-tw/',
-        en: '/en/',
-      },
-    },
-    openGraph: {
+    ...pageMetadata({
+      locale: isLocale(locale) ? locale : defaultLocale,
+      path: '/',
       title: d.meta.title,
       description: d.meta.description,
-      locale,
-      type: 'website',
-    },
+    }),
+    metadataBase: siteUrl ? new URL(siteUrl) : undefined,
+    applicationName: 'COREFIX PRO',
+    icons: { icon: '/icon.svg' },
   }
 }
 

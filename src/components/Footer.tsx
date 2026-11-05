@@ -20,7 +20,7 @@ export default function Footer({ locale, dict }: { locale: Locale; dict: Dict })
               <span className="u-mono mt-1 text-[8px] tracking-[0.22em] text-faint">COREFIX PRO</span>
             </span>
           </div>
-          <div className="space-y-1 text-[12px] leading-[2.1] text-muted">
+          <div className="space-y-1 text-[13px] leading-[2.1] text-muted">
             {dict.footer.address.map((line) => (
               <p key={line}>{line}</p>
             ))}
@@ -35,7 +35,7 @@ export default function Footer({ locale, dict }: { locale: Locale; dict: Dict })
         {dict.footer.cols.map((col) => (
           <div key={col.t}>
             <h4 className="u-label mb-4 font-medium">{col.t}</h4>
-            <ul className="space-y-1 text-[12.5px] text-ink2">
+            <ul className="space-y-1 text-[13.5px] text-ink2">
               {col.items.map((it) => (
                 <li key={it}>{it}</li>
               ))}

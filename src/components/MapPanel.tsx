@@ -16,22 +16,43 @@ const POS: [number, number][] = [
   [54.2, 75.9],
 ]
 
-/* GCJ-02 coordinates used when a Tencent Maps key is configured. */
+/* GCJ-02 coordinates used when a Tencent Maps key is configured. Keyed by Site.id, never by the localized name. */
 const LATLON: Record<string, [number, number]> = {
-  Shenzhen: [22.5431, 114.0579],
-  Shanghai: [31.2304, 121.4737],
-  Beijing: [39.9042, 116.4074],
-  Ningxia: [38.4872, 106.2309],
-  Ulanqab: [40.9909, 113.1334],
-  Hami: [42.8333, 93.5151],
-  Xining: [36.6171, 101.7782],
-  Wuhu: [31.3534, 118.4329],
-  Guizhou: [26.647, 106.6302],
+  shenzhen: [22.5431, 114.0579],
+  shanghai: [31.2304, 121.4737],
+  beijing: [39.9042, 116.4074],
+  ningxia: [38.4872, 106.2309],
+  ulanqab: [40.9909, 113.1334],
+  hami: [42.8333, 93.5151],
+  xining: [36.6171, 101.7782],
+  wuhu: [31.3534, 118.4329],
+  guizhou: [26.647, 106.6302],
+}
+
+/** Falls back to the geographic centre only when a site has no known coordinate. */
+const coord = (s: Site): [number, number] => LATLON[s.id] ?? [35.5, 109]
+
+/* Minimal shape of the Tencent Maps GL JS surface this component actually calls. */
+type TMapOptions = Record<string, unknown>
+
+interface TMapMarkerEvent {
+  geometry?: { id?: string | number }
+}
+
+interface TMapNamespace {
+  Map: new (el: HTMLElement, options: TMapOptions) => unknown
+  LatLng: new (lat: number, lng: number) => unknown
+  CircleStyle: new (options: TMapOptions) => unknown
+  MultiCircle: new (options: TMapOptions) => unknown
+  MarkerStyle: new (options: TMapOptions) => unknown
+  MultiMarker: new (options: TMapOptions) => {
+    on: (event: string, handler: (e: TMapMarkerEvent) => void) => void
+  }
 }
 
 declare global {
   interface Window {
-    TMap?: any
+    TMap?: TMapNamespace
     _TMapSecurityConfig?: { serviceHost: string }
   }
 }
@@ -80,7 +101,7 @@ export default function MapPanel({
           geometries: built.map((s, i) => ({
             id: `c${i}`,
             styleId: 'c',
-            center: new TMap.LatLng(...(LATLON[s.name] ?? [35, 110])),
+            center: new TMap.LatLng(...coord(s)),
             radius: 800000,
           })),
         })
@@ -100,18 +121,18 @@ export default function MapPanel({
             ...built.map((s, i) => ({
               id: String(i),
               styleId: 'b',
-              position: new TMap.LatLng(...(LATLON[s.name] ?? [35, 110])),
+              position: new TMap.LatLng(...coord(s)),
             })),
             ...plan.map((s, i) => ({
               id: String(built.length + i),
               styleId: 'p',
-              position: new TMap.LatLng(...(LATLON[s.name] ?? [35, 110])),
+              position: new TMap.LatLng(...coord(s)),
             })),
           ],
         })
         ;['click', 'mouseover'].forEach((ev) => {
           try {
-            markers.on(ev, (e: any) => {
+            markers.on(ev, (e: TMapMarkerEvent) => {
               const id = Number(e?.geometry?.id)
               if (!Number.isNaN(id)) setActive(id)
             })
@@ -147,7 +168,7 @@ export default function MapPanel({
             style={{ backgroundSize: '46px 46px, 46px 46px' }}
           >
             {sites.slice(0, 5).map((s, i) => (
-              <div key={`r-${s.name}`}>
+              <div key={`r-${s.id}`}>
                 <span
                   className="absolute -translate-x-1/2 -translate-y-1/2 rounded-full border border-line2 bg-ink/[0.02]"
                   style={{
@@ -172,7 +193,7 @@ export default function MapPanel({
 
             {sites.map((s, i) => (
               <button
-                key={s.name}
+                key={s.id}
                 type="button"
                 onMouseEnter={() => setActive(i)}
                 onFocus={() => setActive(i)}
@@ -239,7 +260,7 @@ export default function MapPanel({
             ].map(([k, v]) => (
               <div key={k} className="flex justify-between gap-6 border-b border-line py-3">
                 <dt className="u-mono pt-0.5 text-[9.5px] tracking-[0.1em] text-faint">{k}</dt>
-                <dd className="text-[12.5px] font-medium">{v}</dd>
+                <dd className="text-[13.5px] font-medium">{v}</dd>
               </div>
             ))}
           </dl>
@@ -253,10 +274,10 @@ export default function MapPanel({
         <div className="mt-4 grid grid-cols-2 gap-px bg-line">
           {sites.slice(0, 6).map((s, i) => (
             <button
-              key={s.name}
+              key={s.id}
               type="button"
               onMouseEnter={() => setActive(i)}
-              className={`bg-bg px-3 py-2.5 text-left text-[11.5px] transition-colors hover:bg-bg2 ${
+              className={`bg-bg px-3 py-2.5 text-left text-[12.5px] transition-colors hover:bg-bg2 ${
                 active === i ? 'text-ink' : 'text-muted'
               }`}
             >

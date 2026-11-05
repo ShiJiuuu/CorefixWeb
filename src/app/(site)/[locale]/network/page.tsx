@@ -1,7 +1,8 @@
 import Link from 'next/link'
 import type { Metadata } from 'next'
-import { locales } from '@/lib/i18n'
+import { locales, type Locale } from '@/lib/i18n'
 import { getDict } from '@/content'
+import { pageMetadata } from '@/lib/seo'
 import { PageHeader, CtaBand } from '@/components/Sections'
 import MapPanel from '@/components/MapPanel'
 import SlaTable from '@/components/SlaTable'
@@ -17,11 +18,12 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { locale } = await params
   const d = getDict(locale)
-  return {
+  return pageMetadata({
+    locale: locale as Locale,
+    path: '/network/',
     title: `${d.page.network.title} · ${d.meta.title.split(' · ')[0]}`,
     description: d.page.network.desc,
-    alternates: { canonical: `/${locale}/network/` },
-  }
+  })
 }
 
 export default async function NetworkPage({ params }: { params: Promise<{ locale: string }> }) {
@@ -31,7 +33,7 @@ export default async function NetworkPage({ params }: { params: Promise<{ locale
 
   return (
     <>
-      <PageHeader crumb={d.nav.links[1].label} eyebrow={p.eyebrow} title={p.title} desc={p.desc} />
+      <PageHeader eyebrow={p.eyebrow} title={p.title} desc={p.desc} />
 
       <MapPanel
         sites={d.net.sites}
@@ -54,7 +56,7 @@ export default async function NetworkPage({ params }: { params: Promise<{ locale
                   s.plan ? 'text-faint' : ''
                 }`}
               >
-                <span className="flex items-baseline gap-2 text-[14.5px] font-medium">
+                <span className="flex items-baseline gap-2 text-[15.5px] font-medium">
                   {s.name}
                   <em className="u-mono not-italic text-[9.5px] tracking-[0.12em] text-faint">
                     {s.tag}
@@ -66,7 +68,7 @@ export default async function NetworkPage({ params }: { params: Promise<{ locale
                 </span>
               </div>
             ))}
-            <p className="mt-5 text-[11.5px] leading-[1.9] text-faint">{d.net.note}</p>
+            <p className="mt-5 text-[12.5px] leading-[1.9] text-faint">{d.net.note}</p>
           </div>
 
           <div>
