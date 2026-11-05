@@ -3,7 +3,6 @@
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { useEffect, useState } from 'react'
-import Brandmark from './Brandmark'
 import LocaleSwitch from './LocaleSwitch'
 import ThemeToggle from './ThemeToggle'
 import type { Locale } from '@/lib/i18n'
@@ -37,8 +36,14 @@ export default function Nav({ locale, dict }: { locale: Locale; dict: Dict }) {
       }`}
     >
       <div className="u-container flex h-[84px] items-center justify-between gap-6">
-        <Link href={`/${locale}/`} className="flex items-center gap-3" aria-label="corefix">
-          <Brandmark />
+        <Link href={`/${locale}/`} className="flex items-center gap-2.5" aria-label="集培优 COREFIX PRO">
+          <img
+            src="/logo-corefix.png"
+            alt="集培优 COREFIX PRO"
+            width={231}
+            height={231}
+            className="h-10 w-10 shrink-0 object-contain"
+          />
           <span className="flex flex-col leading-none">
             <span className="text-[17px] font-semibold tracking-[0.08em]">集培优</span>
             <span className="u-mono mt-1 text-[8px] tracking-[0.22em] text-faint">COREFIX PRO</span>

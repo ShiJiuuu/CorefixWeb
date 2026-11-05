@@ -77,6 +77,13 @@ npx serve out        # 预览构建产物
 - 未配置 key 时渲染「坐标网格 + 覆盖圈」示意图，悬停/点击交互完全一致，不影响演示与首屏性能。
 - Key 申请：腾讯位置服务控制台；前端明文 key 请配 Referer 白名单，商用建议走后端代理。
 
+## 品牌资产
+
+- 导航与页脚统一使用官方 PNG：`public/logo-corefix.png`（231×231，透明底，菱形 G/P/U）。
+- 导航内尺寸 40×40，页脚 36×36，`object-contain` 保持比例；旁边保留中文名 + 拉丁字标，便于识别。
+- 已知限制：Logo 的深绿菱形在深色模式（`#0A0A0A`）下对比偏弱。若追求最佳效果，建议补一版反白 Logo，按主题切换 `src`。
+- `public/icon.svg` 仍是简化菱形，用作 favicon；可替换为官方图标。
+
 ## 目录
 
 ```
@@ -93,13 +100,12 @@ src/
     ScrollEffects / ThemeToggle / LocaleSwitch / Brandmark
   content/              zh-cn / zh-tw / en + types
   lib/i18n.ts
-public/                 index.html(根跳转) / icon.svg / robots.txt / sitemap.xml
+public/                 index.html(根跳转) / logo-corefix.png / icon.svg / robots.txt / sitemap.xml
 design/                 Figma 稿（HTML 画板）
 ```
 
 ## 待办
 
-- [ ] **Logo**：目前导航用占位几何标记（`Brandmark.tsx`），需替换为官方单色 SVG（黑白两版）。
 - [ ] **备案号**：`dict.footer.icp` 中的 `沪ICP备XXXXXXXX号` 占位。
 - [ ] **联系表单**：纯前端无后端，CTA 目前走 `tel:`；如需收集线索，接第三方表单或 Serverless 函数。
 - [ ] **案例授权**：客户名称现为脱敏写法（深圳 / 河南 / 上海），公开前需确认可披露范围。

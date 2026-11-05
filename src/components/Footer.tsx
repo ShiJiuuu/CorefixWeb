@@ -1,5 +1,4 @@
 import Link from 'next/link'
-import Brandmark from './Brandmark'
 import type { Locale } from '@/lib/i18n'
 import type { Dict } from '@/content/types'
 
@@ -8,8 +7,14 @@ export default function Footer({ locale, dict }: { locale: Locale; dict: Dict })
     <footer className="border-t border-line2">
       <div className="u-container grid gap-10 py-12 md:grid-cols-2 lg:grid-cols-[1.7fr_1fr_1fr_1.2fr] lg:gap-11">
         <div>
-          <div className="mb-5 flex items-center gap-3">
-            <Brandmark />
+          <div className="mb-5 flex items-center gap-2.5">
+            <img
+              src="/logo-corefix.png"
+              alt="集培优 COREFIX PRO"
+              width={231}
+              height={231}
+              className="h-9 w-9 shrink-0 object-contain"
+            />
             <span className="flex flex-col leading-none">
               <span className="text-[17px] font-semibold tracking-[0.08em]">集培优</span>
               <span className="u-mono mt-1 text-[8px] tracking-[0.22em] text-faint">COREFIX PRO</span>
