@@ -1,0 +1,1129 @@
+<!doctype html>
+<html lang="zh-CN" data-theme="light">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>上海集培优 · 官网设计稿 v2 · 黑白</title>
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  html[data-theme="light"]{
+    --canvas:#E8E8E5;
+    --bg:#FFFFFF; --bg2:#F4F4F1; --card:#FFFFFF;
+    --ink:#0A0A0A; --ink2:#2E2E2C; --muted:#6E6E6A; --faint:#9C9C97;
+    --line:rgba(10,10,10,.12); --line2:rgba(10,10,10,.28);
+    --inv:#0A0A0A; --inv-t:#FFFFFF;
+    --grid:rgba(10,10,10,.05);
+    --shadow:0 24px 60px -40px rgba(0,0,0,.45);
+  }
+  html[data-theme="dark"]{
+    --canvas:#151513;
+    --bg:#0A0A0A; --bg2:#111110; --card:#0E0E0D;
+    --ink:#F3F3F0; --ink2:#CFCFC9; --muted:#8C8C86; --faint:#66665F;
+    --line:rgba(255,255,255,.14); --line2:rgba(255,255,255,.26);
+    --inv:#F3F3F0; --inv-t:#0A0A0A;
+    --grid:rgba(255,255,255,.05);
+    --shadow:0 24px 60px -40px rgba(0,0,0,.9);
+  }
+  :root{--accent:#A9CB39}
+  html,body{background:var(--canvas);color:var(--ink);
+    font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","PingFang SC","HarmonyOS Sans SC","Microsoft YaHei",sans-serif;
+    -webkit-font-smoothing:antialiased;transition:background .3s}
+  .mono{font-family:ui-monospace,"SF Mono",SFMono-Regular,Menlo,Consolas,monospace;font-variant-numeric:tabular-nums}
+
+  .topbar{position:sticky;top:0;z-index:60;display:flex;align-items:center;gap:14px;
+    padding:13px 30px;background:var(--canvas);border-bottom:1px solid var(--line);
+    font-size:12px;color:var(--muted)}
+  .topbar b{color:var(--ink);font-weight:600;font-size:13px;letter-spacing:.01em}
+  .topbar .sp{flex:1}
+  .topbar .chip{border:1px solid var(--line2);border-radius:3px;padding:3px 8px;letter-spacing:.06em}
+  .canvas{padding:34px 30px 100px;display:flex;flex-direction:column;gap:52px;align-items:flex-start}
+  .board{width:100%}
+  .label{display:flex;align-items:center;gap:12px;margin-bottom:9px;font-size:11.5px;color:var(--faint)}
+  .label .n{color:var(--ink);font-weight:600;letter-spacing:.1em;font-family:ui-monospace,Menlo,monospace}
+  .frame-wrap{width:100%;overflow:hidden;border:1px solid var(--line2);border-radius:3px;
+    background:var(--bg);box-shadow:var(--shadow)}
+  .frame{width:1440px;transform:scale(var(--s,1));transform-origin:top left;position:relative;overflow:hidden;
+    background:var(--bg);color:var(--ink);transition:background .3s,color .3s}
+
+  .toggle{position:fixed;right:28px;bottom:28px;z-index:80;display:flex;align-items:center;gap:10px;
+    height:46px;padding:0 6px 0 16px;border-radius:999px;background:var(--accent);color:#0A0A0A;
+    border:none;cursor:pointer;box-shadow:0 10px 30px -10px rgba(120,150,30,.6);
+    font-family:ui-monospace,Menlo,monospace;font-size:11.5px;letter-spacing:.1em;font-weight:600}
+  .toggle .knob{width:34px;height:34px;border-radius:50%;background:#0A0A0A;display:grid;place-items:center;
+    color:#A9CB39;font-size:14px;font-weight:700}
+
+  .pad{padding:0 80px}
+  .eyebrow{display:inline-flex;align-items:center;gap:10px;font-family:ui-monospace,Menlo,monospace;
+    font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--muted)}
+  .eyebrow b{color:var(--ink);font-weight:600}
+  .sec{padding:92px 80px}
+  .sec-head{display:flex;justify-content:space-between;align-items:flex-end;gap:48px;
+    padding-bottom:26px;border-bottom:1px solid var(--line2);margin-bottom:52px}
+  .sec-title{font-size:50px;line-height:1.16;letter-spacing:-.025em;font-weight:600;margin-top:20px}
+  .sec-sub{font-size:15px;line-height:1.9;color:var(--muted);max-width:520px;margin-top:18px}
+  .sec-idx{font-family:ui-monospace,Menlo,monospace;font-size:11px;letter-spacing:.16em;color:var(--faint);padding-bottom:8px}
+
+  .btn{display:inline-flex;align-items:center;gap:12px;height:52px;padding:0 26px;border-radius:2px;
+    font-size:14px;font-weight:600;letter-spacing:.01em}
+  .btn-solid{background:var(--inv);color:var(--inv-t)}
+  .btn-line{border:1px solid var(--line2);color:var(--ink)}
+  .btn .ar{font-family:ui-monospace,Menlo,monospace;font-size:13px}
+
+  .nav{height:84px;display:flex;align-items:center;justify-content:space-between;padding:0 80px;
+    border-bottom:1px solid var(--line);position:relative;z-index:3;background:var(--bg)}
+  .logo{display:flex;align-items:center;gap:12px}
+  .mark{width:30px;height:30px;position:relative;display:grid;place-items:center}
+  .brand{display:flex;flex-direction:column;line-height:1}
+  .brand .cn{font-size:18px;font-weight:600;letter-spacing:.08em}
+  .brand .en{font-family:ui-monospace,Menlo,monospace;font-size:8.5px;letter-spacing:.22em;color:var(--faint);margin-top:5px}
+  .nav-links{display:flex;gap:34px;font-size:13.5px;color:var(--ink2)}
+  .nav-right{display:flex;align-items:center;gap:24px}
+  .tel{font-family:ui-monospace,Menlo,monospace;font-size:13px;color:var(--ink);letter-spacing:.02em}
+  .nav-btn{height:38px;padding:0 18px;border:1px solid var(--line2);border-radius:2px;
+    display:flex;align-items:center;font-size:12.5px;font-weight:600}
+
+  .hero{position:relative;padding:88px 80px 64px;display:grid;grid-template-columns:1.06fr .94fr;gap:56px;align-items:start}
+  .hero-bg{position:absolute;inset:0;background-image:linear-gradient(var(--grid) 1px,transparent 1px),
+    linear-gradient(90deg,var(--grid) 1px,transparent 1px);background-size:80px 80px;
+    mask-image:radial-gradient(ellipse 75% 70% at 65% 35%,#000,transparent 80%)}
+  .hero-l{position:relative;z-index:2}
+  .hero h1{font-size:84px;line-height:1.06;letter-spacing:-.035em;font-weight:600;margin-top:28px}
+  .hero h1 .thin{color:var(--muted);font-weight:400}
+  .hero p{font-size:16.5px;line-height:1.95;color:var(--muted);margin-top:30px;max-width:500px}
+  .hero-cta{display:flex;gap:12px;margin-top:40px}
+  .hero-meta{display:flex;gap:0;margin-top:44px;border-top:1px solid var(--line)}
+  .hero-meta div{padding:18px 26px 0 0;margin-right:26px;border-right:1px solid var(--line)}
+  .hero-meta div:last-child{border-right:none}
+  .hero-meta b{display:block;font-family:ui-monospace,Menlo,monospace;font-size:15px;font-weight:600;margin-bottom:5px}
+  .hero-meta span{font-size:11.5px;color:var(--faint);letter-spacing:.04em}
+
+  .wo{position:relative;z-index:2;border:1px solid var(--line2);background:var(--card);border-radius:2px;
+    box-shadow:var(--shadow)}
+  .wo-top{display:flex;justify-content:space-between;align-items:center;padding:16px 22px;
+    border-bottom:1px solid var(--line)}
+  .wo-top .t{font-family:ui-monospace,Menlo,monospace;font-size:11px;letter-spacing:.16em;color:var(--muted)}
+  .wo-top .no{font-family:ui-monospace,Menlo,monospace;font-size:11px;letter-spacing:.06em;color:var(--ink)}
+  .wo-body{padding:22px}
+  .wo-row{display:flex;justify-content:space-between;gap:20px;padding:11px 0;border-bottom:1px solid var(--line);
+    font-size:12.5px}
+  .wo-row:last-child{border-bottom:none}
+  .wo-row .k{color:var(--faint);font-family:ui-monospace,Menlo,monospace;font-size:11px;letter-spacing:.08em;padding-top:2px}
+  .wo-row .v{text-align:right;color:var(--ink);line-height:1.6;max-width:280px}
+  .wo-state{padding:20px 22px 22px;border-top:1px solid var(--line);background:var(--bg2)}
+  .wo-state .lbl{font-family:ui-monospace,Menlo,monospace;font-size:10px;letter-spacing:.16em;color:var(--faint);margin-bottom:16px}
+  .track{display:flex;align-items:center;gap:0}
+  .track .node{flex:1;position:relative;text-align:center}
+  .track .dot{width:7px;height:7px;background:var(--line2);margin:0 auto 9px;border-radius:50%}
+  .track .node.done .dot{background:var(--ink)}
+  .track .node.now .dot{background:var(--ink);box-shadow:0 0 0 4px var(--line)}
+  .track .node span{font-size:10px;color:var(--faint);letter-spacing:.02em}
+  .track .node.done span,.track .node.now span{color:var(--ink)}
+  .track .ln{position:absolute;top:3px;left:50%;width:100%;height:1px;background:var(--line2)}
+  .track .node.done .ln{background:var(--ink)}
+  .wo-kpi{display:flex;gap:0;border-top:1px solid var(--line)}
+  .wo-kpi div{flex:1;padding:18px 22px;border-right:1px solid var(--line)}
+  .wo-kpi div:last-child{border-right:none}
+  .wo-kpi b{display:block;font-family:ui-monospace,Menlo,monospace;font-size:26px;font-weight:600;letter-spacing:-.02em}
+  .wo-kpi b i{font-style:normal;font-size:12px;color:var(--muted);margin-left:2px}
+  .wo-kpi span{font-size:10.5px;color:var(--faint);letter-spacing:.05em;margin-top:6px;display:block}
+
+  .statbar{display:grid;grid-template-columns:repeat(4,1fr);border-top:1px solid var(--line2);
+    border-bottom:1px solid var(--line2)}
+  .stat{padding:26px 0 26px 32px;border-right:1px solid var(--line)}
+  .stat:first-child{padding-left:0;border-left:none}
+  .stat:last-child{border-right:none}
+  .stat .n{font-family:ui-monospace,Menlo,monospace;font-size:38px;font-weight:600;letter-spacing:-.03em;line-height:1}
+  .stat .n i{font-style:normal;font-size:16px;color:var(--muted);margin-left:3px}
+  .stat .l{font-size:12px;color:var(--faint);margin-top:11px;letter-spacing:.06em}
+
+  .caps{border-top:1px solid var(--line2)}
+  .cap{display:grid;grid-template-columns:64px 264px 1fr 190px;gap:32px;align-items:start;
+    padding:30px 0;border-bottom:1px solid var(--line)}
+  .cap .no{font-family:ui-monospace,Menlo,monospace;font-size:11px;letter-spacing:.1em;color:var(--faint);padding-top:6px}
+  .cap h3{font-size:22px;font-weight:600;letter-spacing:-.01em;line-height:1.4}
+  .cap h3 small{display:block;font-family:ui-monospace,Menlo,monospace;font-size:9.5px;letter-spacing:.16em;
+    color:var(--faint);font-weight:400;margin-top:8px}
+  .cap p{font-size:13.5px;line-height:1.95;color:var(--muted)}
+  .cap .m{text-align:right}
+  .cap .m b{font-family:ui-monospace,Menlo,monospace;font-size:22px;font-weight:600;display:block;letter-spacing:-.02em}
+  .cap .m span{font-size:10.5px;color:var(--faint);letter-spacing:.05em;display:block;margin-top:6px}
+
+  .net{display:grid;grid-template-columns:1fr 1.18fr;gap:56px}
+  .site{display:flex;justify-content:space-between;align-items:center;padding:17px 0;border-bottom:1px solid var(--line)}
+  .site .n{font-size:15px;font-weight:500}
+  .site .n em{font-style:normal;font-family:ui-monospace,Menlo,monospace;font-size:9.5px;letter-spacing:.12em;
+    color:var(--faint);margin-left:8px}
+  .site .v{font-family:ui-monospace,Menlo,monospace;font-size:11.5px;color:var(--muted);letter-spacing:.02em}
+  .site.pending .n,.site.pending .v{color:var(--faint)}
+  table.sla{width:100%;border-collapse:collapse}
+  table.sla th,table.sla td{text-align:left;padding:15px 0;border-bottom:1px solid var(--line);font-size:13px}
+  table.sla thead th{font-family:ui-monospace,Menlo,monospace;font-size:10px;letter-spacing:.14em;
+    color:var(--faint);font-weight:500;padding-bottom:12px;border-bottom:1px solid var(--line2)}
+  table.sla tbody td:first-child{color:var(--muted);font-size:12px;font-family:inherit}
+  table.sla tbody td{font-family:ui-monospace,Menlo,monospace;font-size:13.5px;letter-spacing:-.01em}
+  table.sla tbody tr:last-child td{border-bottom:none}
+  table.sla .hl{font-weight:600}
+  .note{font-size:11.5px;color:var(--faint);line-height:1.9;margin-top:16px}
+
+  .cases{display:grid;grid-template-columns:repeat(3,1fr);gap:0;border-top:1px solid var(--line2)}
+  .case{padding:32px 30px 34px 0;border-right:1px solid var(--line)}
+  .case:last-child{border-right:none;padding-right:0}
+  .case .k{font-family:ui-monospace,Menlo,monospace;font-size:10px;letter-spacing:.14em;color:var(--faint)}
+  .case h4{font-size:17px;font-weight:600;line-height:1.55;margin:14px 0 12px;min-height:80px}
+  .case p{font-size:12.5px;line-height:1.85;color:var(--muted);min-height:70px}
+  .case .big{font-family:ui-monospace,Menlo,monospace;font-size:34px;font-weight:600;letter-spacing:-.03em;margin-top:20px}
+  .case .big i{font-style:normal;font-size:14px;color:var(--muted);margin-left:2px}
+  .case .ccap{font-size:10.5px;color:var(--faint);margin-top:8px;letter-spacing:.04em}
+
+  .steps{display:grid;grid-template-columns:repeat(6,1fr);border-top:1px solid var(--line2);margin-top:8px}
+  .step{padding:28px 20px 30px 0;border-right:1px solid var(--line);position:relative}
+  .step:last-child{border-right:none}
+  .step .no{font-family:ui-monospace,Menlo,monospace;font-size:10px;color:var(--faint);letter-spacing:.1em}
+  .step h4{font-size:15px;font-weight:600;margin:16px 0 8px}
+  .step p{font-size:11.5px;line-height:1.8;color:var(--muted)}
+  .step .bar{position:absolute;top:-1px;left:0;width:100%;height:2px;background:var(--ink)}
+
+  .cta{padding:100px 80px 92px;border-top:1px solid var(--line2);display:grid;
+    grid-template-columns:1.25fr .75fr;gap:60px;align-items:end}
+  .cta h2{font-size:64px;line-height:1.14;letter-spacing:-.035em;font-weight:600}
+  .cta h2 .thin{color:var(--muted);font-weight:400}
+  .cta .sub{font-size:15px;color:var(--muted);margin-top:22px;line-height:1.9;max-width:520px}
+  .cta-r{display:flex;flex-direction:column;align-items:flex-start;gap:14px}
+  .cta-r .btn{width:100%;justify-content:space-between}
+
+  .footer{padding:52px 80px 34px;border-top:1px solid var(--line2);display:grid;
+    grid-template-columns:1.7fr 1fr 1fr 1.2fr;gap:44px}
+  .footer h5{font-family:ui-monospace,Menlo,monospace;font-size:9.5px;letter-spacing:.16em;color:var(--faint);
+    margin-bottom:16px;font-weight:500}
+  .footer ul{list-style:none;font-size:12.5px;color:var(--ink2);line-height:2.5}
+  .footer .co{font-size:12px;color:var(--muted);line-height:2.1;margin-top:20px}
+  .copyright{border-top:1px solid var(--line);padding:20px 80px;display:flex;justify-content:space-between;
+    font-family:ui-monospace,Menlo,monospace;font-size:10.5px;color:var(--faint);letter-spacing:.04em}
+
+  .spec{display:grid;grid-template-columns:repeat(12,1fr);gap:0;border-top:1px solid var(--line2)}
+  .spec-box{padding:26px 28px 30px 0;border-right:1px solid var(--line)}
+  .spec h4{font-family:ui-monospace,Menlo,monospace;font-size:9.5px;letter-spacing:.16em;color:var(--faint);
+    margin-bottom:20px;font-weight:500}
+  .sw{display:flex;border:1px solid var(--line);width:fit-content}
+  .swatch{width:104px}
+  .swatch .chip{height:62px}
+  .swatch .nm{font-size:10px;color:var(--muted);padding:8px 0 2px}
+  .swatch .hx{font-family:ui-monospace,Menlo,monospace;font-size:9.5px;color:var(--faint);padding-bottom:8px}
+  .type-row{display:flex;align-items:baseline;gap:16px;padding:11px 0;border-bottom:1px dashed var(--line)}
+  .type-row .k{width:84px;font-family:ui-monospace,Menlo,monospace;font-size:9.5px;color:var(--faint);letter-spacing:.06em}
+  .type-row .s{margin-left:auto;font-family:ui-monospace,Menlo,monospace;font-size:9.5px;color:var(--faint)}
+
+  .phones{display:flex;gap:34px;padding:0 80px}
+  .phone{width:338px;height:696px;border:1px solid var(--line2);border-radius:26px;
+    background:var(--bg);overflow:hidden;position:relative;flex:none}
+  .phone .notch{position:absolute;top:9px;left:50%;transform:translateX(-50%);width:86px;height:20px;
+    border-radius:999px;background:var(--ink);z-index:6;opacity:.9}
+  .pnav{height:64px;display:flex;align-items:center;justify-content:space-between;padding:0 20px;
+    border-bottom:1px solid var(--line)}
+  .pbody{padding:22px 20px}
+  .pbody h1{font-size:36px;line-height:1.14;letter-spacing:-.035em;font-weight:600}
+  .pbody h1 .thin{color:var(--muted);font-weight:400}
+  .pbody p{font-size:12.5px;line-height:1.85;color:var(--muted);margin-top:14px}
+  .pbtn{height:44px;display:flex;align-items:center;justify-content:space-between;padding:0 16px;
+    background:var(--inv);color:var(--inv-t);font-size:12.5px;font-weight:600;margin-top:20px}
+  .pcard{border:1px solid var(--line2);padding:16px;margin-top:18px}
+  .pcard .r{display:flex;justify-content:space-between;font-family:ui-monospace,Menlo,monospace;
+    font-size:10.5px;padding:7px 0;border-bottom:1px solid var(--line)}
+  .pcard .r:last-child{border-bottom:none}
+  .pcard .r span:first-child{color:var(--faint)}
+  .pbar{position:absolute;left:0;right:0;bottom:0;height:68px;display:flex;align-items:center;
+    justify-content:space-between;padding:0 18px;background:var(--inv);color:var(--inv-t);z-index:5}
+  .pbar span.t{font-family:ui-monospace,Menlo,monospace;font-size:9.5px;letter-spacing:.1em;opacity:.75;line-height:1.6}
+  .pbar span.b{font-size:12px;font-weight:600}
+
+  /* ===== web-ify: link rows, routes ===== */
+  .link-more{display:inline-flex;align-items:center;gap:10px;font-family:ui-monospace,Menlo,monospace;
+    font-size:11px;letter-spacing:.14em;color:var(--ink);border-bottom:1px solid var(--line2);
+    padding-bottom:8px}
+  .link-more .p{color:var(--faint);font-size:10px}
+  .caps .cap{transition:background .18s,color .18s;cursor:pointer}
+  .caps .cap .go{font-family:ui-monospace,Menlo,monospace;font-size:10px;letter-spacing:.1em;
+    color:var(--faint);opacity:0;transition:opacity .18s;align-self:center;white-space:nowrap}
+  .caps .cap:hover{background:var(--inv)}
+  .caps .cap:hover *{color:var(--inv-t)!important}
+  .caps .cap:hover .go{opacity:1;color:var(--inv-t)!important}
+  .more-bar{display:flex;justify-content:space-between;align-items:center;margin-top:28px}
+  .hero-mini-map{position:relative;margin-top:40px;border:1px solid var(--line2);height:150px;overflow:hidden;background:
+    linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px),var(--bg);
+    background-size:40px 40px,40px 40px,auto;display:flex;align-items:center;justify-content:space-between;padding:0 28px}
+  .hero-mini-map .lbl{font-family:ui-monospace,Menlo,monospace;font-size:9.5px;letter-spacing:.16em;color:var(--faint);line-height:2}
+  .hero-mini-map .go-map{display:inline-flex;align-items:center;gap:10px;background:var(--inv);color:var(--inv-t);
+    height:40px;padding:0 18px;font-size:12px;font-weight:600;white-space:nowrap}
+  .mini-dots{position:absolute;inset:0}
+
+  /* ===== marquee cases ===== */
+  .cases-wrap{overflow:hidden;position:relative;margin-top:0}
+  .cases-mar{display:flex;gap:0;border-top:1px solid var(--line2);border-bottom:1px solid var(--line);
+    width:1320px;padding-bottom:0}
+  .cases-mar .case{flex:0 0 340px;padding:30px 28px 30px 0;border-right:1px solid var(--line)}
+  .cases-mar .case:last-child{border-right:none}
+  .cases-fade{position:absolute;top:0;right:0;bottom:36px;width:120px;pointer-events:none;
+    background:linear-gradient(90deg,transparent,var(--bg))}
+  .cases-hint{display:flex;align-items:center;gap:14px;margin-top:14px;font-family:ui-monospace,Menlo,monospace;
+    font-size:10px;letter-spacing:.12em;color:var(--faint)}
+  .dragbar{flex:1;height:1px;background:var(--line2);position:relative}
+  .dragbar i{position:absolute;left:38%;top:-2px;width:64px;height:5px;background:var(--ink)}
+
+  /* ===== sub-page shell ===== */
+  .crumbs{display:flex;gap:10px;align-items:center;font-family:ui-monospace,Menlo,monospace;
+    font-size:10.5px;letter-spacing:.12em;color:var(--faint);padding:26px 80px 0}
+  .crumbs b{color:var(--ink);font-weight:500}
+  .page-hero{padding:40px 80px 34px;display:flex;justify-content:space-between;align-items:flex-end;gap:60px;
+    border-bottom:1px solid var(--line2)}
+  .page-hero h1{font-size:64px;line-height:1.08;letter-spacing:-.03em;font-weight:600;margin-top:16px}
+  .page-hero .desc{font-size:14.5px;line-height:1.95;color:var(--muted);max-width:430px;padding-bottom:10px}
+
+  /* ===== network map page ===== */
+  .netpage{display:grid;grid-template-columns:1fr 440px;gap:0;border-bottom:1px solid var(--line2)}
+  .map-side{position:relative;padding:30px 24px 24px 80px;border-right:1px solid var(--line)}
+  .map-grid{position:relative;height:560px;background:
+    linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px),var(--bg);
+    background-size:46px 46px,46px 46px,auto;border:1px solid var(--line);overflow:hidden}
+  .map-grid svg{position:absolute;inset:0;width:100%;height:100%}
+  .pulse{transform-origin:center;animation:pl 2.4s ease-out infinite}
+  @keyframes pl{0%{transform:translate(-50%,-50%) scale(.4);opacity:.5}70%{opacity:0}100%{transform:translate(-50%,-50%) scale(1);opacity:0}}
+  @media (prefers-reduced-motion: reduce){.pulse{animation:none;opacity:0}}
+  .map-coord{position:absolute;font-family:ui-monospace,Menlo,monospace;font-size:9px;letter-spacing:.14em;color:var(--faint)}
+  .info-side{padding:30px 80px 30px 36px;display:flex;flex-direction:column}
+  .info-card{border:1px solid var(--line2);padding:26px 26px 22px;position:sticky;top:20px}
+  .info-card .city{display:flex;align-items:baseline;justify-content:space-between}
+  .info-card .city b{font-size:34px;font-weight:600;letter-spacing:-.02em}
+  .info-card .city .tag2{font-family:ui-monospace,Menlo,monospace;font-size:9.5px;letter-spacing:.14em;
+    border:1px solid var(--line2);padding:5px 9px;color:var(--muted)}
+  .info-rows{margin-top:18px;border-top:1px solid var(--line)}
+  .info-rows .r{display:flex;justify-content:space-between;padding:12px 0;border-bottom:1px solid var(--line);
+    font-size:12.5px}
+  .info-rows .r span:first-child{color:var(--faint);font-family:ui-monospace,Menlo,monospace;font-size:10px;
+    letter-spacing:.1em;padding-top:2px}
+  .info-rows .r span:last-child{font-weight:500}
+  .info-hint{font-family:ui-monospace,Menlo,monospace;font-size:9.5px;letter-spacing:.12em;color:var(--faint);
+    margin-top:14px;line-height:1.9}
+  .legend{display:flex;gap:22px;padding:16px 26px 0}
+  .legend span{display:flex;align-items:center;gap:8px;font-family:ui-monospace,Menlo,monospace;
+    font-size:9px;letter-spacing:.1em;color:var(--muted)}
+  .legend .lg{width:10px;height:10px;border-radius:50%}
+  .pagenav{display:grid;grid-template-columns:1fr 1fr;border-top:1px solid var(--line2)}
+  .pagenav a{display:block;padding:26px 80px;text-decoration:none;color:inherit}
+  .pagenav a.next{border-left:1px solid var(--line2);text-align:right}
+  .pagenav .k{font-family:ui-monospace,Menlo,monospace;font-size:9.5px;letter-spacing:.16em;color:var(--faint)}
+  .pagenav b{display:block;font-size:20px;font-weight:600;margin-top:10px}
+
+  /* ===== IA route board ===== */
+  .ia{padding:44px 80px 56px}
+  .ia-row{display:grid;grid-template-columns:270px 1fr;gap:0;border-top:1px solid var(--line)}
+  .ia-row .route{padding:20px 24px 20px 0;border-right:1px solid var(--line)}
+  .ia-row .route b{font-family:ui-monospace,Menlo,monospace;font-size:15px;font-weight:600;letter-spacing:-.01em}
+  .ia-row .route span{display:block;font-size:11px;color:var(--faint);margin-top:6px;letter-spacing:.04em}
+  .ia-row .subs{padding:20px 0 20px 28px;display:flex;flex-wrap:wrap;gap:10px 28px;align-items:center}
+  .ia-row .sub{font-family:ui-monospace,Menlo,monospace;font-size:11px;color:var(--muted);
+    display:flex;align-items:center;gap:8px}
+  .ia-row .sub i{font-style:normal;font-size:9px;color:var(--faint)}
+  .ia-note{font-size:12px;color:var(--muted);line-height:1.9;margin-top:26px;max-width:720px}
+
+  /* marquee fix + extras */
+  .cases-mar{width:max-content;animation:mq 38s linear infinite}
+  .cases-wrap:hover .cases-mar{animation-play-state:paused}
+  @keyframes mq{from{transform:translateX(0)}to{transform:translateX(-2040px)}}
+  @media (prefers-reduced-motion: reduce){.cases-mar{animation:none}}
+  .caps .cap{grid-template-columns:64px 250px 1fr 170px 56px;gap:24px}
+  .map-fallback{position:absolute;inset:0;background:
+    linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px),var(--bg);
+    background-size:46px 46px,46px 46px,auto}
+  #tmap{position:absolute;inset:0}
+  .fb-ring{position:absolute;transform:translate(-50%,-50%);border:1px solid var(--line2);border-radius:50%;background:rgba(10,10,10,.02)}
+  html[data-theme="dark"] .fb-ring{background:rgba(255,255,255,.03)}
+  .fb-pulse{position:absolute;transform:translate(-50%,-50%);border:1px solid var(--ink);border-radius:50%;
+    animation:pl 2.6s ease-out infinite;pointer-events:none}
+  .map-dot{position:absolute;transform:translate(-50%,-50%);background:none;border:none;cursor:pointer;
+    display:flex;flex-direction:column;align-items:center;gap:6px;padding:0;font-family:ui-monospace,Menlo,monospace}
+  .map-dot i{width:9px;height:9px;border-radius:50%;background:var(--ink);display:block}
+  .map-dot.plan i{background:transparent;border:1px solid var(--ink)}
+  .map-dot span{font-size:9px;letter-spacing:.1em;color:var(--muted);white-space:nowrap}
+  .map-dot.on i,.map-dot:hover i{box-shadow:0 0 0 4px var(--line)}
+  .map-dot.on span,.map-dot:hover span{color:var(--ink);font-weight:600}
+
+</style>
+</head>
+<body>
+
+<button class="toggle" id="themeBtn" aria-label="切换深浅色">
+  <span id="toggleLabel">LIGHT</span>
+  <span class="knob" id="knob">◐</span>
+</button>
+
+<div class="topbar">
+  <b>上海集培优 COREFIX PRO</b>
+  <span>官网设计稿 v2</span>
+  <span class="chip">黑白 · 白底</span>
+  <span class="chip">首页 + 路由页</span>
+  <span class="sp"></span>
+  <span>品牌绿 #A9CB39 仅出现在右下角切换按钮</span>
+</div>
+
+<div class="canvas">
+
+<section class="board">
+  <div class="label"><span class="n">A1</span><span>首页 · 首屏 Hero</span><span class="dim"></span></div>
+  <div class="frame-wrap"><div class="frame">
+
+    <nav class="nav">
+      <div class="logo">
+        <div class="mark">
+          <svg width="30" height="30" viewBox="0 0 32 32" fill="none">
+            <rect x="12.5" y="1.5" width="10" height="10" transform="rotate(45 17.5 6.5)" stroke="currentColor" stroke-width="1.3"/>
+            <path d="M16 11.5 21.5 17 16 22.5 10.5 17 16 11.5Z" fill="currentColor"/>
+          </svg>
+        </div>
+        <div class="brand"><span class="cn">集培优</span><span class="en">COREFIX PRO</span></div>
+      </div>
+      <div class="nav-links">
+        <span>核心业务</span><span>服务能力</span><span>服务网络</span><span>客户案例</span><span>关于我们</span>
+      </div>
+      <div class="nav-right">
+        <span class="tel">021-5176-8787</span>
+        <span class="nav-btn">预约检修</span>
+      </div>
+    </nav>
+
+    <div class="hero">
+      <div class="hero-bg"></div>
+      <div class="hero-l">
+        <div class="eyebrow"><b>01</b> / GPU REPAIR &amp; MAINTENANCE</div>
+        <h1>让每一张 GPU<br/><span class="thin">回到满算力</span></h1>
+        <p>芯片级维修、驱动与固件调优、全国备件网络。12 小时压力测试验证，修复后算力恢复至原厂标准的 98% 以上。</p>
+        <div class="hero-cta">
+          <span class="btn btn-solid">预约检修 <span class="ar">→</span></span>
+          <span class="btn btn-line">查看服务能力</span>
+        </div>
+        <div class="hero-mini-map">
+          <span class="lbl">SERVICE NETWORK<br/>28 CITIES · 7×24</span>
+          <a class="go-map">查看服务网络地图 →</a>
+        </div>
+
+        <div class="hero-meta">
+          <div><b>60+</b><span>工程师团队</span></div>
+          <div><b>28 城</b><span>7×24 响应</span></div>
+          <div><b>&lt;0.8%</b><span>故障复发率</span></div>
+        </div>
+      </div>
+
+      <div class="wo">
+        <div class="wo-top">
+          <span class="t">WORK ORDER</span>
+          <span class="no">NO. CF-2609-0417</span>
+        </div>
+        <div class="wo-body">
+          <div class="wo-row"><span class="k">DEVICE</span><span class="v">NVIDIA H200 ×8 / 服务器整机</span></div>
+          <div class="wo-row"><span class="k">FAULT</span><span class="v">底板焊点虚焊 · 显存供电短路</span></div>
+          <div class="wo-row"><span class="k">ACTION</span><span class="v">BGA 返修 + 芯片级替换</span></div>
+          <div class="wo-row"><span class="k">SLA</span><span class="v">MAX · 4h 到场 / 5 天交付</span></div>
+        </div>
+        <div class="wo-state">
+          <div class="lbl">REPAIR TRACK</div>
+          <div class="track">
+            <div class="node done"><div class="ln"></div><div class="dot"></div><span>接收</span></div>
+            <div class="node done"><div class="ln"></div><div class="dot"></div><span>检测</span></div>
+            <div class="node done"><div class="ln"></div><div class="dot"></div><span>维修</span></div>
+            <div class="node now"><div class="ln"></div><div class="dot"></div><span>压测</span></div>
+            <div class="node"><div class="dot"></div><span>交付</span></div>
+          </div>
+        </div>
+        <div class="wo-kpi">
+          <div><b>98.6<i>%</i></b><span>算力恢复率</span></div>
+          <div><b>12<i>h</i></b><span>满载压测</span></div>
+          <div><b>0</b><span>异常记录</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="pad">
+      <div class="statbar">
+        <div class="stat"><div class="n">99.2<i>%</i></div><div class="l">维修成功率</div></div>
+        <div class="stat"><div class="n">85<i>%+</i></div><div class="l">芯片级修复成功率</div></div>
+        <div class="stat"><div class="n">48<i>h</i></div><div class="l">常规故障交付</div></div>
+        <div class="stat"><div class="n">60<i>天</i></div><div class="l">维修后质保</div></div>
+      </div>
+    </div>
+
+  </div></div>
+</section>
+
+<section class="board">
+  <div class="label"><span class="n">A2</span><span>首页 · 核心业务与能力</span><span class="dim"></span></div>
+  <div class="frame-wrap"><div class="frame">
+
+    <div class="sec">
+      <div class="sec-head">
+        <div>
+          <div class="eyebrow"><b>02</b> / CAPABILITY</div>
+          <h2 class="sec-title">从芯片到集群，<br/>一条完整的修复链路</h2>
+        </div>
+        <div class="sec-idx">02 — 05</div>
+      </div>
+
+      <div class="caps">
+        <div class="cap">
+          <div class="no">01</div>
+          <h3>硬件维修<small>HARDWARE REPAIR</small></h3>
+          <p>芯片级修复显存颗粒、核心供电电路与 PCIe 通信异常；模块级更换散热模组、电源与 NVMe 阵列；整机诊断覆盖 128 项指标，三维成像定位隐蔽故障。</p>
+          <div class="m"><b>85%+</b><span>芯片级修复成功率</span></div><span class="go">→</span>
+        </div>
+        <div class="cap">
+          <div class="no">02</div>
+          <h3>软件测试与调优<small>SOFTWARE &amp; TUNING</small></h3>
+          <p>驱动兼容性测试与部署、固件与 VBIOS 刷新、BIOS/UEFI 与 MIG 配置优化、DCGM 监控部署、CUDA 基准与长时压力测试。</p>
+          <div class="m"><b>98%+</b><span>修复后算力恢复</span></div><span class="go">→</span>
+        </div>
+        <div class="cap">
+          <div class="no">03</div>
+          <h3>维修增值服务<small>VALUE-ADDED</small></h3>
+          <p>1–3 年延保套餐、同型号备机租赁，以及季度《设备健康报告》与性能衰减预警。</p>
+          <div class="m"><b>180<i>天</i></b><span>最高质保期</span></div><span class="go">→</span>
+        </div>
+        <div class="cap">
+          <div class="no">04</div>
+          <h3>备件供应链<small>SPARE PARTS</small></h3>
+          <p>总部中心仓 / 区域分仓 / 客户前置仓三级布局，备件 ATE 全检，大型数据中心 1:1 备机率，同城 2 小时调拨。</p>
+          <div class="m"><b>1:1</b><span>关键部件备机率</span></div><span class="go">→</span>
+        </div>
+        <div class="cap">
+          <div class="no">05</div>
+          <h3>现场与驻场<small>ON-SITE</small></h3>
+          <p>全国 28 城 7×24 应急小组，市区 4 小时到场；按每 300 台服务器配 4 名驻场工程师，远程诊断中心实时跟踪进度。</p>
+          <div class="m"><b>4<i>h</i></b><span>市区到场时效</span></div><span class="go">→</span>
+        </div>
+      </div>
+
+      <div class="more-bar">
+        <a class="link-more">查看全部服务能力 <span class="p">→ /CAPABILITY</span></a>
+        <a class="link-more">备件供应链方案 <span class="p">→ /SUPPLY</span></a>
+      </div>
+    </div>
+
+  </div></div>
+</section>
+
+<section class="board">
+  <div class="label"><span class="n">A3</span><span>首页 · 全国服务网络 + 服务等级</span><span class="dim"></span></div>
+  <div class="frame-wrap"><div class="frame">
+
+    <div class="sec">
+      <div class="sec-head">
+        <div>
+          <div class="eyebrow"><b>03</b> / NETWORK &amp; SLA</div>
+          <h2 class="sec-title">双枢纽，覆盖全国</h2>
+          <p class="sec-sub">深圳总部与上海维修基地双城联动，5 个已建服务点 + 4 个在建服务点，服务半径内到场不超过 24 小时。</p>
+        </div>
+        <div class="sec-idx">03 — 05</div>
+      </div>
+
+      <div class="net">
+        <div>
+          <div class="site"><span class="n">深圳<em>总部</em></span><span class="v">覆盖 5 省 · 61 城</span></div>
+          <div class="site"><span class="n">上海<em>维修基地 2000㎡</em></span><span class="v">覆盖 4 省 · 34 城</span></div>
+          <div class="site"><span class="n">北京<em>服务点</em></span><span class="v">覆盖 7 省 · 47 城</span></div>
+          <div class="site"><span class="n">宁夏<em>服务点</em></span><span class="v">覆盖 3 省 · 30 城</span></div>
+          <div class="site"><span class="n">乌兰察布<em>服务点</em></span><span class="v">覆盖 3 省 · 25 城</span></div>
+          <div class="site pending"><span class="n">哈密 / 西宁 / 芜湖 / 贵州<em>在建</em></span><span class="v">2026 年陆续启用</span></div>
+          <p class="note">已建服务点周边 800 公里内 ≤24 小时到场；800–1500 公里 ≤48 小时；1500 公里以上 ≤72 小时。支持按 P1–P4 分级定制 SLA。</p>
+        </div>
+
+        <div>
+          <table class="sla">
+            <thead><tr><th>服务等级</th><th>基础</th><th>PRO</th><th>MAX</th></tr></thead>
+            <tbody>
+              <tr><td>响应时间</td><td>≤4h</td><td>≤2h</td><td class="hl">≤30min</td></tr>
+              <tr><td>现场抵达</td><td>≤24h</td><td>≤10h</td><td class="hl">≤4h</td></tr>
+              <tr><td>故障修复</td><td>≤14天</td><td>≤7天</td><td class="hl">≤5天</td></tr>
+              <tr><td>备件保障率</td><td>100%</td><td>100%</td><td>100%</td></tr>
+              <tr><td>维修后质保</td><td>30天</td><td>60天</td><td class="hl">180天</td></tr>
+              <tr><td>驻场配置</td><td>—</td><td>≥2 人</td><td class="hl">专属团队</td></tr>
+            </tbody>
+          </table>
+          <p class="note">支持设备：A100 / A800 / H100 / H200 / H20 / H800 / B200 / B300，以及 8 卡 4090、5090、A6000 集群。</p>
+          <div class="more-bar" style="margin-top:20px">
+            <a class="link-more">进入服务网络地图 <span class="p">→ /NETWORK</span></a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div></div>
+</section>
+
+<section class="board">
+  <div class="label"><span class="n">A4</span><span>首页 · 客户案例 + 服务流程</span><span class="dim"></span></div>
+  <div class="frame-wrap"><div class="frame">
+
+    <div class="sec" style="padding-bottom:64px">
+      <div class="sec-head">
+        <div>
+          <div class="eyebrow"><b>04</b> / CASES</div>
+          <h2 class="sec-title">修过的机器，会说话</h2>
+        </div>
+        <div class="sec-idx">04 — 05</div>
+      </div>
+
+      <div class="cases-wrap">
+        <div class="cases-mar">
+        <div class="case">
+          <div class="k">深圳 · 1000 台 H200 批量维保</div>
+          <h4>近万卡集群，故障率从 10% 压到 3% 以内</h4>
+          <p>驻场 2 人加季度巡检与工单分析，非集群级中断控制在 8 小时内。</p>
+          <div class="big">10%<i>→</i>3%</div>
+          <div class="ccap">集群故障率</div>
+        </div>
+        <div class="case">
+          <div class="k">河南 · H200 模组底板故障</div>
+          <h4>8 小时到场，72 小时满载稳定</h4>
+          <p>虚焊与短路双重故障，显微镜定位、恒温补焊，三轮全工况测试通过。</p>
+          <div class="big">72<i>h</i></div>
+          <div class="ccap">连续稳定运行</div>
+        </div>
+        <div class="case">
+          <div class="k">上海 · 32 台 H200 交付维保</div>
+          <h4>7 天完成拆改配与全流程压测</h4>
+          <p>内存、硬盘更换与网卡安装调试，交付即达标，延伸至年度维保。</p>
+          <div class="big">7<i>天</i></div>
+          <div class="ccap">交付周期</div>
+        </div>
+        <div class="case">
+          <div class="k">乌兰察布 · 智算中心驻场</div>
+          <h4>300 台服务器配 4 名驻场工程师</h4>
+          <p>远程诊断中心实时跟踪工单，问题不过夜，故障闭环全程留痕。</p>
+          <div class="big">300<i>:</i>4</div>
+          <div class="ccap">驻场配比</div>
+        </div>
+        <div class="case">
+          <div class="k">上海 · 备件前置仓</div>
+          <h4>同城 2 小时备件调拨到位</h4>
+          <p>三级仓网加 ATE 全检，大型数据中心关键部件 1:1 备机。</p>
+          <div class="big">2<i>h</i></div>
+          <div class="ccap">备件到场</div>
+        </div>
+        <div class="case">
+          <div class="k">全国 · 寄修服务</div>
+          <h4>48 小时常规故障修复交付</h4>
+          <p>故障件多层包装寄回基地，全程物流追踪，维修成功率 99.2%。</p>
+          <div class="big">48<i>h</i></div>
+          <div class="ccap">修复交付</div>
+        </div>
+        <div class="case">
+          <div class="k">深圳 · 1000 台 H200 批量维保</div>
+          <h4>近万卡集群，故障率从 10% 压到 3% 以内</h4>
+          <p>驻场 2 人加季度巡检与工单分析，非集群级中断控制在 8 小时内。</p>
+          <div class="big">10%<i>→</i>3%</div>
+          <div class="ccap">集群故障率</div>
+        </div>
+        <div class="case">
+          <div class="k">河南 · H200 模组底板故障</div>
+          <h4>8 小时到场，72 小时满载稳定</h4>
+          <p>虚焊与短路双重故障，显微镜定位、恒温补焊，三轮全工况测试通过。</p>
+          <div class="big">72<i>h</i></div>
+          <div class="ccap">连续稳定运行</div>
+        </div>
+        <div class="case">
+          <div class="k">上海 · 32 台 H200 交付维保</div>
+          <h4>7 天完成拆改配与全流程压测</h4>
+          <p>内存、硬盘更换与网卡安装调试，交付即达标，延伸至年度维保。</p>
+          <div class="big">7<i>天</i></div>
+          <div class="ccap">交付周期</div>
+        </div>
+        <div class="case">
+          <div class="k">乌兰察布 · 智算中心驻场</div>
+          <h4>300 台服务器配 4 名驻场工程师</h4>
+          <p>远程诊断中心实时跟踪工单，问题不过夜，故障闭环全程留痕。</p>
+          <div class="big">300<i>:</i>4</div>
+          <div class="ccap">驻场配比</div>
+        </div>
+        <div class="case">
+          <div class="k">上海 · 备件前置仓</div>
+          <h4>同城 2 小时备件调拨到位</h4>
+          <p>三级仓网加 ATE 全检，大型数据中心关键部件 1:1 备机。</p>
+          <div class="big">2<i>h</i></div>
+          <div class="ccap">备件到场</div>
+        </div>
+        <div class="case">
+          <div class="k">全国 · 寄修服务</div>
+          <h4>48 小时常规故障修复交付</h4>
+          <p>故障件多层包装寄回基地，全程物流追踪，维修成功率 99.2%。</p>
+          <div class="big">48<i>h</i></div>
+          <div class="ccap">修复交付</div>
+        </div>
+        </div>
+        <div class="cases-fade"></div>
+        <div class="cases-hint"><span>SCROLL</span><div class="dragbar"><i></i></div><span>DRAG → 01–06</span></div>
+      </div>
+    </div>
+
+    <div class="sec" style="padding-top:56px">
+      <div class="sec-head" style="margin-bottom:40px">
+        <div>
+          <div class="eyebrow"><b>05</b> / PROCESS</div>
+          <h2 class="sec-title" style="font-size:42px">六步闭环，全程留痕</h2>
+        </div>
+        <div class="sec-idx">05 — 05</div>
+      </div>
+      <div class="steps">
+        <div class="step"><span class="bar"></span><span class="no">01</span><h4>报修接收</h4><p>控制台、API、热线多渠道报障，自动生成工单。</p></div>
+        <div class="step"><span class="bar"></span><span class="no">02</span><h4>远程初诊</h4><p>15 分钟内完成故障等级判定，可远程即远程解决。</p></div>
+        <div class="step"><span class="bar"></span><span class="no">03</span><h4>到场 / 寄修</h4><p>市区 4 小时到场；故障件多层包装寄回基地。</p></div>
+        <div class="step"><span class="bar"></span><span class="no">04</span><h4>检测报价</h4><p>三级检测出具元件级诊断报告与报价单。</p></div>
+        <div class="step"><span class="bar"></span><span class="no">05</span><h4>维修压测</h4><p>BGA 返修加 12 小时满载压测，参数偏差 ≤3%。</p></div>
+        <div class="step"><span class="bar"></span><span class="no">06</span><h4>交付质保</h4><p>出具维修测试报告，30–180 天质保与档案追踪。</p></div>
+      </div>
+    </div>
+
+  </div></div>
+</section>
+
+<section class="board">
+  <div class="label"><span class="n">A5</span><span>转化区 + 页脚</span><span class="dim"></span></div>
+  <div class="frame-wrap"><div class="frame">
+
+    <div class="cta">
+      <div>
+        <div class="eyebrow"><b>06</b> / CONTACT</div>
+        <h2 style="margin-top:24px">机器停一天，<br/><span class="thin">业务就少一天。</span></h2>
+        <p class="sub">把故障现象、设备型号和所在城市发给我们，1 小时内给出初步判断与处理建议。</p>
+      </div>
+      <div class="cta-r">
+        <span class="btn btn-solid">预约检修 <span class="ar">→</span></span>
+        <span class="btn btn-line">下载服务手册 <span class="ar">↓</span></span>
+        <span class="btn btn-line">021-5176-8787 <span class="ar">☏</span></span>
+      </div>
+    </div>
+
+    <div class="footer">
+      <div>
+        <div class="logo" style="margin-bottom:18px">
+          <div class="mark">
+            <svg width="30" height="30" viewBox="0 0 32 32" fill="none">
+              <rect x="12.5" y="1.5" width="10" height="10" transform="rotate(45 17.5 6.5)" stroke="currentColor" stroke-width="1.3"/>
+              <path d="M16 11.5 21.5 17 16 22.5 10.5 17 16 11.5Z" fill="currentColor"/>
+            </svg>
+          </div>
+          <div class="brand"><span class="cn">集培优</span><span class="en">COREFIX PRO</span></div>
+        </div>
+        <div class="co">
+          上海集培优信息科技有限公司<br/>
+          上海市长宁区友乐路 299 号 3 号楼 5 层<br/>
+          上海市浦东新区泥城镇秋山路 1775 号<br/>
+          021-5176-8787
+        </div>
+      </div>
+      <div><h5>业务</h5><ul><li>硬件维修</li><li>软件调优</li><li>备件供应链</li><li>驻场维保</li></ul></div>
+      <div><h5>公司</h5><ul><li>关于集培优</li><li>服务网络</li><li>资质认证</li><li>加入我们</li></ul></div>
+      <div><h5>资质</h5><ul style="font-size:11.5px">
+        <li>ISO 9001 质量管理体系</li><li>ISO 14001 环境管理体系</li>
+        <li>ISO 45001 安全管理体系</li><li>AAA 级信用企业（9 项）</li></ul></div>
+    </div>
+    <div class="copyright">
+      <span>© 2026 SHANGHAI COREFIX PRO INFORMATION TECHNOLOGY CO., LTD.</span>
+      <span>沪ICP备XXXXXXXX号 · 隐私政策</span>
+    </div>
+
+  </div></div>
+</section>
+
+<section class="board">
+  <div class="label"><span class="n">N1</span><span>路由页 /network · 服务网络地图（可交互）</span><span class="dim"></span></div>
+  <div class="frame-wrap"><div class="frame">
+
+    <nav class="nav">
+      <div class="logo">
+        <div class="mark">
+          <svg width="30" height="30" viewBox="0 0 32 32" fill="none">
+            <rect x="12.5" y="1.5" width="10" height="10" transform="rotate(45 17.5 6.5)" stroke="currentColor" stroke-width="1.3"/>
+            <path d="M16 11.5 21.5 17 16 22.5 10.5 17 16 11.5Z" fill="currentColor"/>
+          </svg>
+        </div>
+        <div class="brand"><span class="cn">集培优</span><span class="en">COREFIX PRO</span></div>
+      </div>
+      <div class="nav-links"><span>核心业务</span><span>服务能力</span><span style="font-weight:600">服务网络</span><span>客户案例</span><span>关于我们</span></div>
+      <div class="nav-right"><span class="tel">021-5176-8787</span><span class="nav-btn">预约检修</span></div>
+    </nav>
+
+    <div class="crumbs"><span>首页</span><span>/</span><b>服务网络</b><span>/ NETWORK MAP</span></div>
+
+    <div class="page-hero">
+      <div>
+        <div class="eyebrow"><b>03</b> / SERVICE NETWORK</div>
+        <h1>双枢纽，覆盖全国</h1>
+      </div>
+      <p class="desc">深圳总部与上海维修基地双城联动，5 个已建服务点 + 4 个在建服务点。悬停左侧任一服务点，查看定位、覆盖范围与到场时效。</p>
+    </div>
+
+    <div class="netpage">
+      <div class="map-side">
+        <div class="map-grid">
+          <div class="map-fallback" id="mapFallback">
+<div class="fb-ring" style="left:66.2%;top:82%;width:22%;height:30%"></div><div class="fb-ring" style="left:78.0%;top:63.2%;width:24%;height:36%"></div><div class="fb-ring" style="left:69.7%;top:39.2%;width:24%;height:36%"></div><div class="fb-ring" style="left:53.6%;top:43.1%;width:24%;height:36%"></div><div class="fb-ring" style="left:64.7%;top:36.1%;width:24%;height:36%"></div><div class="fb-pulse" style="left:66.2%;top:82%;width:22%;height:30%;animation-delay:0s"></div><div class="fb-pulse" style="left:78.0%;top:63.2%;width:24%;height:36%;animation-delay:.8s"></div><div class="fb-pulse" style="left:69.7%;top:39.2%;width:24%;height:36%;animation-delay:1.6s"></div><div class="fb-pulse" style="left:53.6%;top:43.1%;width:24%;height:36%;animation-delay:2s"></div><div class="fb-pulse" style="left:64.7%;top:36.1%;width:24%;height:36%;animation-delay:2.4s"></div><button class="map-dot " data-k="sz" style="left:66.2%;top:82%"><i></i><span>深圳</span></button><button class="map-dot " data-k="sh" style="left:78.0%;top:63.2%"><i></i><span>上海</span></button><button class="map-dot " data-k="bj" style="left:69.7%;top:39.2%"><i></i><span>北京</span></button><button class="map-dot " data-k="nx" style="left:53.6%;top:43.1%"><i></i><span>宁夏</span></button><button class="map-dot " data-k="wl" style="left:64.7%;top:36.1%"><i></i><span>乌兰察布</span></button><button class="map-dot plan" data-k="hm" style="left:32.8%;top:31.0%"><i></i><span>哈密</span></button><button class="map-dot plan" data-k="xn" style="left:46.4%;top:48.3%"><i></i><span>西宁</span></button><button class="map-dot plan" data-k="wh" style="left:73.2%;top:62.9%"><i></i><span>芜湖</span></button><button class="map-dot plan" data-k="gz" style="left:54.2%;top:75.9%"><i></i><span>贵州</span></button>
+          </div>
+          <div id="tmap"></div>
+        </div>
+        <div class="legend">
+          <span><i class="lg" style="background:var(--ink)"></i>已建服务点</span>
+          <span><i class="lg" style="background:transparent;border:1px solid var(--ink)"></i>在建服务点</span>
+          <span><i class="lg" style="background:transparent;border:1px dashed var(--line2)"></i>800KM 覆盖圈</span>
+        </div>
+      </div>
+      <div class="info-side">
+        <div class="info-card">
+          <div class="city"><b id="icName">深圳</b><span class="tag2" id="icTag">总部枢纽</span></div>
+          <div class="info-rows" id="icRows"></div>
+          <p class="info-hint">HOVER 悬停服务点查看详情<br/>800KM 内 ≤24H · 1500KM 内 ≤48H</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="pagenav">
+      <a><span class="k">← BACK</span><b>返回首页</b></a>
+      <a class="next"><span class="k">NEXT →</span><b>客户案例</b></a>
+    </div>
+
+  </div></div>
+</section>
+
+<section class="board">
+  <div class="label"><span class="n">S0</span><span>信息架构 · 路由规划</span><span class="dim"></span></div>
+  <div class="frame-wrap"><div class="frame">
+    <div class="ia">
+      <div class="sec-head" style="margin-bottom:26px">
+        <div><div class="eyebrow"><b>IA</b> / ROUTE MAP</div>
+          <h2 class="sec-title" style="font-size:34px;margin-top:14px">一个首页 + 四个路由页</h2></div>
+        <div class="sec-idx">SEO · APP ROUTER</div>
+      </div>
+      <div class="ia-row">
+        <div class="route"><b>/</b><span>首页 · 单页滚动叙事</span></div>
+        <div class="subs">
+          <span class="sub">01 核心业务 <i>→ /capability</i></span>
+          <span class="sub">02 服务能力 <i>→ /capability</i></span>
+          <span class="sub">03 服务网络 <i>→ /network</i></span>
+          <span class="sub">04 客户案例 <i>→ /cases</i></span>
+          <span class="sub">05 服务流程 <i>锚点 #process</i></span>
+          <span class="sub">06 联系 <i>锚点 #contact</i></span>
+        </div>
+      </div>
+      <div class="ia-row">
+        <div class="route"><b>/capability</b><span>服务能力</span></div>
+        <div class="subs">
+          <span class="sub">硬件维修</span><span class="sub">软件调优</span><span class="sub">增值服务</span>
+          <span class="sub">备件供应链</span><span class="sub">现场驻场</span>
+        </div>
+      </div>
+      <div class="ia-row">
+        <div class="route"><b>/network</b><span>服务网络 · 即本页 N1</span></div>
+        <div class="subs">
+          <span class="sub">覆盖地图（悬停交互）</span><span class="sub">SLA 等级表</span><span class="sub">服务点清单</span>
+        </div>
+      </div>
+      <div class="ia-row">
+        <div class="route"><b>/cases</b><span>客户案例</span></div>
+        <div class="subs">
+          <span class="sub">案例流（横向滚动）</span><span class="sub">指标看板</span><span class="sub">案例详情锚点</span>
+        </div>
+      </div>
+      <div class="ia-row" style="border-bottom:1px solid var(--line)">
+        <div class="route"><b>/about</b><span>关于集培优</span></div>
+        <div class="subs">
+          <span class="sub">公司简介</span><span class="sub">资质认证</span><span class="sub">团队</span><span class="sub">联系方式</span>
+        </div>
+      </div>
+      <p class="ia-note">导航栏全站不变；首页每个分区右下角的链接进入对应路由页，路由页顶部用面包屑返回。所有路由共享同一套黑白令牌与页头页脚——Next.js App Router 下即 4 个 route segment，每个页面独立 SEO meta，不再把所有内容塞进一张长图。</p>
+    </div>
+  </div></div>
+</section>
+
+<section class="board">
+  <div class="label"><span class="n">A6</span><span>设计规范 · 黑白体系</span><span class="dim"></span></div>
+  <div class="frame-wrap"><div class="frame">
+    <div class="sec">
+      <div class="sec-head" style="margin-bottom:34px">
+        <div><div class="eyebrow"><b>00</b> / DESIGN SYSTEM</div>
+          <h2 class="sec-title" style="font-size:38px">设计规范</h2></div>
+        <div class="sec-idx">V2 · B&amp;W</div>
+      </div>
+
+      <div class="spec">
+        <div class="spec-box" style="grid-column:span 6">
+          <h4>NEUTRAL SCALE · 中性色阶（无彩色）</h4>
+          <div class="sw">
+            <div class="swatch"><div class="chip" style="background:#0A0A0A"></div><div class="nm">Ink 主文字</div><div class="hx">#0A0A0A</div></div>
+            <div class="swatch"><div class="chip" style="background:#2E2E2C"></div><div class="nm">正文</div><div class="hx">#2E2E2C</div></div>
+            <div class="swatch"><div class="chip" style="background:#6E6E6A"></div><div class="nm">次级</div><div class="hx">#6E6E6A</div></div>
+            <div class="swatch"><div class="chip" style="background:#9C9C97"></div><div class="nm">辅助</div><div class="hx">#9C9C97</div></div>
+            <div class="swatch"><div class="chip" style="background:#F4F4F1"></div><div class="nm">纸面</div><div class="hx">#F4F4F1</div></div>
+            <div class="swatch"><div class="chip" style="background:#FFFFFF;border-left:1px solid rgba(0,0,0,.12)"></div><div class="nm">底色</div><div class="hx">#FFFFFF</div></div>
+          </div>
+          <div style="margin-top:22px;display:flex;align-items:center;gap:12px">
+            <div style="width:24px;height:24px;background:#A9CB39;border-radius:2px"></div>
+            <div style="font-size:11.5px;color:var(--muted)">品牌绿 <span class="mono">#A9CB39</span> — 仅用于交互态（切换按钮、焦点框），主体排版不参与</div>
+          </div>
+        </div>
+
+        <div class="spec-box" style="grid-column:span 6;padding-right:0;border-right:none">
+          <h4>TYPE SCALE · 字体层级</h4>
+          <div class="type-row"><span class="k">DISPLAY / 84</span>
+            <span style="font-size:32px;font-weight:600;letter-spacing:-.035em">让每一张 GPU</span><span class="s">600 · -3.5%</span></div>
+          <div class="type-row"><span class="k">H1 / 50</span>
+            <span style="font-size:22px;font-weight:600;letter-spacing:-.025em">从芯片到集群</span><span class="s">600 · -2.5%</span></div>
+          <div class="type-row"><span class="k">H2 / 22</span>
+            <span style="font-size:16px;font-weight:600">硬件维修</span><span class="s">600</span></div>
+          <div class="type-row"><span class="k">BODY / 15</span>
+            <span style="font-size:12.5px;color:var(--muted)">芯片级维修、驱动与固件调优、全国备件网络。</span><span class="s">400 · 1.9</span></div>
+          <div class="type-row" style="border:none"><span class="k">MONO / 11</span>
+            <span class="mono" style="font-size:10.5px;letter-spacing:.16em;color:var(--muted)">WORK ORDER · NO.CF-2609-0417</span><span class="s">500 · 16%</span></div>
+        </div>
+
+        <div class="spec-box" style="grid-column:span 6">
+          <h4>COMPONENT · 组件</h4>
+          <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center">
+            <span class="btn btn-solid" style="height:44px;padding:0 20px;font-size:12.5px">主按钮 →</span>
+            <span class="btn btn-line" style="height:44px;padding:0 20px;font-size:12.5px">次按钮</span>
+            <span style="height:44px;padding:0 16px;border:1px solid var(--line2);display:flex;align-items:center;font-size:12px;color:var(--faint)">输入框</span>
+          </div>
+          <div style="margin-top:18px;font-size:11px;color:var(--faint);line-height:1.9">
+            全部直角或 2px 微圆角 · 按钮高 52 / 44 · 1px 描边 · 不用投影<br/>
+            唯一例外：移动端底部操作条为整幅反色条。
+          </div>
+        </div>
+
+        <div class="spec-box" style="grid-column:span 6;padding-right:0;border-right:none">
+          <h4>GRID · 栅格与节奏</h4>
+          <div style="font-size:12px;color:var(--muted);line-height:2.1">
+            画板 1440 · 12 栏 · 页边距 80<br/>
+            分区间距 92 · 分割线 1px · 首屏标题 84 / 1.06<br/>
+            <span style="color:var(--ink)">所有分区以一条横线开头</span>，编号从 01 递增
+          </div>
+          <div style="display:flex;gap:0;margin-top:20px;border:1px solid var(--line)">
+            <div style="flex:1;height:22px;border-right:1px solid var(--line)"></div>
+            <div style="flex:1;height:22px;border-right:1px solid var(--line)"></div>
+            <div style="flex:1;height:22px;border-right:1px solid var(--line)"></div>
+            <div style="flex:1;height:22px;border-right:1px solid var(--line)"></div>
+            <div style="flex:1;height:22px;border-right:1px solid var(--line)"></div>
+            <div style="flex:1;height:22px"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div></div>
+</section>
+
+<section class="board">
+  <div class="label"><span class="n">A7</span><span>移动端 · 375 适配</span><span class="dim"></span></div>
+  <div class="frame-wrap"><div class="frame" style="padding:56px 0">
+    <div class="phones">
+
+      <div class="phone">
+        <div class="notch"></div>
+        <div class="pnav">
+          <div class="logo">
+            <div class="mark" style="width:24px;height:24px">
+              <svg width="24" height="24" viewBox="0 0 32 32" fill="none">
+                <rect x="12.5" y="1.5" width="10" height="10" transform="rotate(45 17.5 6.5)" stroke="currentColor" stroke-width="1.5"/>
+                <path d="M16 11.5 21.5 17 16 22.5 10.5 17 16 11.5Z" fill="currentColor"/>
+              </svg>
+            </div>
+            <div class="brand"><span class="cn" style="font-size:15px">集培优</span></div>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:4px">
+            <span style="width:18px;height:1.4px;background:var(--ink);display:block"></span>
+            <span style="width:12px;height:1.4px;background:var(--ink);display:block"></span>
+          </div>
+        </div>
+        <div class="pbody">
+          <div class="eyebrow" style="font-size:9px;letter-spacing:.14em"><b>01</b> / GPU REPAIR</div>
+          <h1 style="margin-top:14px">让每一张 GPU<br/><span class="thin">回到满算力</span></h1>
+          <p>芯片级维修、驱动与固件调优、全国备件网络。修复后算力恢复至原厂 98% 以上。</p>
+          <div class="pbtn"><span>预约检修</span><span>→</span></div>
+          <div class="pcard">
+            <div class="r"><span>维修成功率</span><span>99.2%</span></div>
+            <div class="r"><span>芯片级修复</span><span>85%+</span></div>
+            <div class="r"><span>故障复发率</span><span>&lt;0.8%</span></div>
+            <div class="r"><span>常规交付</span><span>48h</span></div>
+          </div>
+        </div>
+        <div class="pbar"><span class="t">COREFIX PRO</span><span class="b">021-5176-8787</span></div>
+      </div>
+
+      <div class="phone">
+        <div class="notch"></div>
+        <div class="pnav">
+          <div class="logo">
+            <div class="mark" style="width:24px;height:24px">
+              <svg width="24" height="24" viewBox="0 0 32 32" fill="none">
+                <rect x="12.5" y="1.5" width="10" height="10" transform="rotate(45 17.5 6.5)" stroke="currentColor" stroke-width="1.5"/>
+                <path d="M16 11.5 21.5 17 16 22.5 10.5 17 16 11.5Z" fill="currentColor"/>
+              </svg>
+            </div>
+            <div class="brand"><span class="cn" style="font-size:15px">集培优</span></div>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:4px">
+            <span style="width:18px;height:1.4px;background:var(--ink);display:block"></span>
+            <span style="width:12px;height:1.4px;background:var(--ink);display:block"></span>
+          </div>
+        </div>
+        <div class="pbody">
+          <div class="eyebrow" style="font-size:9px;letter-spacing:.14em"><b>02</b> / CAPABILITY</div>
+          <div style="font-size:24px;font-weight:600;line-height:1.25;letter-spacing:-.03em;margin-top:12px">
+            从芯片到集群<br/><span style="color:var(--muted);font-weight:400">一条完整链路</span></div>
+          <div style="margin-top:18px;border-top:1px solid var(--line2)">
+            <div style="padding:14px 0;border-bottom:1px solid var(--line)">
+              <div style="display:flex;justify-content:space-between"><b style="font-size:14px">硬件维修</b><span class="mono" style="font-size:11px">85%+</span></div>
+              <div style="font-size:11px;color:var(--muted);margin-top:6px;line-height:1.6">芯片级 · 模块级 · 整机诊断</div>
+            </div>
+            <div style="padding:14px 0;border-bottom:1px solid var(--line)">
+              <div style="display:flex;justify-content:space-between"><b style="font-size:14px">软件调优</b><span class="mono" style="font-size:11px">98%+</span></div>
+              <div style="font-size:11px;color:var(--muted);margin-top:6px;line-height:1.6">驱动 · 固件 · BIOS · 压测</div>
+            </div>
+            <div style="padding:14px 0;border-bottom:1px solid var(--line)">
+              <div style="display:flex;justify-content:space-between"><b style="font-size:14px">备件供应</b><span class="mono" style="font-size:11px">1:1</span></div>
+              <div style="font-size:11px;color:var(--muted);margin-top:6px;line-height:1.6">三级仓网 · 同城 2 小时</div>
+            </div>
+            <div style="padding:14px 0">
+              <div style="display:flex;justify-content:space-between"><b style="font-size:14px">现场驻场</b><span class="mono" style="font-size:11px">4h</span></div>
+              <div style="font-size:11px;color:var(--muted);margin-top:6px;line-height:1.6">28 城 7×24 · 市区到场</div>
+            </div>
+          </div>
+        </div>
+        <div class="pbar"><span class="t">COREFIX PRO</span><span class="b">021-5176-8787</span></div>
+      </div>
+
+      <div class="phone">
+        <div class="notch"></div>
+        <div class="pnav">
+          <div class="logo">
+            <div class="mark" style="width:24px;height:24px">
+              <svg width="24" height="24" viewBox="0 0 32 32" fill="none">
+                <rect x="12.5" y="1.5" width="10" height="10" transform="rotate(45 17.5 6.5)" stroke="currentColor" stroke-width="1.5"/>
+                <path d="M16 11.5 21.5 17 16 22.5 10.5 17 16 11.5Z" fill="currentColor"/>
+              </svg>
+            </div>
+            <div class="brand"><span class="cn" style="font-size:15px">集培优</span></div>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:4px">
+            <span style="width:18px;height:1.4px;background:var(--ink);display:block"></span>
+            <span style="width:12px;height:1.4px;background:var(--ink);display:block"></span>
+          </div>
+        </div>
+        <div class="pbody">
+          <div class="eyebrow" style="font-size:9px;letter-spacing:.14em"><b>03</b> / SLA</div>
+          <div style="font-size:24px;font-weight:600;line-height:1.25;letter-spacing:-.03em;margin-top:12px">服务等级</div>
+          <div class="pcard" style="margin-top:16px">
+            <div class="r"><span>响应</span><span>4h / 2h / 30min</span></div>
+            <div class="r"><span>到场</span><span>24h / 10h / 4h</span></div>
+            <div class="r"><span>修复</span><span>14 / 7 / 5 天</span></div>
+            <div class="r"><span>质保</span><span>30 / 60 / 180 天</span></div>
+          </div>
+          <p style="font-size:11px;color:var(--faint);margin-top:14px;line-height:1.8">基础 · PRO · MAX 三档，可按 P1–P4 分级定制。</p>
+          <div class="pbtn" style="margin-top:18px"><span>获取报价</span><span>→</span></div>
+        </div>
+        <div class="pbar"><span class="t">COREFIX PRO</span><span class="b">021-5176-8787</span></div>
+      </div>
+
+    </div>
+  </div></div>
+</section>
+
+</div>
+
+<script>
+  const boards=[...document.querySelectorAll('.board')];
+  function fit(){
+    boards.forEach(b=>{
+      const wrap=b.querySelector('.frame-wrap'), frame=b.querySelector('.frame'), dim=b.querySelector('.dim');
+      const s=Math.min(1, wrap.clientWidth/1440);
+      wrap.style.setProperty('--s',s);
+      wrap.style.height=(frame.offsetHeight*s)+'px';
+      if(dim) dim.textContent='1440 × '+frame.offsetHeight;
+    });
+  }
+  window.addEventListener('resize',fit);
+  window.addEventListener('load',fit);
+  fit();
+  new ResizeObserver(fit).observe(document.querySelector('.frame'));
+
+  const btn=document.getElementById('themeBtn'), lbl=document.getElementById('toggleLabel'), knob=document.getElementById('knob');
+  function apply(t){
+    document.documentElement.setAttribute('data-theme',t);
+    lbl.textContent = t==='light' ? 'LIGHT' : 'DARK';
+    knob.textContent = t==='light' ? '◐' : '◑';
+    setTimeout(fit,60);
+  }
+  btn.addEventListener('click',()=>{
+    apply(document.documentElement.getAttribute('data-theme')==='light'?'dark':'light');
+  });
+
+  const only=location.hash.replace('#','').toLowerCase();
+  const qp=new URLSearchParams(location.search);
+  if(qp.get('theme')==='dark') apply('dark');
+  if(only){ boards.forEach(b=>{
+    const n=b.querySelector('.label .n').textContent.toLowerCase();
+    if(n!==only) b.style.display='none';
+  }); fit(); }
+
+  /* ----- network map: hover info ----- */
+  var CITY={
+    sz:{n:'深圳',t:'总部枢纽',rows:[['定位','华南调度中心'],['覆盖','5 省 · 61 城'],['到场','≤24H · 800KM 圈内'],['响应','7×24 · 30MIN']]},
+    sh:{n:'上海',t:'维修基地 2000㎡',rows:[['定位','芯片级维修 · 无尘实验室'],['覆盖','4 省 · 34 城'],['到场','≤24H · 800KM 圈内'],['设施','X-RAY · BGA 返修台']]},
+    bj:{n:'北京',t:'服务点',rows:[['定位','华北服务点'],['覆盖','7 省 · 47 城'],['到场','≤24H · 800KM 圈内'],['响应','7×24']]},
+    nx:{n:'宁夏',t:'服务点',rows:[['定位','西北服务点'],['覆盖','3 省 · 30 城'],['到场','≤48H · 1500KM 圈内'],['响应','7×24']]},
+    wl:{n:'乌兰察布',t:'服务点',rows:[['定位','智算中心驻场'],['覆盖','3 省 · 25 城'],['到场','≤48H · 1500KM 圈内'],['响应','7×24']]},
+    hm:{n:'哈密',t:'在建 · 2026',rows:[['状态','规划建设中'],['覆盖','规划中'],['响应','热线 7×24 承接']]},
+    xn:{n:'西宁',t:'在建 · 2026',rows:[['状态','规划建设中'],['覆盖','规划中'],['响应','热线 7×24 承接']]},
+    wh:{n:'芜湖',t:'在建 · 2026',rows:[['状态','规划建设中'],['覆盖','规划中'],['响应','热线 7×24 承接']]},
+    gz:{n:'贵州',t:'在建 · 2026',rows:[['状态','规划建设中'],['覆盖','规划中'],['响应','热线 7×24 承接']]}
+  };
+  function setCity(k){
+    var c=CITY[k];if(!c)return;
+    var n=document.getElementById('icName'),t=document.getElementById('icTag'),r=document.getElementById('icRows');
+    if(!n)return;
+    n.textContent=c.n;t.textContent=c.t;
+    r.innerHTML=c.rows.map(function(x){return '<div class="r"><span>'+x[0]+'</span><span>'+x[1]+'</span></div>';}).join('');
+    document.querySelectorAll('.map-dot').forEach(function(d){d.classList.toggle('on',d.getAttribute('data-k')===k);});
+  }
+  document.querySelectorAll('.map-dot').forEach(function(d){
+    d.addEventListener('mouseenter',function(){setCity(d.getAttribute('data-k'));});
+  });
+  setCity('sz');
+
+  /* ----- tencent map (proxied, auto-fallback to schematic) ----- */
+  (function(){
+    var host='http://127.0.0.1:__WB_HTTP_PORT__/_TMapService/_wbt/__WB_TMAP_SECRET__';
+    if(host.indexOf('__WB')>=0) return; /* opened from disk -> keep schematic */
+    window._TMapSecurityConfig={serviceHost:host};
+    var sc=document.createElement('script');
+    sc.src='https://map.qq.com/api/gljs?v=1.exp';
+    sc.onload=function(){
+      try{
+        var map=new TMap.Map('tmap',{center:new TMap.LatLng(35.5,109),zoom:4});
+        var dot='data:image/svg+xml;utf8,'+encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18"><circle cx="9" cy="9" r="5" fill="#0A0A0A"/></svg>');
+        var ring='data:image/svg+xml;utf8,'+encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18"><circle cx="9" cy="9" r="5" fill="none" stroke="#0A0A0A" stroke-width="1.5"/></svg>');
+        var built=[['sz',22.54,114.06],['sh',31.23,121.47],['bj',39.90,116.41],['nx',38.49,106.23],['wl',40.99,113.13]];
+        var plan=[['hm',42.83,93.52],['xn',36.62,101.78],['wh',31.35,118.43],['gz',26.65,106.63]];
+        new TMap.MultiCircle({map:map,
+          styles:{c:new TMap.CircleStyle({color:'#0A0A0A0A',borderColor:'#0A0A0A80',borderWidth:1.5})},
+          geometries:built.map(function(b,i){return {id:'c'+i,styleId:'c',center:new TMap.LatLng(b[1],b[2]),radius:800000};})});
+        var mk=new TMap.MultiMarker({map:map,
+          styles:{b:new TMap.MarkerStyle({width:18,height:18,url:dot,anchor:'center'}),
+                  p:new TMap.MarkerStyle({width:18,height:18,url:ring,anchor:'center'})},
+          geometries:built.map(function(b){return {id:b[0],styleId:'b',position:new TMap.LatLng(b[1],b[2])};})
+            .concat(plan.map(function(b){return {id:b[0],styleId:'p',position:new TMap.LatLng(b[1],b[2])};}))});
+        ['click','mouseover'].forEach(function(ev){
+          try{mk.on(ev,function(e){if(e&&e.geometry&&e.geometry.id)setCity(e.geometry.id);});}catch(_){}
+        });
+        var fb=document.getElementById('mapFallback');
+        if(fb)fb.style.display='none';
+      }catch(e){}
+    };
+    document.head.appendChild(sc);
+  })();
+</script>
+</body>
+</html>

@@ -1,0 +1,108 @@
+export function SectionHead({
+  eyebrow,
+  index,
+  title,
+  children,
+  more,
+}: {
+  eyebrow: string
+  index?: string
+  title: string
+  children?: React.ReactNode
+  more?: React.ReactNode
+}) {
+  return (
+    <div className="mb-10 border-b border-line2 pb-6 lg:mb-13">
+      <div className="flex flex-wrap items-end justify-between gap-6">
+        <div className="max-w-[720px]" data-reveal>
+          <p className="u-label">{eyebrow}</p>
+          <h2 className="mt-4 text-[clamp(30px,3.4vw,50px)] font-semibold">{title}</h2>
+          {children}
+        </div>
+        {index && <span className="u-mono pb-2 text-[11px] tracking-[0.16em] text-faint">{index}</span>}
+      </div>
+      {more}
+    </div>
+  )
+}
+
+export function PageHeader({
+  crumb,
+  eyebrow,
+  title,
+  desc,
+  aside,
+}: {
+  crumb: string
+  eyebrow: string
+  title: string
+  desc?: string
+  aside?: React.ReactNode
+}) {
+  return (
+    <div className="border-b border-line2">
+      <div className="u-container">
+        <div className="u-mono flex items-center gap-2.5 pt-7 text-[10.5px] tracking-[0.12em] text-faint">
+          <span>HOME</span>
+          <span>/</span>
+          <span className="text-ink">{crumb}</span>
+        </div>
+        <div className="flex flex-col justify-between gap-8 pb-9 pt-8 lg:flex-row lg:items-end lg:gap-16">
+          <div className="max-w-[820px]">
+            <p className="u-label">{eyebrow}</p>
+            <h1 className="mt-4 text-[clamp(34px,5vw,64px)] font-semibold">{title}</h1>
+          </div>
+          {desc ? (
+            <p className="max-w-[420px] text-[14.5px] leading-[1.95] text-muted lg:pb-2">{desc}</p>
+          ) : (
+            aside
+          )}
+        </div>
+      </div>
+    </div>
+  )
+}
+
+export function CtaBand({
+  eyebrow,
+  title,
+  sub,
+  buttons,
+  locale,
+}: {
+  eyebrow: string
+  title: string[]
+  sub: string
+  buttons: string[]
+  locale: string
+}) {
+  return (
+    <section id="contact" className="border-t border-line2">
+      <div className="u-container grid gap-10 py-20 lg:grid-cols-[1.25fr_0.75fr] lg:items-end lg:gap-16 lg:py-24">
+        <div data-reveal>
+          <p className="u-label">{eyebrow}</p>
+          <h2 className="mt-5 text-[clamp(34px,4.4vw,64px)] font-semibold leading-[1.12]">
+            {title[0]}
+            <br />
+            <span className="text-muted">{title[1]}</span>
+          </h2>
+          <p className="mt-6 max-w-[520px] text-[15px] leading-relaxed text-muted">{sub}</p>
+        </div>
+        <div className="flex flex-col gap-3" data-reveal="0.1">
+          <a href={`tel:${buttons[2]}`} className="u-btn u-btn-solid w-full">
+            {buttons[0]}
+            <span className="u-mono text-[13px]">→</span>
+          </a>
+          <a href={`/${locale}/cases/`} className="u-btn u-btn-line w-full">
+            {buttons[1]}
+            <span className="u-mono text-[13px]">↓</span>
+          </a>
+          <a href={`tel:${buttons[2]}`} className="u-btn u-btn-line w-full">
+            {buttons[2]}
+            <span className="u-mono text-[13px]">☏</span>
+          </a>
+        </div>
+      </div>
+    </section>
+  )
+}

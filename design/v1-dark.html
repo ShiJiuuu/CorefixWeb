@@ -1,0 +1,766 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>上海集培优 · 官网设计稿 v1</title>
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  :root{
+    --ink:#07090A;
+    --ink2:#0B0F0C;
+    --card:#0E1310;
+    --line:rgba(255,255,255,.09);
+    --lime:#A9CB39;
+    --lime-dim:#7E9A22;
+    --lime-soft:#DCEBB0;
+    --text:#EDF1E6;
+    --muted:#8F9A88;
+    --canvas:#0E0F10;
+  }
+  html,body{background:var(--canvas);color:#D8DAD5;
+    font-family:"Inter","SF Pro Display",-apple-system,BlinkMacSystemFont,"PingFang SC","HarmonyOS Sans SC","Microsoft YaHei",sans-serif;
+    -webkit-font-smoothing:antialiased}
+  .topbar{position:sticky;top:0;z-index:50;display:flex;align-items:center;gap:16px;
+    padding:14px 32px;background:rgba(14,15,16,.92);backdrop-filter:blur(12px);
+    border-bottom:1px solid rgba(255,255,255,.07);font-size:12px;color:#8B9188}
+  .topbar b{color:#E6E9E2;font-weight:600;font-size:13px}
+  .topbar .dot{width:7px;height:7px;border-radius:50%;background:var(--lime)}
+  .topbar .sp{flex:1}
+  .topbar .tag{border:1px solid rgba(255,255,255,.14);border-radius:999px;padding:4px 10px}
+  .canvas{padding:36px 32px 80px;display:flex;flex-direction:column;gap:56px;align-items:flex-start}
+  .board{width:100%}
+  .label{display:flex;align-items:center;gap:12px;margin-bottom:10px;font-size:12px;color:#7E857C}
+  .label .n{color:#E6E9E2;font-weight:600;font-size:13px;letter-spacing:.02em}
+  .label .dim{color:#5F665C;font-variant-numeric:tabular-nums}
+  .frame-wrap{width:100%;overflow:hidden;border:1px solid rgba(255,255,255,.08);border-radius:6px;background:var(--ink)}
+  .frame{width:1440px;transform:scale(var(--s,1));transform-origin:top left;position:relative;overflow:hidden;
+    background:var(--ink);color:var(--text)}
+
+  /* ---------- shared ---------- */
+  .pad{padding:0 80px}
+  .eyebrow{display:inline-flex;align-items:center;gap:8px;font-size:12px;letter-spacing:.16em;
+    text-transform:uppercase;color:var(--lime);font-weight:600}
+  .eyebrow i{width:18px;height:1px;background:var(--lime);display:block}
+  .sec-title{font-size:52px;line-height:1.14;letter-spacing:-.02em;font-weight:600;color:#F3F6EC}
+  .sec-sub{font-size:16px;line-height:1.85;color:var(--muted);max-width:560px}
+  .btn{display:inline-flex;align-items:center;gap:10px;height:54px;padding:0 28px;border-radius:999px;
+    font-size:15px;font-weight:600;letter-spacing:.01em}
+  .btn-lime{background:var(--lime);color:#0A0D07}
+  .btn-ghost{border:1px solid rgba(255,255,255,.18);color:#E8ECE1}
+  .arrow{font-size:15px}
+
+  /* ---------- nav ---------- */
+  .nav{height:86px;display:flex;align-items:center;justify-content:space-between;
+    padding:0 80px;border-bottom:1px solid var(--line);position:relative;z-index:3}
+  .logo{display:flex;align-items:center;gap:11px}
+  .mark{width:34px;height:34px;border-radius:9px;background:var(--lime);display:grid;place-items:center}
+  .brand{font-size:19px;font-weight:600;letter-spacing:.04em;color:#F2F5EB}
+  .brand span{font-size:11px;color:#7D8873;letter-spacing:.18em;margin-left:8px;font-weight:500}
+  .nav-links{display:flex;gap:36px;font-size:14px;color:#B9C1B0}
+  .nav-links a{color:inherit;text-decoration:none}
+  .nav-links .on{color:var(--lime)}
+  .nav-cta{height:42px;padding:0 20px;border-radius:999px;border:1px solid rgba(169,203,57,.5);
+    color:var(--lime);font-size:13px;font-weight:600;display:flex;align-items:center;gap:8px}
+
+  /* ---------- hero ---------- */
+  .hero{position:relative;padding:96px 80px 72px;display:grid;grid-template-columns:1.02fr .98fr;gap:48px;align-items:center}
+  .glow{position:absolute;border-radius:50%;pointer-events:none}
+  .g1{width:900px;height:900px;background:radial-gradient(circle,rgba(169,203,57,.16) 0%,rgba(169,203,57,.07) 38%,transparent 66%);
+    top:-360px;right:-220px}
+  .g2{width:720px;height:720px;background:radial-gradient(circle,rgba(126,154,34,.20) 0%,rgba(126,154,34,.06) 42%,transparent 68%);
+    bottom:-400px;left:-260px}
+  .grid-bg{position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,.045) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(255,255,255,.045) 1px,transparent 1px);
+    background-size:72px 72px;
+    mask-image:radial-gradient(ellipse 80% 65% at 70% 30%,#000 0%,transparent 78%)}
+  .hero-l{position:relative;z-index:2}
+  .hero h1{font-size:86px;line-height:1.06;letter-spacing:-.03em;font-weight:600;margin:26px 0 0;color:#F5F8EF}
+  .hero h1 em{font-style:normal;color:var(--lime)}
+  .hero p{font-size:17px;line-height:1.9;color:#9AA491;margin-top:28px;max-width:520px}
+  .hero-cta{display:flex;gap:14px;margin-top:40px}
+  .hero-meta{display:flex;gap:22px;margin-top:38px;font-size:13px;color:#79836F;letter-spacing:.01em}
+  .hero-meta b{color:#C6CEBC;font-weight:500}
+
+  .dash{position:relative;z-index:2}
+  .dash-card{background:linear-gradient(180deg,#111711 0%,#0B100C 100%);border:1px solid rgba(169,203,57,.16);
+    border-radius:20px;padding:26px 26px 22px;box-shadow:0 40px 90px -30px rgba(0,0,0,.9)}
+  .dash-head{display:flex;justify-content:space-between;align-items:flex-start;
+    padding-bottom:18px;border-bottom:1px solid rgba(255,255,255,.07)}
+  .dash-title{font-size:14px;font-weight:600;color:#E4EAD8}
+  .dash-title small{display:block;font-size:11px;color:#6F7A66;font-weight:400;margin-top:5px;letter-spacing:.06em}
+  .pill{font-size:11px;color:var(--lime);border:1px solid rgba(169,203,57,.3);border-radius:999px;padding:4px 10px}
+  .kpi{display:flex;align-items:flex-end;gap:12px;margin-top:20px}
+  .kpi .num{font-size:52px;font-weight:600;letter-spacing:-.03em;color:#F2F6E8;line-height:1}
+  .kpi .num i{font-style:normal;font-size:20px;color:var(--lime);margin-left:2px}
+  .kpi .cap{font-size:12px;color:#78836F;padding-bottom:6px}
+  .kpi .up{margin-left:auto;font-size:12px;color:var(--lime);background:rgba(169,203,57,.1);padding:4px 9px;border-radius:6px}
+  .chart{display:flex;align-items:flex-end;gap:9px;height:112px;margin-top:24px}
+  .bar{flex:1;background:rgba(169,203,57,.22);border-radius:3px 3px 0 0}
+  .bar.hi{background:linear-gradient(180deg,#C6E15E,#A9CB39)}
+  .axis{display:flex;justify-content:space-between;font-size:10px;color:#5C6654;margin-top:9px;letter-spacing:.04em}
+  .rows{margin-top:18px;border-top:1px solid rgba(255,255,255,.07);padding-top:6px}
+  .row{display:flex;align-items:center;gap:10px;padding:10px 0;font-size:12.5px;color:#A9B39F}
+  .row .dotc{width:6px;height:6px;border-radius:50%;background:var(--lime)}
+  .row .r{margin-left:auto;color:#E7EDDC;font-weight:500;font-variant-numeric:tabular-nums}
+
+  .float{position:absolute;right:-30px;bottom:-30px;background:#131A12;border:1px solid rgba(169,203,57,.22);
+    border-radius:14px;padding:14px 18px;box-shadow:0 24px 60px -20px #000}
+  .float .t{font-size:10.5px;color:#7A8570;letter-spacing:.1em;text-transform:uppercase}
+  .float .v{font-size:24px;font-weight:600;color:var(--lime);margin-top:4px}
+  .float .v small{font-size:11px;color:#8C9A7C;font-weight:400;margin-left:6px}
+
+  .statbar{display:grid;grid-template-columns:repeat(4,1fr);border-top:1px solid var(--line);
+    border-bottom:1px solid var(--line);margin-top:34px}
+  .stat{padding:30px 0 30px 40px;border-right:1px solid var(--line)}
+  .stat:first-child{padding-left:0;border-left:none}
+  .stat:last-child{border-right:none}
+  .stat .n{font-size:40px;font-weight:600;letter-spacing:-.02em;color:#F1F5E7;font-variant-numeric:tabular-nums}
+  .stat .n i{font-style:normal;color:var(--lime);font-size:22px;margin-left:2px}
+  .stat .l{font-size:12.5px;color:#7A8571;margin-top:8px;letter-spacing:.04em}
+
+  /* ---------- section frame ---------- */
+  .sec{padding:96px 80px}
+  .sec-head{display:flex;justify-content:space-between;align-items:flex-end;gap:40px;margin-bottom:52px}
+  .sec-head .left{max-width:640px}
+  .sec-head .sec-title{margin-top:18px}
+  .sec-idx{font-size:12px;letter-spacing:.18em;color:#5E6656;font-weight:600;padding-bottom:6px}
+
+  /* ---------- bento ---------- */
+  .bento{display:grid;grid-template-columns:repeat(12,1fr);gap:18px}
+  .bcard{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:30px;position:relative;overflow:hidden}
+  .bcard.a{grid-column:span 7;min-height:400px;display:flex;flex-direction:column;justify-content:space-between}
+  .bcard.b{grid-column:span 5;min-height:400px;display:flex;flex-direction:column;justify-content:space-between}
+  .bcard.c,.bcard.d,.bcard.e{grid-column:span 4;min-height:236px}
+  .bcard h3{font-size:24px;font-weight:600;letter-spacing:-.01em;color:#F1F5E7;margin-bottom:12px}
+  .bcard p{font-size:14px;line-height:1.8;color:#8B9581;max-width:420px}
+  .tags{display:flex;gap:8px;margin-top:20px;flex-wrap:wrap}
+  .tag{font-size:11.5px;color:#9FB08A;border:1px solid rgba(169,203,57,.22);border-radius:999px;padding:5px 11px}
+  .mini{display:flex;align-items:flex-end;gap:6px;height:88px;margin-top:26px}
+  .mini .b{flex:1;background:rgba(169,203,57,.18);border-radius:2px}
+  .mini .b.on{background:var(--lime)}
+  .numcard{font-size:46px;font-weight:600;letter-spacing:-.03em;color:var(--lime);line-height:1}
+  .numcard small{display:block;font-size:12px;color:#6F7A66;margin-top:10px;font-weight:400;letter-spacing:.05em}
+  .corner{position:absolute;right:-40px;top:-40px;width:160px;height:160px;border-radius:50%;
+    background:radial-gradient(circle,rgba(169,203,57,.18),transparent 68%)}
+
+  /* ---------- cases ---------- */
+  .cases{display:flex;gap:18px}
+  .case{flex:1;background:var(--card);border:1px solid var(--line);border-radius:16px;overflow:hidden}
+  .case-vis{height:196px;position:relative;overflow:hidden;
+    background:linear-gradient(140deg,#141B11 0%,#0C110D 100%);border-bottom:1px solid var(--line)}
+  .case-vis .arc{position:absolute;width:230px;height:230px;border-radius:50%;
+    border:1px solid rgba(169,203,57,.28);right:-60px;bottom:-90px}
+  .case-vis .arc2{position:absolute;width:150px;height:150px;border-radius:50%;
+    border:1px solid rgba(169,203,57,.16);right:-20px;bottom:-50px}
+  .case-vis .big{position:absolute;left:24px;bottom:22px;font-size:34px;font-weight:600;
+    letter-spacing:-.02em;color:#EFF4E4}
+  .case-vis .big i{font-style:normal;color:var(--lime);font-size:18px}
+  .case-vis .cap{position:absolute;left:24px;top:22px;font-size:11px;letter-spacing:.14em;color:#6E7963;text-transform:uppercase}
+  .case-body{padding:22px 24px 26px}
+  .case-body .k{font-size:11.5px;color:var(--lime);letter-spacing:.1em;margin-bottom:10px}
+  .case-body h4{font-size:17px;font-weight:600;color:#EDF2E6;line-height:1.5}
+  .case-body p{font-size:13px;color:#7D8874;margin-top:10px;line-height:1.7}
+  .case-metrics{display:flex;gap:18px;margin-top:18px;padding-top:16px;border-top:1px solid rgba(255,255,255,.07)}
+  .case-metrics div{font-size:11px;color:#6F7A66}
+  .case-metrics b{display:block;font-size:16px;color:#D9E3C8;font-weight:600;margin-bottom:4px}
+
+  /* ---------- process ---------- */
+  .steps{display:grid;grid-template-columns:repeat(4,1fr);gap:0;border-top:1px solid var(--line)}
+  .step{padding:34px 30px 34px 0;border-right:1px solid var(--line);position:relative}
+  .step:last-child{border-right:none}
+  .step .no{font-size:12px;color:var(--lime);letter-spacing:.1em;margin-bottom:18px;display:block}
+  .step h4{font-size:19px;font-weight:600;color:#EFF3E7;margin-bottom:10px}
+  .step p{font-size:13px;color:#78836F;line-height:1.75;max-width:230px}
+  .step .ln{position:absolute;top:-1px;left:0;width:38px;height:1px;background:var(--lime)}
+
+  /* ---------- cta + footer ---------- */
+  .cta{position:relative;padding:110px 80px 100px;border-top:1px solid var(--line);overflow:hidden}
+  .cta h2{font-size:72px;line-height:1.1;letter-spacing:-.03em;font-weight:600;color:#F5F8EF;max-width:900px}
+  .cta h2 em{font-style:normal;color:var(--lime)}
+  .cta .sub{font-size:16px;color:#8F9A86;margin-top:24px}
+  .cta .btns{display:flex;gap:14px;margin-top:44px}
+  .footer{padding:56px 80px 40px;border-top:1px solid var(--line);display:grid;
+    grid-template-columns:1.6fr 1fr 1fr 1fr;gap:40px}
+  .footer .co{font-size:13px;color:#79836F;line-height:2}
+  .footer h5{font-size:12px;color:#5F6857;letter-spacing:.14em;margin-bottom:18px;font-weight:600}
+  .footer ul{list-style:none;font-size:13px;color:#9DA791;line-height:2.4}
+  .copyright{border-top:1px solid var(--line);padding:22px 80px;display:flex;justify-content:space-between;
+    font-size:11.5px;color:#5C6654}
+
+  /* ---------- spec board ---------- */
+  .spec{display:grid;grid-template-columns:repeat(12,1fr);gap:18px}
+  .spec-box{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:26px}
+  .spec h4{font-size:12px;letter-spacing:.14em;color:#6C7663;margin-bottom:18px;font-weight:600}
+  .sw{display:flex;gap:12px;flex-wrap:wrap}
+  .swatch{width:96px}
+  .swatch .chip{height:64px;border-radius:8px;border:1px solid rgba(255,255,255,.1)}
+  .swatch .nm{font-size:10.5px;color:#8A9480;margin-top:8px;letter-spacing:.03em}
+  .swatch .hx{font-size:10.5px;color:#5E6856;font-variant-numeric:tabular-nums}
+  .type-row{display:flex;align-items:baseline;gap:18px;padding:11px 0;border-bottom:1px dashed rgba(255,255,255,.07)}
+  .type-row .k{width:88px;font-size:10.5px;color:#6C7663;letter-spacing:.08em}
+  .type-row .s{margin-left:auto;font-size:10.5px;color:#5A6452}
+
+  /* ---------- mobile ---------- */
+  .phones{display:flex;gap:36px;padding:0 80px}
+  .phone{width:340px;height:700px;border-radius:34px;border:1px solid rgba(255,255,255,.14);
+    background:var(--ink);overflow:hidden;position:relative;flex:none}
+  .phone .notch{position:absolute;top:10px;left:50%;transform:translateX(-50%);
+    width:92px;height:22px;border-radius:999px;background:#000;z-index:5}
+  .pnav{height:70px;display:flex;align-items:center;justify-content:space-between;padding:0 22px;position:relative;z-index:4}
+  .pbody{padding:14px 22px}
+  .pbody h1{font-size:42px;line-height:1.1;letter-spacing:-.03em;font-weight:600;color:#F5F8EF}
+  .pbody h1 em{font-style:normal;color:var(--lime)}
+  .pbody p{font-size:13px;line-height:1.8;color:#8F9A86;margin-top:16px}
+  .pbody .btn{height:46px;width:100%;justify-content:center;margin-top:24px;font-size:14px}
+  .pbar{position:absolute;left:0;right:0;bottom:0;height:74px;display:flex;align-items:center;justify-content:space-between;
+    padding:0 20px;background:rgba(9,12,9,.94);border-top:1px solid rgba(255,255,255,.08);z-index:4}
+  .pbar span.t{font-size:11px;color:#78836F;line-height:1.5}
+  .pbar span.b{height:40px;padding:0 18px;border-radius:999px;background:var(--lime);color:#0A0D07;
+    font-size:13px;font-weight:600;display:flex;align-items:center}
+</style>
+</head>
+<body>
+<div class="topbar">
+  <span class="dot"></span>
+  <b>上海集培优 · 官网设计稿 v1</b>
+  <span>1440 标准画板 · 品牌色 #A9CB39 · 深色底</span>
+  <span class="sp"></span>
+  <span class="tag">A1–A6 · 6 个画板</span>
+</div>
+
+<div class="canvas">
+
+<!-- ================= A1 HERO ================= -->
+<section class="board">
+  <div class="label"><span class="n">A1</span><span>首页 · 首屏 Hero</span><span class="dim"></span></div>
+  <div class="frame-wrap"><div class="frame">
+
+    <nav class="nav">
+      <div class="logo">
+        <div class="mark">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none">
+            <path d="M4 18V6l8 12L20 6v12" stroke="#0A0D07" stroke-width="2.4" stroke-linecap="square"/>
+          </svg>
+        </div>
+        <div class="brand">集培优<span>JIPEIYOU</span></div>
+      </div>
+      <div class="nav-links">
+        <a class="on">首页</a><a>解决方案</a><a>产品矩阵</a><a>合作案例</a><a>关于我们</a>
+      </div>
+      <div class="nav-cta">预约演示 <span class="arrow">→</span></div>
+    </nav>
+
+    <div class="hero">
+      <div class="glow g1"></div><div class="glow g2"></div><div class="grid-bg"></div>
+      <div class="hero-l">
+        <div class="eyebrow"><i></i>Educational Technology · 上海</div>
+        <h1>集智起航<br/><em>培优</em>致远</h1>
+        <p>以学习数据与 AI 为底座，把「因材施教」从理念，变成每一间教室都能执行的日常。</p>
+        <div class="hero-cta">
+          <div class="btn btn-lime">预约产品演示 <span class="arrow">→</span></div>
+          <div class="btn btn-ghost">查看解决方案</div>
+        </div>
+        <div class="hero-meta">
+          <span><b>320+</b> 所合作学校</span>
+          <span><b>18 万</b> 名在读学生</span>
+          <span><b>12 年</b> 教研积淀</span>
+        </div>
+      </div>
+
+      <div class="dash">
+        <div class="dash-card">
+          <div class="dash-head">
+            <div class="dash-title">学情诊断 · 九年级数学<small>近 30 天 · 全校 1,284 名学生</small></div>
+            <div class="pill">实时更新</div>
+          </div>
+          <div class="kpi">
+            <div class="num">92.6<i>%</i></div>
+            <div class="cap">知识点达标率</div>
+            <div class="up">↑ 11.4%</div>
+          </div>
+          <div class="chart">
+            <div class="bar" style="height:34%"></div><div class="bar" style="height:48%"></div>
+            <div class="bar" style="height:41%"></div><div class="bar" style="height:58%"></div>
+            <div class="bar" style="height:52%"></div><div class="bar" style="height:66%"></div>
+            <div class="bar" style="height:72%"></div><div class="bar hi" style="height:88%"></div>
+            <div class="bar" style="height:63%"></div><div class="bar" style="height:77%"></div>
+            <div class="bar" style="height:81%"></div><div class="bar hi" style="height:96%"></div>
+          </div>
+          <div class="axis"><span>第 1 周</span><span>第 2 周</span><span>第 3 周</span><span>第 4 周</span></div>
+          <div class="rows">
+            <div class="row"><span class="dotc"></span>二次函数图像与性质<span class="r">96%</span></div>
+            <div class="row"><span class="dotc"></span>圆的切线判定<span class="r">88%</span></div>
+            <div class="row"><span class="dotc" style="background:#7A8570"></span>概率与统计综合<span class="r">79%</span></div>
+          </div>
+        </div>
+        <div class="float">
+          <div class="t">班级平均分提升</div>
+          <div class="v">+11.4 <small>分 / 学期</small></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="pad">
+      <div class="statbar">
+        <div class="stat"><div class="n">320<i>+</i></div><div class="l">合作学校与机构</div></div>
+        <div class="stat"><div class="n">180,000<i>+</i></div><div class="l">累计服务学生</div></div>
+        <div class="stat"><div class="n">92.6<i>%</i></div><div class="l">提分目标达成率</div></div>
+        <div class="stat"><div class="n">12<i>年</i></div><div class="l">教研与师训积淀</div></div>
+      </div>
+    </div>
+
+  </div></div>
+</section>
+
+<!-- ================= A2 CAPABILITY ================= -->
+<section class="board">
+  <div class="label"><span class="n">A2</span><span>首页 · 核心能力矩阵（Bento）</span><span class="dim"></span></div>
+  <div class="frame-wrap"><div class="frame">
+
+    <div class="sec">
+      <div class="sec-head">
+        <div class="left">
+          <div class="eyebrow"><i></i>Capability</div>
+          <h2 class="sec-title">五项能力，<br/>撑起一所学校的<em style="font-style:normal;color:var(--lime)">教学底盘</em></h2>
+        </div>
+        <div class="sec-idx">02 / 05</div>
+      </div>
+
+      <div class="bento">
+        <div class="bcard a">
+          <div class="corner"></div>
+          <div>
+            <h3>智能教学平台</h3>
+            <p>备课、授课、作业、学情四端打通。教师在一个界面完成从教案生成到课后追踪的全部动作，平均每周减负 6.5 小时。</p>
+            <div class="tags"><span class="tag">AI 备课</span><span class="tag">课堂互动</span><span class="tag">智能批改</span></div>
+          </div>
+          <div class="mini">
+            <div class="b" style="height:38%"></div><div class="b" style="height:52%"></div>
+            <div class="b" style="height:44%"></div><div class="b on" style="height:74%"></div>
+            <div class="b" style="height:61%"></div><div class="b" style="height:68%"></div>
+            <div class="b on" style="height:92%"></div><div class="b" style="height:57%"></div>
+            <div class="b" style="height:79%"></div><div class="b on" style="height:100%"></div>
+          </div>
+        </div>
+
+        <div class="bcard b">
+          <div>
+            <h3>分层培优体系</h3>
+            <p>基于诊断结果自动分层，为每个学生匹配「最近发展区」内的课程与练习，让培优不再等于加量。</p>
+            <div class="tags"><span class="tag">诊断分层</span><span class="tag">个性化路径</span></div>
+          </div>
+          <div style="margin-top:30px">
+            <div class="numcard">6 层<small>动态分层模型 · 每两周复评一次</small></div>
+            <div style="display:flex;gap:6px;margin-top:22px">
+              <div style="flex:1;height:6px;border-radius:3px;background:rgba(169,203,57,.2)"></div>
+              <div style="flex:1;height:6px;border-radius:3px;background:rgba(169,203,57,.35)"></div>
+              <div style="flex:1;height:6px;border-radius:3px;background:rgba(169,203,57,.55)"></div>
+              <div style="flex:1;height:6px;border-radius:3px;background:rgba(169,203,57,.75)"></div>
+              <div style="flex:1;height:6px;border-radius:3px;background:var(--lime)"></div>
+              <div style="flex:1;height:6px;border-radius:3px;background:rgba(169,203,57,.4)"></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="bcard c">
+          <h3>学情数据中台</h3>
+          <p>一次考试，200+ 维度归因，精准定位真正的失分点。</p>
+          <div class="numcard" style="margin-top:24px">200<i style="font-style:normal;font-size:18px">+</i>
+            <small>归因维度</small></div>
+        </div>
+
+        <div class="bcard d">
+          <h3>升学规划服务</h3>
+          <p>从学科优势到志愿填报，为每个家庭设计一条可执行的路径。</p>
+          <div class="numcard" style="margin-top:24px">1 对 1
+            <small>规划师全程陪跑</small></div>
+        </div>
+
+        <div class="bcard e">
+          <h3>教师成长学院</h3>
+          <p>教研共同体与师训体系，把优秀教师的经验沉淀成可复制的方法。</p>
+          <div class="numcard" style="margin-top:24px">1,400<i style="font-style:normal;font-size:18px">+</i>
+            <small>注册教师</small></div>
+        </div>
+      </div>
+    </div>
+
+  </div></div>
+</section>
+
+<!-- ================= A3 CASES + PROCESS ================= -->
+<section class="board">
+  <div class="label"><span class="n">A3</span><span>首页 · 客户案例 + 合作流程</span><span class="dim"></span></div>
+  <div class="frame-wrap"><div class="frame">
+
+    <div class="sec" style="padding-bottom:64px">
+      <div class="sec-head">
+        <div class="left">
+          <div class="eyebrow"><i></i>Cases</div>
+          <h2 class="sec-title">数据不说谎</h2>
+          <p class="sec-sub" style="margin-top:20px">三个不同体量的学校与机构，用同一个方法体系跑出了可验证的结果。</p>
+        </div>
+        <div class="sec-idx">03 / 05</div>
+      </div>
+
+      <div class="cases">
+        <div class="case">
+          <div class="case-vis">
+            <div class="arc"></div><div class="arc2"></div>
+            <div class="cap">上海 · 区重点中学</div>
+            <div class="big">+11.4<i>分</i></div>
+          </div>
+          <div class="case-body">
+            <div class="k">智慧课堂</div>
+            <h4>九年级数学组，用一个学期把年级均分拉过区平均线</h4>
+            <p>接入 12 个班级的学情诊断与分层作业，薄弱知识点自动回流到课堂。</p>
+            <div class="case-metrics">
+              <div><b>68% → 89%</b>薄弱学科达标率</div>
+              <div><b>6.5h</b>教师周均减负</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="case">
+          <div class="case-vis">
+            <div class="arc"></div><div class="arc2"></div>
+            <div class="cap">杭州 · 连锁教育集团</div>
+            <div class="big">81<i>%</i></div>
+          </div>
+          <div class="case-body">
+            <div class="k">分层培优</div>
+            <h4>17 个校区统一分层标准，续班率一年提升 19 个点</h4>
+            <p>用统一诊断模型替代各校区自编测评，教学质量第一次变得可比较。</p>
+            <div class="case-metrics">
+              <div><b>62% → 81%</b>续班率</div>
+              <div><b>-43%</b>备课耗时</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="case">
+          <div class="case-vis">
+            <div class="arc"></div><div class="arc2"></div>
+            <div class="cap">苏州 · 外国语学校</div>
+            <div class="big">10<i>分钟</i></div>
+          </div>
+          <div class="case-body">
+            <div class="k">学情中台</div>
+            <h4>学情报告从 3 天出到 10 分钟出，家长会不再靠印象说话</h4>
+            <p>考试数据自动归因、自动成文，班主任只需复核与补充建议。</p>
+            <div class="case-metrics">
+              <div><b>3 天 → 10 分钟</b>报告生成</div>
+              <div><b>1,800</b>份 / 学期</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="sec" style="padding-top:64px">
+      <div class="sec-head" style="margin-bottom:40px">
+        <div class="left">
+          <div class="eyebrow"><i></i>Process</div>
+          <h2 class="sec-title" style="font-size:44px">四步，把方案落到课堂上</h2>
+        </div>
+        <div class="sec-idx">04 / 05</div>
+      </div>
+      <div class="steps">
+        <div class="step"><span class="ln"></span><span class="no">01</span>
+          <h4>诊断</h4><p>两周内完成学情盘点与教学现状访谈，输出问题清单。</p></div>
+        <div class="step"><span class="ln"></span><span class="no">02</span>
+          <h4>方案</h4><p>按校情组合产品模块，明确阶段目标与验收指标。</p></div>
+        <div class="step"><span class="ln"></span><span class="no">03</span>
+          <h4>落地</h4><p>驻校陪跑一个完整教学周期，教师培训与课堂打磨同步。</p></div>
+        <div class="step"><span class="ln"></span><span class="no">04</span>
+          <h4>迭代</h4><p>按学期复评数据，动态调整分层与课程配比。</p></div>
+      </div>
+    </div>
+
+  </div></div>
+</section>
+
+<!-- ================= A4 CTA + FOOTER ================= -->
+<section class="board">
+  <div class="label"><span class="n">A4</span><span>首页 · 转化区 + 页脚</span><span class="dim"></span></div>
+  <div class="frame-wrap"><div class="frame">
+
+    <div class="cta">
+      <div class="glow" style="width:820px;height:820px;background:radial-gradient(circle,rgba(169,203,57,.15) 0%,rgba(169,203,57,.05) 40%,transparent 66%);right:-260px;top:-300px"></div>
+      <div style="position:relative;z-index:2">
+        <div class="eyebrow"><i></i>Get Started</div>
+        <h2 style="margin-top:22px">让每一所学校<br/>都有<em>一套自己的培优方法</em></h2>
+        <div class="sub">留下联系方式，我们会在 1 个工作日内安排一次 40 分钟的现状诊断。</div>
+        <div class="btns">
+          <div class="btn btn-lime">预约方案沟通 <span class="arrow">→</span></div>
+          <div class="btn btn-ghost">下载产品手册</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="footer">
+      <div>
+        <div class="logo" style="margin-bottom:20px">
+          <div class="mark"><svg width="17" height="17" viewBox="0 0 24 24" fill="none">
+            <path d="M4 18V6l8 12L20 6v12" stroke="#0A0D07" stroke-width="2.4" stroke-linecap="square"/></svg></div>
+          <div class="brand">集培优</div>
+        </div>
+        <div class="co">
+          上海集培优信息科技有限公司<br/>
+          上海市 · 待补充详细地址<br/>
+          hello@jipeiyou.com &nbsp;|&nbsp; 待补充电话
+        </div>
+      </div>
+      <div><h5>产品</h5><ul><li>智能教学平台</li><li>分层培优体系</li><li>学情数据中台</li><li>升学规划服务</li></ul></div>
+      <div><h5>公司</h5><ul><li>关于我们</li><li>合作案例</li><li>教师成长学院</li><li>加入我们</li></ul></div>
+      <div><h5>关注</h5><ul><li>微信公众号</li><li>视频号</li><li>小红书</li><li>联系合作</li></ul></div>
+    </div>
+    <div class="copyright">
+      <span>© 2026 上海集培优信息科技有限公司</span>
+      <span>沪ICP备XXXXXXXX号 · 隐私政策 · 服务条款</span>
+    </div>
+
+  </div></div>
+</section>
+
+<!-- ================= A5 DESIGN SYSTEM ================= -->
+<section class="board">
+  <div class="label"><span class="n">A5</span><span>设计规范 · 色彩 / 字体 / 组件</span><span class="dim"></span></div>
+  <div class="frame-wrap"><div class="frame">
+    <div class="sec" style="padding-bottom:40px">
+      <div class="sec-head" style="margin-bottom:34px">
+        <div class="left"><div class="eyebrow"><i></i>Design System</div>
+          <h2 class="sec-title" style="font-size:40px;margin-top:16px">设计规范</h2></div>
+        <div class="sec-idx">00 / 05 · v1</div>
+      </div>
+
+      <div class="spec">
+        <div class="spec-box" style="grid-column:span 7">
+          <h4>色彩 COLOR</h4>
+          <div class="sw">
+            <div class="swatch"><div class="chip" style="background:#A9CB39"></div>
+              <div class="nm">品牌主色 Lime</div><div class="hx">#A9CB39</div></div>
+            <div class="swatch"><div class="chip" style="background:#DCEBB0"></div>
+              <div class="nm">浅色辅助</div><div class="hx">#DCEBB0</div></div>
+            <div class="swatch"><div class="chip" style="background:#7E9A22"></div>
+              <div class="nm">深色辅助</div><div class="hx">#7E9A22</div></div>
+            <div class="swatch"><div class="chip" style="background:#07090A"></div>
+              <div class="nm">底色 Ink</div><div class="hx">#07090A</div></div>
+            <div class="swatch"><div class="chip" style="background:#0E1310"></div>
+              <div class="nm">卡片 Surface</div><div class="hx">#0E1310</div></div>
+            <div class="swatch"><div class="chip" style="background:#EDF1E6"></div>
+              <div class="nm">正文 Text</div><div class="hx">#EDF1E6</div></div>
+          </div>
+          <div style="margin-top:26px;font-size:11.5px;color:#6E7865;line-height:1.9">
+            主色仅用于：CTA 按钮、关键数字、图标与下划线。<br/>
+            面积占比控制在 8% 以内，深色底上才显贵。
+          </div>
+        </div>
+
+        <div class="spec-box" style="grid-column:span 5">
+          <h4>组件 COMPONENT</h4>
+          <div style="display:flex;gap:12px;flex-wrap:wrap;align-items:center">
+            <div class="btn btn-lime" style="height:44px;padding:0 22px;font-size:13px">主按钮</div>
+            <div class="btn btn-ghost" style="height:44px;padding:0 22px;font-size:13px">次按钮</div>
+            <div class="tag">标签</div>
+            <div class="pill">状态</div>
+          </div>
+          <div style="margin-top:24px;border:1px solid rgba(255,255,255,.12);border-radius:10px;
+            height:48px;display:flex;align-items:center;padding:0 16px;font-size:13px;color:#5F6857">
+            请输入您的手机号
+          </div>
+          <div style="margin-top:16px;display:flex;gap:8px;font-size:11px;color:#6E7865">
+            <span class="tag">圆角 999 按钮</span><span class="tag">圆角 16 卡片</span><span class="tag">圆角 10 输入框</span>
+          </div>
+        </div>
+
+        <div class="spec-box" style="grid-column:span 7">
+          <h4>字体 TYPOGRAPHY</h4>
+          <div class="type-row"><span class="k">Display / 86</span>
+            <span style="font-size:40px;font-weight:600;letter-spacing:-.03em;color:#F3F6EC">集智起航</span>
+            <span class="s">600 · -3%</span></div>
+          <div class="type-row"><span class="k">H1 / 52</span>
+            <span style="font-size:28px;font-weight:600;letter-spacing:-.02em;color:#F3F6EC">五项能力撑起教学底盘</span>
+            <span class="s">600 · -2%</span></div>
+          <div class="type-row"><span class="k">H2 / 24</span>
+            <span style="font-size:20px;font-weight:600;color:#F3F6EC">智能教学平台</span>
+            <span class="s">600</span></div>
+          <div class="type-row"><span class="k">Body / 16</span>
+            <span style="font-size:14px;color:#9AA491">以学习数据与 AI 为底座，让因材施教可执行。</span>
+            <span class="s">400 · 1.85</span></div>
+          <div class="type-row" style="border:none"><span class="k">Caption / 12</span>
+            <span style="font-size:11px;color:#6E7865;letter-spacing:.14em">EDUCATIONAL TECHNOLOGY</span>
+            <span class="s">600 · +14%</span></div>
+        </div>
+
+        <div class="spec-box" style="grid-column:span 5">
+          <h4>栅格 GRID</h4>
+          <div style="font-size:12px;color:#8B9581;line-height:2.1">
+            画板 1440 · 12 栏 · 间距 24<br/>
+            页边距 <span style="color:#DDE5CF">80px</span> · 模块间距 <span style="color:#DDE5CF">96–120px</span><br/>
+            基础单位 8pt，卡片内边距 30px
+          </div>
+          <div style="display:flex;gap:4px;margin-top:22px">
+            <div style="flex:1;height:26px;background:rgba(169,203,57,.14);border-radius:3px"></div>
+            <div style="flex:1;height:26px;background:rgba(169,203,57,.14);border-radius:3px"></div>
+            <div style="flex:1;height:26px;background:rgba(169,203,57,.14);border-radius:3px"></div>
+            <div style="flex:1;height:26px;background:rgba(169,203,57,.14);border-radius:3px"></div>
+            <div style="flex:1;height:26px;background:rgba(169,203,57,.14);border-radius:3px"></div>
+            <div style="flex:1;height:26px;background:rgba(169,203,57,.14);border-radius:3px"></div>
+            <div style="flex:1;height:26px;background:rgba(169,203,57,.14);border-radius:3px"></div>
+            <div style="flex:1;height:26px;background:rgba(169,203,57,.14);border-radius:3px"></div>
+            <div style="flex:1;height:26px;background:rgba(169,203,57,.14);border-radius:3px"></div>
+            <div style="flex:1;height:26px;background:rgba(169,203,57,.14);border-radius:3px"></div>
+            <div style="flex:1;height:26px;background:rgba(169,203,57,.14);border-radius:3px"></div>
+            <div style="flex:1;height:26px;background:rgba(169,203,57,.14);border-radius:3px"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div></div>
+</section>
+
+<!-- ================= A6 MOBILE ================= -->
+<section class="board">
+  <div class="label"><span class="n">A6</span><span>移动端 · 375 适配（首屏 / 能力 / 案例）</span><span class="dim"></span></div>
+  <div class="frame-wrap"><div class="frame" style="padding:60px 0">
+    <div class="phones">
+      <div class="phone">
+        <div class="notch"></div>
+        <div class="pbar"><span class="t">上海集培优<br/>教育科技</span><span class="b">预约演示 →</span></div>
+        <div class="pnav">
+          <div class="mark" style="width:28px;height:28px;border-radius:8px">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
+              <path d="M4 18V6l8 12L20 6v12" stroke="#0A0D07" stroke-width="2.6" stroke-linecap="square"/></svg>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:4px">
+            <span style="width:20px;height:1.6px;background:#DDE5CF;display:block"></span>
+            <span style="width:14px;height:1.6px;background:#DDE5CF;display:block"></span>
+          </div>
+        </div>
+        <div class="pbody" style="position:relative;padding-top:36px">
+          <div class="eyebrow" style="font-size:10px;letter-spacing:.14em"><i style="width:12px"></i>EdTech</div>
+          <h1 style="margin-top:16px">集智起航<br/><em>培优</em>致远</h1>
+          <p>以学习数据与 AI 为底座，把因材施教变成每间教室都能执行的日常。</p>
+          <div class="btn btn-lime">预约演示 →</div>
+          <div style="margin-top:30px;background:var(--card);border:1px solid var(--line);border-radius:16px;padding:18px">
+            <div style="font-size:11px;color:#76816C">知识点达标率</div>
+            <div style="font-size:32px;font-weight:600;color:#EFF4E4;margin-top:6px">92.6<span style="color:var(--lime);font-size:16px">%</span>
+              <span style="float:right;font-size:11px;color:var(--lime);margin-top:12px">↑11.4%</span></div>
+            <div style="display:flex;gap:5px;align-items:flex-end;height:56px;margin-top:14px">
+              <div style="flex:1;height:40%;background:rgba(169,203,57,.25);border-radius:2px"></div>
+              <div style="flex:1;height:55%;background:rgba(169,203,57,.25);border-radius:2px"></div>
+              <div style="flex:1;height:48%;background:rgba(169,203,57,.25);border-radius:2px"></div>
+              <div style="flex:1;height:70%;background:var(--lime);border-radius:2px"></div>
+              <div style="flex:1;height:62%;background:rgba(169,203,57,.25);border-radius:2px"></div>
+              <div style="flex:1;height:84%;background:var(--lime);border-radius:2px"></div>
+              <div style="flex:1;height:76%;background:rgba(169,203,57,.25);border-radius:2px"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="phone">
+        <div class="notch"></div>
+        <div class="pbar"><span class="t">上海集培优<br/>教育科技</span><span class="b">预约演示 →</span></div>
+        <div class="pnav">
+          <div class="mark" style="width:28px;height:28px;border-radius:8px">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
+              <path d="M4 18V6l8 12L20 6v12" stroke="#0A0D07" stroke-width="2.6" stroke-linecap="square"/></svg>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:4px">
+            <span style="width:20px;height:1.6px;background:#DDE5CF;display:block"></span>
+            <span style="width:14px;height:1.6px;background:#DDE5CF;display:block"></span>
+          </div>
+        </div>
+        <div class="pbody">
+          <div class="eyebrow" style="font-size:10px;letter-spacing:.14em"><i style="width:12px"></i>Capability</div>
+          <div style="font-size:26px;font-weight:600;line-height:1.3;letter-spacing:-.02em;color:#F3F6EC;margin-top:14px">
+            五项能力<br/>撑起教学底盘</div>
+          <div style="margin-top:22px;display:flex;flex-direction:column;gap:12px">
+            <div style="background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px">
+              <div style="font-size:16px;font-weight:600;color:#EFF3E7">智能教学平台</div>
+              <div style="font-size:12px;color:#7D8874;line-height:1.75;margin-top:8px">备课、授课、作业、学情四端打通，教师每周减负 6.5 小时。</div>
+            </div>
+            <div style="background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px">
+              <div style="font-size:16px;font-weight:600;color:#EFF3E7">分层培优体系</div>
+              <div style="font-size:12px;color:#7D8874;line-height:1.75;margin-top:8px">诊断分层，为每个学生匹配最近发展区内的课程。</div>
+            </div>
+            <div style="background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px">
+              <div style="font-size:16px;font-weight:600;color:#EFF3E7">学情数据中台</div>
+              <div style="font-size:12px;color:#7D8874;line-height:1.75;margin-top:8px">一次考试 200+ 维度归因，定位真正的失分点。</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="phone">
+        <div class="notch"></div>
+        <div class="pbar"><span class="t">上海集培优<br/>教育科技</span><span class="b">预约演示 →</span></div>
+        <div class="pnav">
+          <div class="mark" style="width:28px;height:28px;border-radius:8px">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
+              <path d="M4 18V6l8 12L20 6v12" stroke="#0A0D07" stroke-width="2.6" stroke-linecap="square"/></svg>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:4px">
+            <span style="width:20px;height:1.6px;background:#DDE5CF;display:block"></span>
+            <span style="width:14px;height:1.6px;background:#DDE5CF;display:block"></span>
+          </div>
+        </div>
+        <div class="pbody">
+          <div class="eyebrow" style="font-size:10px;letter-spacing:.14em"><i style="width:12px"></i>Cases</div>
+          <div style="font-size:26px;font-weight:600;line-height:1.3;letter-spacing:-.02em;color:#F3F6EC;margin-top:14px">
+            数据不说谎</div>
+          <div style="margin-top:20px;position:relative;background:var(--card);border:1px solid var(--line);
+            border-radius:16px;overflow:hidden;height:330px">
+            <div style="height:150px;background:linear-gradient(140deg,#141B11,#0C110D);position:relative;border-bottom:1px solid var(--line)">
+              <div style="position:absolute;width:170px;height:170px;border-radius:50%;
+                border:1px solid rgba(169,203,57,.28);right:-40px;bottom:-70px"></div>
+              <div style="position:absolute;left:18px;top:16px;font-size:10px;letter-spacing:.12em;color:#6E7963">上海 · 区重点中学</div>
+              <div style="position:absolute;left:18px;bottom:16px;font-size:26px;font-weight:600;color:#EFF4E4">+11.4<span style="color:var(--lime);font-size:14px">分</span></div>
+            </div>
+            <div style="padding:18px">
+              <div style="font-size:10.5px;color:var(--lime);letter-spacing:.1em">智慧课堂</div>
+              <div style="font-size:15px;font-weight:600;color:#EDF2E6;line-height:1.55;margin-top:8px">
+                九年级数学组，一个学期把年级均分拉过区平均线</div>
+              <div style="display:flex;gap:18px;margin-top:16px;padding-top:14px;border-top:1px solid rgba(255,255,255,.07)">
+                <div style="font-size:10px;color:#6F7A66"><b style="display:block;font-size:14px;color:#D9E3C8;margin-bottom:3px">68→89%</b>达标率</div>
+                <div style="font-size:10px;color:#6F7A66"><b style="display:block;font-size:14px;color:#D9E3C8;margin-bottom:3px">6.5h</b>周均减负</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div></div>
+</section>
+
+</div>
+
+<script>
+  const boards = [...document.querySelectorAll('.board')];
+  function fit(){
+    boards.forEach(b=>{
+      const wrap = b.querySelector('.frame-wrap');
+      const frame = b.querySelector('.frame');
+      const dim = b.querySelector('.dim');
+      const s = Math.min(1, wrap.clientWidth / 1440);
+      wrap.style.setProperty('--s', s);
+      wrap.style.height = (frame.offsetHeight * s) + 'px';
+      if(dim) dim.textContent = `1440 × ${frame.offsetHeight}`;
+    });
+  }
+  window.addEventListener('resize', fit);
+  window.addEventListener('load', fit);
+  fit();
+  const ro = new ResizeObserver(fit);
+  boards.forEach(b=>ro.observe(b.querySelector('.frame')));
+  const only = location.hash.replace('#','').toLowerCase();
+  if(only){ boards.forEach(b=>{
+    const n = b.querySelector('.label .n').textContent.toLowerCase();
+    if(n !== only) b.style.display = 'none';
+  }); fit(); }
+</script>
+</body>
+</html>
