@@ -100,7 +100,7 @@ export default async function AboutPage({ params }: { params: Promise<{ locale: 
       </section>
 
       <CtaBand
-        eyebrow={`06 / ${d.cta.eyebrow}`}
+        eyebrow={d.cta.eyebrow}
         title={d.cta.title}
         sub={d.cta.sub}
         buttons={d.cta.buttons}

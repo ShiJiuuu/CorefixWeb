@@ -16,7 +16,7 @@ const POS: [number, number][] = [
   [54.2, 75.9],
 ]
 
-/* GCJ-02 coordinates used when a Tencent Maps key is configured. Keyed by Site.id, never by the localized name. */
+/* GCJ-02 coordinates used when an AMap key is configured. Keyed by Site.id, never by the localized name. */
 const LATLON: Record<string, [number, number]> = {
   shenzhen: [22.5431, 114.0579],
   shanghai: [31.2304, 121.4737],
@@ -32,29 +32,62 @@ const LATLON: Record<string, [number, number]> = {
 /** Falls back to the geographic centre only when a site has no known coordinate. */
 const coord = (s: Site): [number, number] => LATLON[s.id] ?? [35.5, 109]
 
-/* Minimal shape of the Tencent Maps GL JS surface this component actually calls. */
-type TMapOptions = Record<string, unknown>
-
-interface TMapMarkerEvent {
-  geometry?: { id?: string | number }
+/** AMap takes [lng, lat]; the table above is [lat, lng] because that is how it is written down. */
+const lngLat = (s: Site): [number, number] => {
+  const [lat, lng] = coord(s)
+  return [lng, lat]
 }
 
-interface TMapNamespace {
-  Map: new (el: HTMLElement, options: TMapOptions) => unknown
-  LatLng: new (lat: number, lng: number) => unknown
-  CircleStyle: new (options: TMapOptions) => unknown
-  MultiCircle: new (options: TMapOptions) => unknown
-  MarkerStyle: new (options: TMapOptions) => unknown
-  MultiMarker: new (options: TMapOptions) => {
-    on: (event: string, handler: (e: TMapMarkerEvent) => void) => void
-  }
+/* Minimal shape of the AMap JS API 2.0 surface this component actually calls. */
+type AMapOptions = Record<string, unknown>
+
+interface AMapMap {
+  setMapStyle(style: string): void
+  destroy(): void
+}
+
+interface AMapOverlay {
+  setMap(map: AMapMap | null): void
+  on(event: string, handler: () => void): void
+  setOptions?(options: AMapOptions): void
+}
+
+interface AMapNamespace {
+  Map: new (el: HTMLElement, options: AMapOptions) => AMapMap
+  Marker: new (options: AMapOptions) => AMapOverlay
+  Circle: new (options: AMapOptions) => AMapOverlay
 }
 
 declare global {
   interface Window {
-    TMap?: TMapNamespace
-    _TMapSecurityConfig?: { serviceHost: string }
+    AMap?: AMapNamespace
+    _AMapSecurityConfig?: { securityJsCode: string }
   }
+}
+
+const MAP_STYLE_LIGHT = 'amap://styles/whitesmoke'
+const MAP_STYLE_DARK = 'amap://styles/dark'
+
+let amapLoader: Promise<void> | null = null
+
+/** Loads AMap JS API 2.0 once; the security code has to be on window before the script runs. */
+function loadAMap(key: string, securityJsCode?: string): Promise<void> {
+  if (window.AMap) return Promise.resolve()
+  if (!amapLoader) {
+    amapLoader = new Promise<void>((resolve, reject) => {
+      window._AMapSecurityConfig = securityJsCode ? { securityJsCode } : undefined
+      const s = document.createElement('script')
+      s.src = `https://webapi.amap.com/maps?v=2.0&key=${key}`
+      s.async = true
+      s.onload = () => resolve()
+      s.onerror = () => {
+        amapLoader = null
+        reject(new Error('AMap JS API failed to load'))
+      }
+      document.head.appendChild(s)
+    })
+  }
+  return amapLoader
 }
 
 export default function MapPanel({
@@ -75,84 +108,107 @@ export default function MapPanel({
   const current = sites[active] ?? sites[0]
 
   useEffect(() => {
-    const key = process.env.NEXT_PUBLIC_TMAP_KEY
+    const key = process.env.NEXT_PUBLIC_AMAP_KEY
     if (!key) return
+
     let cancelled = false
+    let map: AMapMap | null = null
+    let observer: MutationObserver | null = null
+
+    const isDark = () => document.documentElement.classList.contains('dark')
+    const mapStyle = () => (isDark() ? MAP_STYLE_DARK : MAP_STYLE_LIGHT)
 
     const init = () => {
-      if (cancelled || !window.TMap || !mapEl.current) return
+      if (cancelled || !window.AMap || !mapEl.current) return
       try {
-        const TMap = window.TMap
-        const map = new TMap.Map(mapEl.current, {
-          center: new TMap.LatLng(35.5, 109),
+        const AMap = window.AMap
+        map = new AMap.Map(mapEl.current, {
+          center: [109, 35.5],
           zoom: 4,
-          baseMap: { type: 'vector' },
+          rotation: 0,
+          pitch: 0,
+          mapStyle: mapStyle(),
+          // Static illustration: the map must not pan, zoom, rotate or trap the page scroll.
+          dragEnable: false,
+          jogEnable: false,
+          zoomEnable: false,
+          scrollWheel: false,
+          doubleClickZoom: false,
+          keyboardEnable: false,
+          touchZoom: false,
+          rotateEnable: false,
+          pitchEnable: false,
         })
-        const built = sites.filter((s) => !s.plan)
-        const plan = sites.filter((s) => s.plan)
-        const circleStyle = new TMap.CircleStyle({
-          color: '#0A0A0A0A',
-          borderColor: '#0A0A0A80',
-          borderWidth: 1.5,
-        })
-        new TMap.MultiCircle({
-          map,
-          styles: { c: circleStyle },
-          geometries: built.map((s, i) => ({
-            id: `c${i}`,
-            styleId: 'c',
-            center: new TMap.LatLng(...coord(s)),
-            radius: 800000,
-          })),
-        })
-        const dot = `data:image/svg+xml;utf8,${encodeURIComponent(
-          '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"><circle cx="8" cy="8" r="5" fill="#0A0A0A"/></svg>',
-        )}`
-        const ring = `data:image/svg+xml;utf8,${encodeURIComponent(
-          '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"><circle cx="8" cy="8" r="4.5" fill="none" stroke="#0A0A0A" stroke-width="1.6"/></svg>',
-        )}`
-        const markers = new TMap.MultiMarker({
-          map,
-          styles: {
-            b: new TMap.MarkerStyle({ width: 16, height: 16, url: dot, anchor: 'center' }),
-            p: new TMap.MarkerStyle({ width: 16, height: 16, url: ring, anchor: 'center' }),
-          },
-          geometries: [
-            ...built.map((s, i) => ({
-              id: String(i),
-              styleId: 'b',
-              position: new TMap.LatLng(...coord(s)),
-            })),
-            ...plan.map((s, i) => ({
-              id: String(built.length + i),
-              styleId: 'p',
-              position: new TMap.LatLng(...coord(s)),
-            })),
-          ],
-        })
-        ;['click', 'mouseover'].forEach((ev) => {
-          try {
-            markers.on(ev, (e: TMapMarkerEvent) => {
-              const id = Number(e?.geometry?.id)
-              if (!Number.isNaN(id)) setActive(id)
+        // the constructor option is not always honoured before the first tile batch
+        map.setMapStyle(mapStyle())
+
+        // 800km coverage circle around every operating site; colour follows the theme
+        const coverage = {
+          strokeColor: isDark() ? '#F3F3F0' : '#0A0A0A',
+          fillColor: isDark() ? '#F3F3F0' : '#0A0A0A',
+        }
+        const circles: AMapOverlay[] = []
+        sites
+          .filter((s) => !s.plan)
+          .forEach((s) => {
+            const circle = new AMap.Circle({
+              center: lngLat(s),
+              radius: 800000,
+              bubble: true,
+              ...coverage,
+              strokeOpacity: 0.35,
+              strokeWeight: 1,
+              fillOpacity: 0.03,
+              zIndex: 10,
             })
-          } catch {}
+            circle.setMap(map)
+            circles.push(circle)
+          })
+
+        // filled dot = operating site, ring = planned site
+        sites.forEach((s, i) => {
+          const marker = new AMap.Marker({
+            position: lngLat(s),
+            anchor: 'center',
+            zIndex: 100 + i,
+            content: `<span style="display:block;width:10px;height:10px;border-radius:9999px;cursor:pointer;${
+              s.plan
+                ? 'border:1.5px solid var(--ink);'
+                : 'background:var(--ink);box-shadow:0 0 0 4px var(--line);'
+            }"></span>`,
+          })
+          marker.on('mouseover', () => setActive(i))
+          marker.on('click', () => setActive(i))
+          marker.setMap(map)
         })
+
+        // keep the basemap in step with the light/dark toggle
+        observer = new MutationObserver(() => {
+          map?.setMapStyle(mapStyle())
+          const next = {
+            strokeColor: isDark() ? '#F3F3F0' : '#0A0A0A',
+            fillColor: isDark() ? '#F3F3F0' : '#0A0A0A',
+          }
+          circles.forEach((c) => c.setOptions?.(next))
+        })
+        observer.observe(document.documentElement, { attributes: true, attributeFilter: ['class'] })
+
         setReady(true)
-      } catch {}
+      } catch {
+        // keep the schematic layer: the map simply never takes over
+      }
     }
 
-    if (window.TMap) {
-      init()
-    } else {
-      const s = document.createElement('script')
-      s.src = `https://map.qq.com/api/gljs?v=1.exp&key=${key}`
-      s.async = true
-      s.onload = init
-      document.head.appendChild(s)
-    }
+    loadAMap(key, process.env.NEXT_PUBLIC_AMAP_SECURITY_CODE)
+      .then(init)
+      .catch(() => {})
+
     return () => {
       cancelled = true
+      observer?.disconnect()
+      map?.destroy()
+      map = null
+      setReady(false)
     }
   }, [sites])
 
@@ -220,8 +276,11 @@ export default function MapPanel({
             ))}
           </div>
 
-          {/* tencent map layer */}
-          <div ref={mapEl} className="absolute inset-0" />
+          {/* AMap canvas layer: AMap rewrites the container's position to relative, so it needs a
+              sized (absolutely positioned) wrapper or it collapses to zero height inside this box. */}
+          <div className="absolute inset-0">
+            <div ref={mapEl} className="h-full w-full" />
+          </div>
 
           <span className="u-mono absolute left-3 top-3 text-[9px] tracking-[0.16em] text-faint">
             {title}

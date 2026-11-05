@@ -85,11 +85,15 @@ npm run clean        # 删掉 .next / out
 
 ## 地图（合规）
 
-- 只用**腾讯地图 GL JS**（合规白名单：腾讯 / 高德 / 百度 / 天地图）。国界线由官方数据渲染，**不手绘版图**。
-- 配置 `NEXT_PUBLIC_TMAP_KEY` 后自动切换到真实地图，并绘制 800km 覆盖圈（`MultiCircle`）与已建/在建点位（`MultiMarker`），支持缩放拖拽与悬停联动。
+- 只用**高德地图 JS API 2.0**（合规白名单：腾讯 / 高德 / 百度 / 天地图）。国界线由官方数据渲染，**不手绘版图**。
+- 配置 `NEXT_PUBLIC_AMAP_KEY` 后自动切换到真实地图，并绘制 800km 覆盖圈（`AMap.Circle`）与已建/在建点位（`AMap.Marker`）。
+- 地图是**静态展示**：`dragEnable / zoomEnable / scrollWheel / doubleClickZoom / rotateEnable / pitchEnable` 全部关闭，不能拖拽、缩放、旋转；滚轮和手势穿透给页面正常滚动。只有悬停/点击点位会联动右侧信息卡。
+- 2021-12 之后申请的 Key 还需要配套的**安全密钥**，配到 `NEXT_PUBLIC_AMAP_SECURITY_CODE`；缺了会报 `INVALID_USER_SCODE`，此时页面停在示意图，不会白屏。
 - 未配置 key 时渲染「坐标网格 + 覆盖圈」示意图，悬停/点击交互完全一致，不影响演示与首屏性能。
+- 底图随深浅色切换：浅色 `amap://styles/whitesmoke`、深色 `amap://styles/dark`，由 `MutationObserver` 监听 `<html class="dark">` 自动同步。
 - 坐标按 `Site.id`（`shenzhen` / `ulanqab` …）查表，**不要用 `name`**——`name` 是本地化展示文案，简繁中文站会拿不到坐标。新增服务点时三个字典的 `id` 必须一致。
-- Key 申请：腾讯位置服务控制台；前端明文 key 请配 Referer 白名单，商用建议走后端代理。
+- 坐标表是 `[lat, lng]`（和腾讯一致），代码里 `lngLat()` 负责转成高德要求的 `[lng, lat]`，别在表里直接写反。
+- Key 申请：高德开放平台控制台，类型选「Web 端（JS API）」，配域名白名单（开发用 `localhost`）；前端明文 key 请配白名单，商用建议走后端代理。
 
 ## 品牌资产
 
