@@ -38,15 +38,16 @@ npm run clean        # 删掉 .next / out
 
 ```
 /                   → 跳 /zh-cn/（静态导出无法服务端 redirect）
-/zh-cn/            首页（Hero / 数据 / 能力 / 网络+SLA / 案例卡片 / 流程 / 联系）
+/zh-cn/            首页（Hero / 数据 / 能力 / 网络+SLA / 案例 / 流程 / 联系）
 /zh-cn/capability  核心业务（五项能力明细）
 /zh-cn/network     服务网络（覆盖地图 + SLA + 服务点清单）
-/zh-cn/cases       客户案例（指标条 + 六宫格）
+/zh-cn/cases       客户案例（指标条 + 2×2 案例卡）
+/zh-cn/cases/[slug] 案例详情（四个案例共用一套模板，slug 三语一致）
 /zh-cn/about       关于我们（公司 / 资质 / 联系）
 /zh-tw/...  /en/...  同构
 ```
 
-共 15 个静态页（5 路由 × 3 语言）+ 品牌化 404。
+共 27 个静态页（5 个列表路由 + 4 个案例详情，× 3 语言）+ 品牌化 404。
 
 源码目录用 route group 承载两套根布局：`(site)/[locale]/` 负责三语站点，`(redirect)/` 只负责 `/`。两套根布局没有共同父级，因此 404 只能放在 `src/app/global-not-found.tsx`（Next 15 的 `experimental.globalNotFound`）。
 
@@ -80,8 +81,19 @@ npm run clean        # 删掉 .next / out
 | `data-count` | 数字滚动（自动解析前后缀与小数位） |
 | `data-line` | 进度线随滚动绘制（scrub） |
 
-案例卡片由 `CaseCards.tsx`（`CaseCard` / `CaseGrid`）统一渲染，首页与 `/cases` 共用同一套卡片，避免两处样式漂移；不再有横向轮播。
+案例卡片由 `CaseCards.tsx`（`CaseCard` / `CaseGrid`）统一渲染，首页、`/cases` 和详情页底部的「其他案例」共用同一套卡片，避免三处样式漂移；不再有横向轮播。
+网格为 1 列（手机）→ 2 列（≥md）发丝线布局；案例数为奇数时最后一张自动通栏（`md:col-span-2`），所以加第 5 个案例不用改版式。
 `prefers-reduced-motion` 下全部动画关闭、内容直接可见。
+
+## 客户案例
+
+案例是数据驱动的：列表、详情页、详情页底部的「其他案例」、sitemap 全部从 `dict.cases.items` 生成，模板里没有硬编码文案。
+
+- 字段见 `src/content/types.ts` 的 `CaseStudy`：`slug`（URL 键）、`client`、`device`、`tag`、`service`、`date`、`title`、`summary`、`metrics`、`challenge`、`solution`、`outcome`、`record`，可选 `quote`。
+- 列表卡只取 `metrics` 的前两项，详情页展示全部；`quote` 没有就整块不渲染。
+- **新增一个案例**：在三个字典的 `cases.items` 各加一个对象，`slug` 必须完全一致。`src/content/index.ts` 会在构建期比对三语 slug 集合，缺一个或拼错直接报错；`generateStaticParams` 负责生成三种语言的静态页。
+- 详情页路由 `[locale]/cases/[slug]/` 用 `dynamicParams = false`，只导出已声明的 slug，其余走 404。
+- 标签页标题：详情页用「案例标题 — 公司名」（`pageMetadata` 的 `title` 参数）；五个主路由仍固定为公司名。
 
 ## 地图（合规）
 
@@ -113,6 +125,7 @@ src/
       layout.tsx         站点根布局（html lang / 导航 / 页脚 / 动效挂载）
       page.tsx           首页
       capability|network|cases|about/page.tsx
+      cases/[slug]/page.tsx  案例详情（固定模板 + generateStaticParams）
     global-not-found.tsx 品牌化 404
     sitemap.ts robots.ts 构建期生成的 SEO 文件
     globals.css          设计令牌 + 基础样式

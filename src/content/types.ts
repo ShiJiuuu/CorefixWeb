@@ -10,7 +10,33 @@ export type Cap = {
   points: string[]
 }
 
-export type CaseItem = { k: string; h: string; p: string; b: string; c: string }
+/** One step of "what we did" on a case detail page. */
+export type CaseStep = { t: string; d: string }
+
+/**
+ * A customer service case. `slug` is the URL key and must be identical in every
+ * dictionary — `content/index.ts` fails the build when the three locales drift.
+ */
+export type CaseStudy = {
+  slug: string
+  client: string
+  device: string
+  /** Short technical tag shown at the top-right of the card, e.g. 网络链路. */
+  tag: string
+  service: string
+  /** Service window, already formatted for display. */
+  date: string
+  title: string
+  summary: string
+  /** The card shows the first two; the detail page shows all of them. */
+  metrics: Metric[]
+  challenge: string[]
+  solution: CaseStep[]
+  outcome: string[]
+  /** Work-order style facts: ticket number, serial, status. */
+  record: { k: string; v: string }[]
+  quote?: { text: string; by: string }
+}
 
 /** `id` is the stable lookup key (map coordinates, links); `name` is display text and is localized. */
 export type Site = {
@@ -103,7 +129,28 @@ export type Dict = {
     slaNote: string
     cta: string
   }
-  cases: { eyebrow: string; title: string; items: CaseItem[]; all: string }
+  cases: {
+    eyebrow: string
+    title: string
+    items: CaseStudy[]
+    all: string
+    /** Label on the card's detail link. */
+    read: string
+    detail: {
+      back: string
+      client: string
+      device: string
+      service: string
+      date: string
+      challenge: string
+      solution: string
+      outcome: string
+      record: string
+      quote: string
+      related: string
+      allCases: string
+    }
+  }
   process: { eyebrow: string; title: string; flow: ProcessFlow }
   cta: { eyebrow: string; title: string[]; sub: string; buttons: CtaButton[] }
   footer: {

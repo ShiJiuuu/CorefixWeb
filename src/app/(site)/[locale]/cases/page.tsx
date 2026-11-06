@@ -52,7 +52,12 @@ export default async function CasesPage({ params }: { params: Promise<{ locale: 
       </section>
 
       <section className="u-container py-14 lg:py-20">
-        <CaseGrid items={d.cases.items} headingLevel="h2" />
+        <CaseGrid
+          items={d.cases.items}
+          locale={locale}
+          readLabel={d.cases.read}
+          headingLevel="h2"
+        />
 
         <div className="mt-8 flex flex-wrap items-center justify-between gap-4">
           <Link href={`/${locale}/network/`} className="u-link">

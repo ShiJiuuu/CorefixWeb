@@ -139,50 +139,247 @@ export const en: Dict = {
     eyebrow: 'CASES',
     title: 'Machines that came back',
     all: 'View all cases',
+    read: 'Read case',
     items: [
       {
-        k: 'Shenzhen · 1,000 × H200 maintenance',
-        h: 'Fleet failure rate cut from 10% to under 3%',
-        p: 'Two resident engineers, quarterly inspection and work-order analysis keep non-cluster downtime under 8 hours.',
-        b: '10%→3%',
-        c: 'Cluster failure rate',
+        slug: 'supermicro-h200-nic-no-carrier',
+        client: 'Aidixi',
+        device: 'Supermicro H200 server',
+        tag: 'Network link',
+        service: 'On-site diagnosis + transceiver replacement',
+        date: '3 October 2026',
+        title: 'A No-Carrier alarm, isolated to one optical transceiver',
+        summary:
+          'The brainpf/data NIC kept reporting No-Carrier. Working segment by segment through the fibre patch leads and the transceiver isolated the fault, and the link came back up after an on-site replacement.',
+        metrics: [
+          { v: '1 point', l: 'Fault isolated' },
+          { v: 'On site', l: 'Link restored' },
+        ],
+        challenge: [
+          'On a Supermicro H200 server, the brainpf/data NIC reported No-Carrier continuously: no carrier signal on the link, so the port would not come up.',
+          'That NIC carries data-plane traffic. With the link down, inter-node transfers and training-job communication were directly affected — not something that could wait for the next maintenance window.',
+          'A system-level restart had already been ruled out remotely, so an engineer had to work the path on site and establish whether the fault sat in the fibre lead, the transceiver, or the NIC port itself.',
+        ],
+        solution: [
+          {
+            t: 'Dispatch and spares',
+            d: 'Confirmed the alarm, server model and failed NIC, and lined up an engineer plus a matching transceiver.',
+          },
+          {
+            t: 'On-site check',
+            d: 'Verified the server state in the machine room and confirmed the No-Carrier alarm was persistent, not intermittent.',
+          },
+          {
+            t: 'Segment-by-segment isolation',
+            d: 'Checked the fibre patch leads and transceiver status, working along the path until the fault was narrowed to the transceiver.',
+          },
+          {
+            t: 'Replacement and end-face cleaning',
+            d: 'Replaced the transceiver, following proper insertion practice and cleaning the fibre end-face to avoid dust-induced attenuation.',
+          },
+          {
+            t: 'Link validation',
+            d: 'Retested the port: the No-Carrier alarm cleared, the port came up and data-plane traffic resumed.',
+          },
+          {
+            t: 'Handover',
+            d: 'Confirmed recovery with the customer, closed the work order and logged the full sequence.',
+          },
+        ],
+        outcome: [
+          'With the transceiver replaced, the No-Carrier alarm on brainpf/data cleared, the port came up, and inter-node transfer and training communication recovered.',
+          'The whole job was completed on site; neither the server nor any part was shipped back, keeping the outage to the shortest possible window.',
+        ],
+        record: [
+          { k: 'Work order', v: 'YX25007495' },
+          { k: 'Equipment', v: 'Supermicro H200 server' },
+          { k: 'Service date', v: '3 October 2026' },
+          { k: 'Status', v: 'Resolved' },
+        ],
       },
       {
-        k: 'Henan · H200 board fault',
-        h: 'On site in 8 hours, stable at full load for 72',
-        p: 'Cold joints plus a shorted trace: microscope localisation, controlled reflow, three full-load validation rounds.',
-        b: '72h',
-        c: 'Continuous runtime',
+        slug: 'hgx-b300-ecc-counter',
+        client: 'Songsaikesi Technology',
+        device: 'HGX B300 SXM6',
+        tag: 'ECC counters',
+        service: 'Hardware inspection + ECC counter reset + full function test',
+        date: '24 September 2026',
+        title: 'Every rail was healthy — the fault was the ECC baseline',
+        summary:
+          'Impedance checks on every supply rail came back normal, ruling out shorts and component breakdown. Clearing the ECC counters rebuilt the baseline, and the full function test passed item by item.',
+        metrics: [
+          { v: '0 parts', l: 'Replaced' },
+          { v: 'Full', l: 'Function test passed' },
+        ],
+        challenge: [
+          'An HGX B300 SXM6 reported abnormal ECC counts. The customer suspected memory or supply-side damage and wanted the fault boundary established before anything was pulled apart.',
+          'An alarm like this has two possible causes: genuine hardware degradation, or baseline drift from historical counter accumulation. The first needs parts; the second only needs a reset and verification.',
+          'The brief was explicit: measure first, and do not replace a single component without data behind it.',
+        ],
+        solution: [
+          {
+            t: 'Intake and test plan',
+            d: 'Logged the model and serial, and set the order of work — supply first, function second — so nothing was dismantled prematurely.',
+          },
+          {
+            t: 'Supply rail impedance',
+            d: 'Measured input and output-to-ground impedance on every GPU supply rail; all readings sat inside the normal range.',
+          },
+          {
+            t: 'Ruling out the supply path',
+            d: 'Used those readings to exclude shorts and component breakdown, narrowing the search to counters and function.',
+          },
+          {
+            t: 'ECC counter reset',
+            d: 'Cleared the ECC counters, removed the historical accumulation and rebuilt a clean counting baseline.',
+          },
+          {
+            t: 'Full function test',
+            d: 'Ran a complete function test item by item after the reset, rather than treating a silent alarm as proof of health.',
+          },
+          {
+            t: 'Verdict and handover',
+            d: 'Tests passed, the unit returned to service with no parts replaced, and the customer signed off.',
+          },
+        ],
+        outcome: [
+          'The unit returned to normal operation with no component replaced — the smallest possible intervention, and the equipment left intact.',
+          'The diagnostic path is fully traceable: rail impedance measurements, exclusion of hardware shorts, ECC baseline rebuild, then full function-test validation.',
+        ],
+        record: [
+          { k: 'Serial', v: '1650926016680' },
+          { k: 'Equipment', v: 'HGX B300 SXM6, AC, MOD' },
+          { k: 'Service date', v: '24 September 2026' },
+          { k: 'Status', v: 'Resolved, no parts replaced' },
+        ],
       },
       {
-        k: 'Shanghai · 32 × H200 delivery',
-        h: 'Rework and full stress testing in 7 days',
-        p: 'Memory and drive replacement, NIC installation and tuning — delivered to spec, extended into annual maintenance.',
-        b: '7d',
-        c: 'Turnaround',
+        slug: 'h100-single-gpu-failure',
+        client: 'Guangzhou Zhimei Internet Technology',
+        device: 'NVIDIA H100 server',
+        tag: 'Single card',
+        service: 'On-site inspection + failed card removal',
+        date: '9 July 2026',
+        title: 'One card down — pulled cleanly, on site',
+        summary:
+          'A single GPU was dragging down the whole chassis. The engineer attended site, powered down, pulled the card under ESD control and logged its serial, then validated the server over multiple reboot cycles.',
+        metrics: [
+          { v: '1 card', l: 'Fault isolated' },
+          { v: 'Multi-round', l: 'Reboot validation' },
+        ],
+        challenge: [
+          'A single-GPU failure alarm appeared while the server was running. The card was in a bad state, and both chassis compute output and workload balancing were affected.',
+          'The card could not be recovered remotely: it required a power-down, teardown and extraction in the machine room — an on-site hardware job.',
+          'The customer runs a strict change window and ESD regime, so the removal had to be procedural and traceable, with no loose ends.',
+        ],
+        solution: [
+          {
+            t: 'Rapid response',
+            d: 'Confirmed the symptom, model and site conditions, and arranged the engineer, spares and a work window.',
+          },
+          {
+            t: 'Arrival on site',
+            d: 'Verified equipment details, agreed the work window and safety rules, and set up ESD protection.',
+          },
+          {
+            t: 'Fault detection',
+            d: 'Powered up on site, checked GPU status and logs card by card, and isolated the faulty unit (6444—6566).',
+          },
+          {
+            t: 'Card extraction',
+            d: 'Powered down, removed the card under ESD control and logged its serial, without damaging the slot or neighbouring cards.',
+          },
+          {
+            t: 'Post-service validation',
+            d: 'After the server came back up, validated GPU status, compute output and stability over multiple rounds with no alarms.',
+          },
+          {
+            t: 'Handover',
+            d: 'Confirmed recovery with the customer on site and closed the service loop.',
+          },
+        ],
+        outcome: [
+          'With the faulty card out, the server returned to service: the single-card alarm cleared and compute output and stability returned to normal.',
+          'The removal followed the site procedure end to end with the serial logged, so the failed part stays traceable for replacement or RMA.',
+        ],
+        record: [
+          { k: 'Equipment', v: 'NVIDIA H100 server (single card)' },
+          { k: 'Card identifier', v: '6444—6566' },
+          { k: 'Service date', v: '9 July 2026' },
+          { k: 'Status', v: 'Resolved' },
+        ],
       },
       {
-        k: 'Ulanqab · Data centre residency',
-        h: '4 resident engineers for 300 servers',
-        p: 'The remote diagnostics centre tracks every ticket; nothing stays open overnight and closures are fully logged.',
-        b: '300:4',
-        c: 'Resident ratio',
-      },
-      {
-        k: 'Shanghai · Forward parts warehouse',
-        h: 'Parts dispatched within 2 hours citywide',
-        p: 'Three-tier stocking plus ATE screening, with 1:1 critical spares for large data centres.',
-        b: '2h',
-        c: 'Parts dispatch',
-      },
-      {
-        k: 'Nationwide · Mail-in service',
-        h: 'Standard faults repaired and shipped in 48 hours',
-        p: 'Multi-layer packaging back to base, tracked end to end, with a 99.2% repair success rate.',
-        b: '48h',
-        c: 'Repair turnaround',
+        slug: 'a100-no-boot-u9-module',
+        client: 'Shanghai Hanxi Computer',
+        device: 'NVIDIA A100',
+        tag: 'No boot',
+        service: 'Power-on inspection + module replacement + verdict',
+        date: '8 — 17 June 2026',
+        title: 'After replacing U9: the core was dead — stop spending',
+        summary:
+          'No-boot reproduced on the bench. Step-by-step measurement along the power path pointed to the U9 power module; after replacement the retest confirmed the GPU core was damaged beyond repair, with a clear verdict in nine days.',
+        metrics: [
+          { v: '9 days', l: 'Report to verdict' },
+          { v: 'U9', l: 'Module isolated' },
+        ],
+        challenge: [
+          'An A100 card would not boot on power-up. The device could not start and the workload stopped with it.',
+          'The initial read pointed at the power path, but that path has several conversion stages: the fault could sit in a power module, or it could already have reached the GPU core.',
+          'The customer needed more than a repair — they needed a verdict they could act on: whether the card was still worth investing in.',
+        ],
+        solution: [
+          {
+            t: 'Intake',
+            d: 'Accepted the report on 8 June 2026, logged the symptom and serial, and set out the test plan.',
+          },
+          {
+            t: 'Power-on test',
+            d: 'Ran a bench power-on test on the A100, reproduced the no-boot condition and ruled out the host environment.',
+          },
+          {
+            t: 'Power path isolation',
+            d: 'Measured stage by stage along the supply path and located the fault at the U9 power module.',
+          },
+          {
+            t: 'U9 replacement',
+            d: 'Replaced the U9 power module, cleared the supply-side fault and restored the power path.',
+          },
+          {
+            t: 'Retest and core assessment',
+            d: 'Powered up again after replacement; testing confirmed the GPU core was damaged and beyond repair.',
+          },
+          {
+            t: 'Verdict',
+            d: 'Completed testing on 17 June 2026 and issued a clear conclusion with disposal recommendations.',
+          },
+        ],
+        outcome: [
+          'Replacing the U9 module cleared the supply-side fault, and further testing confirmed the GPU core was damaged beyond repair.',
+          'The verdict was unambiguous and traceable, so the customer stopped sinking money into an unrepairable card and moved to spares and replacement.',
+        ],
+        record: [
+          { k: 'Reported', v: '8 June 2026' },
+          { k: 'Completed', v: '17 June 2026' },
+          { k: 'Serial', v: '1652622000303' },
+          { k: 'Status', v: 'Resolved, inspection verdict issued' },
+        ],
       },
     ],
+    detail: {
+      back: 'Cases',
+      client: 'Client',
+      device: 'Equipment',
+      service: 'Scope',
+      date: 'Service date',
+      challenge: 'The problem',
+      solution: 'What we did',
+      outcome: 'Results and verification',
+      record: 'Service record',
+      quote: 'Client feedback',
+      related: 'More cases',
+      allCases: 'View all cases',
+    },
   },
   process: {
     eyebrow: 'PROCESS',

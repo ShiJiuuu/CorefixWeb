@@ -177,7 +177,7 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
         <div className="u-container py-16 lg:py-24">
           <SectionHead eyebrow={d.cases.eyebrow} title={d.cases.title} />
 
-          <CaseGrid items={d.cases.items} />
+          <CaseGrid items={d.cases.items} locale={locale} readLabel={d.cases.read} />
 
           <div className="mt-7 flex flex-wrap items-center justify-between gap-4">
             <Link href={`/${locale}/cases/`} className="u-link">

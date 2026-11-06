@@ -1,51 +1,108 @@
-import type { CaseItem } from '@/content/types'
+import Link from 'next/link'
+import type { CaseStudy } from '@/content/types'
 
 /**
- * One case card. Shared by the home section and /cases so the two never drift:
- * home renders it under an h2 section head, /cases under the page h1.
+ * One case card. Shared by the home section, /cases and the related block on a
+ * detail page, so the visual language never drifts between the three places.
+ *
+ * The card is a link to /[locale]/cases/[slug]/ — the whole surface is clickable,
+ * and the "read case" label is decorative rather than a nested anchor.
  */
 export function CaseCard({
   item,
   index = 0,
+  locale,
+  readLabel,
   headingLevel: Heading = 'h3',
+  wide = false,
 }: {
-  item: CaseItem
+  item: CaseStudy
   index?: number
+  locale: string
+  readLabel: string
   headingLevel?: 'h2' | 'h3'
+  /** Spans both columns; used for the last card when the count is odd. */
+  wide?: boolean
 }) {
   return (
-    <article
-      className="group bg-bg p-7 transition-colors hover:bg-bg2"
+    <Link
+      href={`/${locale}/cases/${item.slug}/`}
+      className={`group flex flex-col bg-bg p-7 transition-colors duration-200 hover:bg-bg2 lg:p-8 ${
+        wide ? 'md:col-span-2' : ''
+      }`}
       data-reveal={String(index * 0.03)}
     >
-      <p className="u-mono text-[10px] tracking-[0.14em] text-faint">{item.k}</p>
-      <Heading className="mt-4 min-h-[90px] text-[19px] font-semibold leading-[1.55]">{item.h}</Heading>
-      <p className="min-h-[78px] text-[13.5px] leading-[1.85] text-muted">{item.p}</p>
-      <div className="mt-6 flex items-end justify-between border-t border-line pt-5">
-        <div>
-          <p className="u-mono text-[30px] font-semibold leading-none tracking-tight">{item.b}</p>
-          <p className="mt-2 text-[10.5px] text-faint">{item.c}</p>
-        </div>
-        <span className="u-mono text-[13px] text-faint transition-transform group-hover:translate-x-1">
-          →
+      <div className="flex items-start justify-between gap-4">
+        <p className="u-mono text-[10px] tracking-[0.14em] text-faint">
+          {String(index + 1).padStart(2, '0')} / {item.client}
+        </p>
+        <span className="u-mono shrink-0 border border-line2 px-2 py-0.5 text-[9.5px] tracking-[0.1em] text-muted">
+          {item.tag}
         </span>
       </div>
-    </article>
+
+      <Heading
+        className={`mt-4 font-semibold leading-[1.5] ${
+          wide ? 'text-[21px] lg:text-[26px]' : 'text-[19px] lg:text-[23px]'
+        }`}
+      >
+        {item.title}
+      </Heading>
+
+      <p className="mt-3 max-w-[640px] flex-1 text-[13.5px] leading-[1.85] text-muted">
+        {item.summary}
+      </p>
+
+      <div className="mt-6 flex items-end justify-between gap-4 border-t border-line pt-5">
+        <div className="flex flex-wrap gap-x-7 gap-y-3">
+          {item.metrics.slice(0, 2).map((m) => (
+            <div key={m.l}>
+              <p className="u-mono text-[26px] font-semibold leading-none tracking-tight">{m.v}</p>
+              <p className="mt-2 text-[10.5px] text-faint">{m.l}</p>
+            </div>
+          ))}
+        </div>
+        <span className="u-mono hidden shrink-0 items-center gap-1.5 text-[10.5px] tracking-[0.1em] text-faint transition-transform duration-200 group-hover:translate-x-1 sm:flex">
+          {readLabel}
+          <span>→</span>
+        </span>
+      </div>
+    </Link>
   )
 }
 
-/** Hairline grid of case cards; 1 / 2 / 3 columns depending on the breakpoint. */
+/**
+ * Hairline case grid: one column on mobile, two from md up.
+ *
+ * Extensibility rule: an odd number of cases would leave an empty cell, so the
+ * last card spans both columns instead. Adding a fifth case therefore needs no
+ * layout work at all — it simply becomes 2 + 2 + 1 full-width.
+ */
 export function CaseGrid({
   items,
+  locale,
+  readLabel,
   headingLevel = 'h3',
 }: {
-  items: CaseItem[]
+  items: CaseStudy[]
+  locale: string
+  readLabel: string
   headingLevel?: 'h2' | 'h3'
 }) {
+  const odd = items.length % 2 === 1
+
   return (
-    <div className="grid gap-px border border-line2 bg-line md:grid-cols-2 lg:grid-cols-3">
+    <div className="grid gap-px border border-line2 bg-line md:grid-cols-2">
       {items.map((item, i) => (
-        <CaseCard key={item.k} item={item} index={i} headingLevel={headingLevel} />
+        <CaseCard
+          key={item.slug}
+          item={item}
+          index={i}
+          locale={locale}
+          readLabel={readLabel}
+          headingLevel={headingLevel}
+          wide={odd && i === items.length - 1}
+        />
       ))}
     </div>
   )

@@ -50,17 +50,20 @@ export function pageMetadata({
   locale,
   path = '/',
   description,
+  title = SITE_TITLE,
 }: {
   locale: Locale
   path?: string
   description: string
+  /** Defaults to the company name; case detail pages pass their own headline. */
+  title?: string
 }): Metadata {
   return {
-    title: SITE_TITLE,
+    title,
     description,
     alternates: alternates(locale, path),
     openGraph: {
-      title: SITE_TITLE,
+      title,
       description,
       url: absolute(`/${locale}${normalizePath(path)}`),
       locale: hreflang[locale],

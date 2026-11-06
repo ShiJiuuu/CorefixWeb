@@ -27,7 +27,11 @@ export default function Nav({ locale, dict }: { locale: Locale; dict: Dict }) {
     }
   }, [open])
 
-  const isActive = (href: string) => pathname.replace(/\/$/, '').endsWith(href)
+  // Sub-paths count as active too: /zh-cn/cases/<slug>/ keeps 客户案例 underlined.
+  const isActive = (href: string) => {
+    const path = pathname.replace(/\/$/, '')
+    return path === `/${locale}${href}` || path.startsWith(`/${locale}${href}/`)
+  }
 
   return (
     <header
