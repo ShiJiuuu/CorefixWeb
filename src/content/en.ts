@@ -23,29 +23,6 @@ export const en: Dict = {
       { label: 'View capability', href: '/capability' },
     ],
     netBar: { label: 'SERVICE NETWORK / 28 CITIES · 7×24', cta: 'Open network map' },
-    meta: [
-      { v: '60+', l: 'Engineers' },
-      { v: '28', l: 'Cities, 7×24' },
-      { v: '<0.8%', l: 'Recurrence rate' },
-    ],
-  },
-  wo: {
-    label: 'WORK ORDER',
-    no: 'NO. CF-2609-0417',
-    rows: [
-      { k: 'DEVICE', v: 'NVIDIA H200 ×8 / full server' },
-      { k: 'FAULT', v: 'Cold solder joint · VRM short' },
-      { k: 'ACTION', v: 'BGA rework + component replacement' },
-      { k: 'SLA', v: 'MAX · 4h on-site / 5-day turnaround' },
-    ],
-    trackLabel: 'REPAIR TRACK',
-    track: ['Intake', 'Diagnose', 'Repair', 'Stress', 'Deliver'],
-    trackCurrent: 3,
-    kpis: [
-      { v: '98.6%', l: 'Compute restored' },
-      { v: '12h', l: 'Full-load stress' },
-      { v: '0', l: 'Anomalies' },
-    ],
   },
   stats: [
     { v: '99.2%', l: 'Repair success rate' },

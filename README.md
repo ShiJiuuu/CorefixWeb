@@ -107,6 +107,15 @@ npm run clean        # 删掉 .next / out
 - 坐标表是 `[lat, lng]`（和腾讯一致），代码里 `lngLat()` 负责转成高德要求的 `[lng, lat]`，别在表里直接写反。
 - Key 申请：高德开放平台控制台，类型选「Web 端（JS API）」，配域名白名单（开发用 `localhost`）；前端明文 key 请配白名单，商用建议走后端代理。
 
+## 首屏视频
+
+- 首页 Hero 背景是一段无声循环视频：`public/media/hero.mp4`（960×540，25fps，H.264，约 7MB）+ 首帧 `hero-poster.jpg`。
+- 原始素材在 `assets/source/410.mp4`（1920×1080，124MB），**不进 public、不进构建**；换片时重新压一版：
+  `ffmpeg -i assets/source/410.mp4 -an -vf "scale=960:-2,fps=25" -c:v libx264 -preset slow -crf 32 -pix_fmt yuv420p -movflags +faststart public/media/hero.mp4`
+- 播放层是 `absolute inset-0` + `object-cover`，**彩色原样播放**；文字压在一条从左到右由黑渐透明的底板上，所以首屏文案始终可读。
+- 文案区的色板由 `.hero-on-dark`（`globals.css`）局部重映射：`--ink/--muted/--line` 等换成白色系，`.u-btn-solid` 自动变成白底黑字；数据条在视频块之外，仍是常规配色。
+- 组件 `HeroVideo.tsx`，`prefers-reduced-motion` 下自动降级为静态首帧。
+
 ## 品牌资产
 
 - 导航与页脚统一使用官方 PNG：`public/logo-corefix.png`（231×231，透明底，菱形 G/P/U）。

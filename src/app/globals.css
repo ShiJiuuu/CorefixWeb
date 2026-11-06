@@ -125,6 +125,20 @@ html.lenis body {
     max-width: 1920px;
     padding-inline: clamp(20px, 5.5vw, 80px);
   }
+  /* hero copy sits on a dark video plate, so re-map the theme tokens to light values */
+  .hero-on-dark {
+    color: var(--ink);
+    --ink: #ffffff;
+    --ink2: rgba(255, 255, 255, 0.88);
+    --muted: rgba(255, 255, 255, 0.74);
+    --faint: rgba(255, 255, 255, 0.55);
+    --line: rgba(255, 255, 255, 0.22);
+    --line2: rgba(255, 255, 255, 0.38);
+    --inv: #ffffff;
+    --inv-t: #0a0a0a;
+    --bg: #0a0a0a;
+    --bg2: rgba(255, 255, 255, 0.08);
+  }
   .u-mono {
     font-family: var(--font-mono);
     font-variant-numeric: tabular-nums;

@@ -10,7 +10,12 @@ const config = [
   {
     // Static export runs with images.unoptimized, so plain <img> is intentional for the
     // two brand assets that must also work without the Next image runtime.
-    files: ['src/components/Nav.tsx', 'src/components/Footer.tsx', 'src/components/SocialLinks.tsx'],
+    files: [
+      'src/components/Nav.tsx',
+      'src/components/Footer.tsx',
+      'src/components/SocialLinks.tsx',
+      'src/components/HeroVideo.tsx',
+    ],
     rules: { '@next/next/no-img-element': 'off' },
   },
 ]

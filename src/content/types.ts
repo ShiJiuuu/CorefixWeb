@@ -97,17 +97,6 @@ export type Dict = {
     sub: string
     ctas: { label: string; href: string }[]
     netBar: { label: string; cta: string }
-    meta: Metric[]
-  }
-  wo: {
-    label: string
-    no: string
-    rows: { k: string; v: string }[]
-    trackLabel: string
-    track: string[]
-    /** Index of the step currently in progress; steps before it are done, the rest are pending. */
-    trackCurrent: number
-    kpis: Metric[]
   }
   stats: Metric[]
   cap: {

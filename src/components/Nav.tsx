@@ -35,8 +35,10 @@ export default function Nav({ locale, dict }: { locale: Locale; dict: Dict }) {
 
   return (
     <header
-      className={`sticky top-0 z-50 border-b bg-bg/85 backdrop-blur-md transition-colors duration-300 ${
-        solid ? 'border-line2' : 'border-line'
+      className={`sticky top-0 z-50 border-b bg-bg/55 backdrop-blur-xl backdrop-saturate-150 transition-[background-color,border-color,box-shadow] duration-300 supports-[backdrop-filter]:bg-bg/50 ${
+        solid
+          ? 'border-line2 shadow-[0_18px_40px_-32px_rgba(0,0,0,0.45)]'
+          : 'border-line'
       }`}
     >
       <div className="u-container flex h-[84px] items-center justify-between gap-4 xl:gap-6">

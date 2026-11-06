@@ -1,9 +1,9 @@
 import Link from 'next/link'
 import { locales } from '@/lib/i18n'
 import { getDict } from '@/content'
-import WorkOrder from '@/components/WorkOrder'
 import { CaseGrid } from '@/components/CaseCards'
 import ProcessFlow from '@/components/ProcessFlow'
+import HeroVideo from '@/components/HeroVideo'
 import SlaTable from '@/components/SlaTable'
 import { SectionHead, CtaBand } from '@/components/Sections'
 
@@ -19,73 +19,62 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
     <>
       {/* ---------- hero ---------- */}
       <section className="relative overflow-hidden border-b border-line2">
-        <div
-          className="u-gridbg pointer-events-none absolute inset-0"
-          style={{
-            maskImage: 'radial-gradient(ellipse 75% 70% at 65% 35%, #000, transparent 80%)',
-            WebkitMaskImage: 'radial-gradient(ellipse 75% 70% at 65% 35%, #000, transparent 80%)',
-          }}
-        />
-        <div className="u-container relative flex flex-col gap-12 pb-12 pt-14 lg:gap-14 lg:pb-16 lg:pt-20 xl:flex-row xl:items-start">
-          <div className="min-w-0 xl:flex-[1.04]">
-            <p className="u-label flex items-center gap-2.5" data-hero-fade>
-              <span className="inline-block h-px w-4 bg-ink" />
-              {d.hero.eyebrow}
-            </p>
-
-            <h1 className="u-hero-title mt-6 font-semibold leading-[1.06] tracking-[-0.035em]">
-              <span className="block overflow-hidden pb-1">
-                <span className="block" data-hero-line>
-                  {d.hero.title[0]}
-                </span>
-              </span>
-              <span className="block overflow-hidden pb-1">
-                <span className="block text-muted" data-hero-line>
-                  {d.hero.title[1]}
-                </span>
-              </span>
-            </h1>
-
-            <p className="mt-7 max-w-[500px] text-[16.5px] leading-[1.95] text-muted" data-hero-fade>
-              {d.hero.sub}
-            </p>
-
-            <div className="mt-9 flex flex-wrap gap-3" data-hero-fade>
-              <Link href={`/${locale}/${d.hero.ctas[0].href}`} className="u-btn u-btn-solid">
-                {d.hero.ctas[0].label}
-                <span className="u-mono text-[13px]">→</span>
-              </Link>
-              <Link href={`/${locale}${d.hero.ctas[1].href}/`} className="u-btn u-btn-line">
-                {d.hero.ctas[1].label}
-              </Link>
+        <div className="relative">
+          {/* full-colour film; the copy sits on a black plate that fades out to the right */}
+          <div className="pointer-events-none absolute inset-0 overflow-hidden" aria-hidden="true">
+            <div className="absolute inset-0">
+              <HeroVideo />
             </div>
-
-            <Link
-              href={`/${locale}/network/`}
-              className="group mt-9 flex items-center justify-between gap-4 border border-line2 px-5 py-4 transition-colors hover:bg-bg2"
-              data-hero-fade
-            >
-              <span className="u-mono text-[9.5px] leading-[1.7] tracking-[0.16em] text-faint">
-                {d.hero.netBar.label}
-              </span>
-              <span className="flex items-center gap-2 whitespace-nowrap text-[12px] font-semibold">
-                {d.hero.netBar.cta}
-                <span className="u-mono transition-transform group-hover:translate-x-1">→</span>
-              </span>
-            </Link>
+            <div className="absolute inset-0 bg-gradient-to-r from-black/90 via-black/60 via-45% to-transparent" />
           </div>
 
-          <div className="min-w-0 lg:max-w-[620px] xl:max-w-none xl:flex-[0.96] xl:pt-2">
-            <WorkOrder wo={d.wo} />
-            <div className="mt-6 flex flex-wrap gap-x-8 gap-y-3">
-              {d.hero.meta.map((m) => (
-                <div key={m.l} className="flex items-baseline gap-2">
-                  <span className="u-mono text-[14px] font-semibold" data-count={m.v}>
-                    {m.v}
+          <div className="u-container relative pb-12 pt-14 lg:pb-16 lg:pt-20">
+            <div className="hero-on-dark max-w-[820px]">
+              <p className="u-label flex items-center gap-2.5" data-hero-fade>
+                <span className="inline-block h-px w-4 bg-ink" />
+                {d.hero.eyebrow}
+              </p>
+
+              <h1 className="u-hero-title mt-6 font-semibold leading-[1.06] tracking-[-0.035em]">
+                <span className="block overflow-hidden pb-1">
+                  <span className="block" data-hero-line>
+                    {d.hero.title[0]}
                   </span>
-                  <span className="text-[11px] tracking-[0.04em] text-faint">{m.l}</span>
-                </div>
-              ))}
+                </span>
+                <span className="block overflow-hidden pb-1">
+                  <span className="block text-muted" data-hero-line>
+                    {d.hero.title[1]}
+                  </span>
+                </span>
+              </h1>
+
+              <p className="mt-7 max-w-[500px] text-[16.5px] leading-[1.95] text-muted" data-hero-fade>
+                {d.hero.sub}
+              </p>
+
+              <div className="mt-9 flex flex-wrap gap-3" data-hero-fade>
+                <Link href={`/${locale}/${d.hero.ctas[0].href}`} className="u-btn u-btn-solid">
+                  {d.hero.ctas[0].label}
+                  <span className="u-mono text-[13px]">→</span>
+                </Link>
+                <Link href={`/${locale}${d.hero.ctas[1].href}/`} className="u-btn u-btn-line">
+                  {d.hero.ctas[1].label}
+                </Link>
+              </div>
+
+              <Link
+                href={`/${locale}/network/`}
+                className="group mt-9 flex items-center justify-between gap-4 border border-line2 px-5 py-4 transition-colors hover:bg-bg2"
+                data-hero-fade
+              >
+                <span className="u-mono text-[9.5px] leading-[1.7] tracking-[0.16em] text-faint">
+                  {d.hero.netBar.label}
+                </span>
+                <span className="flex items-center gap-2 whitespace-nowrap text-[12px] font-semibold">
+                  {d.hero.netBar.cta}
+                  <span className="u-mono transition-transform group-hover:translate-x-1">→</span>
+                </span>
+              </Link>
             </div>
           </div>
         </div>

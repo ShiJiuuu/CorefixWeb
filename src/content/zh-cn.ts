@@ -23,29 +23,6 @@ export const zhCN: Dict = {
       { label: '查看服务能力', href: '/capability' },
     ],
     netBar: { label: 'SERVICE NETWORK / 28 CITIES · 7×24', cta: '查看服务网络地图' },
-    meta: [
-      { v: '60+', l: '工程师团队' },
-      { v: '28 城', l: '7×24 响应' },
-      { v: '<0.8%', l: '故障复发率' },
-    ],
-  },
-  wo: {
-    label: 'WORK ORDER',
-    no: 'NO. CF-2609-0417',
-    rows: [
-      { k: 'DEVICE', v: 'NVIDIA H200 ×8 / 服务器整机' },
-      { k: 'FAULT', v: '底板焊点虚焊 · 显存供电短路' },
-      { k: 'ACTION', v: 'BGA 返修 + 芯片级替换' },
-      { k: 'SLA', v: 'MAX · 4h 到场 / 5 天交付' },
-    ],
-    trackLabel: 'REPAIR TRACK',
-    track: ['接收', '检测', '维修', '压测', '交付'],
-    trackCurrent: 3,
-    kpis: [
-      { v: '98.6%', l: '算力恢复率' },
-      { v: '12h', l: '满载压测' },
-      { v: '0', l: '异常记录' },
-    ],
   },
   stats: [
     { v: '99.2%', l: '维修成功率' },
