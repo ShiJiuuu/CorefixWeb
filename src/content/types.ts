@@ -24,6 +24,33 @@ export type Site = {
 
 export type PageHero = { eyebrow: string; title: string; desc: string }
 
+/** Service-flow diagram content: five circular nodes, the labels along the arrows, and the footnote. */
+export type ProcessFlow = {
+  nodes: {
+    intake: string[]
+    approve: string[]
+    repair: string[]
+    test: string[]
+    ship: string[]
+  }
+  steps: {
+    unbox: string
+    assign: string
+    inspect: string
+    quote: string[]
+    yes: string
+    no: string
+    fieldiags: string
+    outbound: string
+    burn: string
+    dcgm: string
+    fail: string
+    pass: string
+    report: string
+  }
+  note: string[]
+}
+
 export type SocialId = 'wechat' | 'mp' | 'douyin' | 'xhs'
 
 /** Footer platform button: clicking it opens `image` (a QR code / contact card) in a modal. */
@@ -77,11 +104,16 @@ export type Dict = {
     cta: string
   }
   cases: { eyebrow: string; title: string; items: CaseItem[]; all: string }
-  process: { eyebrow: string; title: string; steps: { no: string; t: string; d: string }[] }
+  process: { eyebrow: string; title: string; flow: ProcessFlow }
   cta: { eyebrow: string; title: string[]; sub: string; buttons: CtaButton[] }
   footer: {
-    address: string[]
+    company: string
+    address: string
     phone: string
+    /** Inline prefixes rendered before the address and the phone number. */
+    labels: { address: string; phone: string }
+    /** Brand slogan: Chinese line on top, English line underneath. */
+    slogan: { zh: string; en: string }
     social: SocialLink[]
     cols: { t: string; items: string[] }[]
     copyright: string

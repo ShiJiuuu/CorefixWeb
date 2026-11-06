@@ -187,14 +187,34 @@ export const zhTW: Dict = {
   process: {
     eyebrow: 'PROCESS',
     title: '六步閉環，全程留痕',
-    steps: [
-      { no: '01', t: '報修接收', d: '控制台、API、熱線多渠道報障，自動生成工單。' },
-      { no: '02', t: '遠端初診', d: '15 分鐘內完成故障等級判定，可遠端即遠端解決。' },
-      { no: '03', t: '到場 / 寄修', d: '市區 4 小時到場；故障件多層包裝寄回基地。' },
-      { no: '04', t: '檢測報價', d: '三級檢測出具元件級診斷報告與報價單。' },
-      { no: '05', t: '維修壓測', d: 'BGA 返修加 12 小時滿載壓測，參數偏差 ≤3%。' },
-      { no: '06', t: '交付保固', d: '出具維修測試報告，30–180 天保固與檔案追蹤。' },
-    ],
+    flow: {
+      nodes: {
+        intake: ['維修入庫'],
+        approve: ['客戶是否', '同意維修'],
+        repair: ['顯卡維修'],
+        test: ['測試是否', '通過'],
+        ship: ['維修出庫'],
+      },
+      steps: {
+        unbox: '錄製開箱影片',
+        assign: '分配維修人員',
+        inspect: '顯卡檢測',
+        quote: ['顯示檢測報告、報價單', '與維修合約'],
+        yes: '是',
+        no: '否',
+        fieldiags: 'Fieldiags 測試',
+        outbound: '出庫測試',
+        burn: 'GPU Burn 測試',
+        dcgm: 'DCGM 測試',
+        fail: '測試不通過',
+        pass: '測試通過',
+        report: '出具維修報告',
+      },
+      note: [
+        '您一旦聯繫我們，專業客服團隊即刻啟動服務流程，1 小時內為您提供初步維修諮詢與指引。',
+        '常規故障 48 小時內修復完畢並寄回，複雜問題也將在 10–15 個工作日內交付，最大限度減少您的停機時間。',
+      ],
+    },
   },
   cta: {
     eyebrow: 'CONTACT',
@@ -207,11 +227,11 @@ export const zhTW: Dict = {
     ],
   },
   footer: {
-    address: [
-      '上海集培優信息科技有限公司',
-      '上海市長寧區友樂路 299 號 3 號樓 5 層',
-    ],
+    company: '上海集培優信息科技有限公司',
+    address: '上海市長寧區友樂路 299 號 3 號樓 5 層',
+    labels: { address: '地址：', phone: '電話：' },
     phone: '021-5176-8787',
+    slogan: { zh: '集智起航，培優致遠', en: 'Wisdom Sets Sail, Excellence Goes Far' },
     social: [
       { id: 'wechat', label: '微信', image: '/social/wechat.jpg' },
       { id: 'mp', label: '公眾號', image: '/social/wxgzh.jpg' },
@@ -221,7 +241,6 @@ export const zhTW: Dict = {
     cols: [
       { t: '業務', items: ['硬體維修', '軟體調校', '備件供應鏈', '駐場保養'] },
       { t: '公司', items: ['關於集培優', '服務網路', '資質認證', '加入我們'] },
-      { t: '資質', items: ['ISO 9001 品質管理系統', 'ISO 14001 環境管理系統', 'ISO 45001 安全管理系統', 'AAA 級信用企業'] },
     ],
     copyright: '© 2026 SHANGHAI COREFIX PRO INFORMATION TECHNOLOGY CO., LTD.',
     icp: '滬ICP備XXXXXXXX號 · 隱私政策',

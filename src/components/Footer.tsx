@@ -5,7 +5,8 @@ export default function Footer({ dict }: { dict: Dict }) {
   return (
     <footer className="border-t border-line2">
       <div className="u-container flex flex-col gap-10 py-12 md:flex-row md:flex-wrap lg:flex-nowrap lg:gap-11">
-        <div className="md:w-full md:shrink-0 lg:w-auto lg:min-w-0 lg:flex-[1.7]">
+        {/* brand + slogan + social */}
+        <div className="md:w-full md:shrink-0 lg:w-auto lg:min-w-0 lg:flex-[1.5]">
           <div className="mb-5 flex items-center gap-2.5">
             <img
               src="/logo-corefix.png"
@@ -19,26 +20,38 @@ export default function Footer({ dict }: { dict: Dict }) {
               <span className="u-mono mt-1 text-[8px] tracking-[0.22em] text-faint">COREFIX PRO</span>
             </span>
           </div>
-          <div className="space-y-1 text-[13px] leading-[2.1] text-muted">
-            {dict.footer.address.map((line) => (
-              <p key={line}>{line}</p>
-            ))}
-            <p>
-              <a href={`tel:${dict.footer.phone}`} className="u-mono hover:text-ink">
-                {dict.footer.phone}
-              </a>
-            </p>
 
-            <SocialLinks items={dict.footer.social} />
-          </div>
+          <p className="text-[18px] font-semibold leading-[1.5] tracking-[0.02em]">
+            {dict.footer.slogan.zh}
+          </p>
+          <p className="u-mono mt-2 text-[10px] leading-[1.7] tracking-[0.12em] text-faint">
+            {dict.footer.slogan.en}
+          </p>
+
+          <SocialLinks items={dict.footer.social} />
         </div>
 
-        {dict.footer.cols.map((col, i) => (
+        {/* contact — moved out of the brand column */}
+        <div className="md:w-[calc(50%_-_1.25rem)] md:shrink-0 lg:w-auto lg:min-w-0 lg:flex-[1.5]">
+          <p className="text-[16px] font-semibold leading-[1.5] text-ink">
+            {dict.footer.company}
+          </p>
+          <p className="mt-4 text-[13.5px] font-semibold leading-[1.85] text-ink2">
+            <span className="font-normal text-faint">{dict.footer.labels.address}</span>
+            {dict.footer.address}
+          </p>
+          <p className="mt-1.5 text-[13.5px] leading-[1.85] text-ink2">
+            <span className="font-normal text-faint">{dict.footer.labels.phone}</span>
+            <a href={`tel:${dict.footer.phone}`} className="u-mono font-semibold hover:text-ink">
+              {dict.footer.phone}
+            </a>
+          </p>
+        </div>
+
+        {dict.footer.cols.map((col) => (
           <div
             key={col.t}
-            className={`md:w-[calc(50%_-_1.25rem)] md:shrink-0 lg:w-auto lg:min-w-0 ${
-              i === dict.footer.cols.length - 1 ? 'lg:flex-[1.2]' : 'lg:flex-1'
-            }`}
+            className="md:w-[calc(50%_-_1.25rem)] md:shrink-0 lg:w-auto lg:min-w-0 lg:flex-[0.95]"
           >
             <h4 className="u-label mb-4 font-medium">{col.t}</h4>
             <ul className="space-y-1 text-[13.5px] text-ink2">
@@ -54,7 +67,6 @@ export default function Footer({ dict }: { dict: Dict }) {
         <p className="u-mono text-[10.5px] tracking-[0.04em] text-faint">{dict.footer.copyright}</p>
         <p className="u-mono text-[10.5px] tracking-[0.04em] text-faint">{dict.footer.icp}</p>
       </div>
-
     </footer>
   )
 }

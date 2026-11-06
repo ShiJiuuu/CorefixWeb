@@ -187,14 +187,34 @@ export const en: Dict = {
   process: {
     eyebrow: 'PROCESS',
     title: 'Six steps, fully logged',
-    steps: [
-      { no: '01', t: 'Intake', d: 'Tickets raised via console, API or hotline — work order generated automatically.' },
-      { no: '02', t: 'Remote triage', d: 'Severity classified within 15 minutes; anything solvable remotely is solved remotely.' },
-      { no: '03', t: 'On-site / mail-in', d: '4-hour urban arrival; faulty parts shipped back to base in multi-layer packaging.' },
-      { no: '04', t: 'Diagnose & quote', d: 'Three-stage inspection with a component-level report and a fixed quote.' },
-      { no: '05', t: 'Repair & stress', d: 'BGA rework plus 12 hours at full load, parameter deviation ≤3%.' },
-      { no: '06', t: 'Deliver & warranty', d: 'Repair report issued, 30–180 day warranty, full history archived.' },
-    ],
+    flow: {
+      nodes: {
+        intake: ['Intake'],
+        approve: ['Customer', 'approval'],
+        repair: ['GPU repair'],
+        test: ['Test', 'passed?'],
+        ship: ['Dispatch'],
+      },
+      steps: {
+        unbox: 'Unboxing video',
+        assign: 'Engineer assigned',
+        inspect: 'Inspection',
+        quote: ['Report, quote and', 'repair contract issued'],
+        yes: 'Yes',
+        no: 'No',
+        fieldiags: 'Fieldiags test',
+        outbound: 'Outbound tests',
+        burn: 'GPU Burn test',
+        dcgm: 'DCGM test',
+        fail: 'Test failed',
+        pass: 'Test passed',
+        report: 'Repair report issued',
+      },
+      note: [
+        'Once you contact us, our service desk starts the process immediately and gives an initial assessment within one hour.',
+        'Standard faults are repaired and shipped back within 48 hours; complex cases are delivered within 10–15 working days, keeping downtime to a minimum.',
+      ],
+    },
   },
   cta: {
     eyebrow: 'CONTACT',
@@ -207,11 +227,11 @@ export const en: Dict = {
     ],
   },
   footer: {
-    address: [
-      'Shanghai CoreFix Pro Information Technology Co., Ltd.',
-      'Floor 5, Building 3, 299 Youle Road, Changning District, Shanghai',
-    ],
+    company: 'Shanghai CoreFix Pro Information Technology Co., Ltd.',
+    address: 'Floor 5, Building 3, 299 Youle Road, Changning District, Shanghai',
+    labels: { address: 'Address: ', phone: 'Tel: ' },
     phone: '021-5176-8787',
+    slogan: { zh: '集智起航，培优致远', en: 'Wisdom Sets Sail, Excellence Goes Far' },
     social: [
       { id: 'wechat', label: 'WeChat', image: '/social/wechat.jpg' },
       { id: 'mp', label: 'Official account', image: '/social/wxgzh.jpg' },
@@ -221,7 +241,6 @@ export const en: Dict = {
     cols: [
       { t: 'Service', items: ['Hardware repair', 'Software tuning', 'Spare parts', 'Resident maintenance'] },
       { t: 'Company', items: ['About', 'Service network', 'Certifications', 'Careers'] },
-      { t: 'Certified', items: ['ISO 9001 Quality', 'ISO 14001 Environment', 'ISO 45001 Safety', 'AAA credit rating'] },
     ],
     copyright: '© 2026 SHANGHAI COREFIX PRO INFORMATION TECHNOLOGY CO., LTD.',
     icp: '沪ICP备XXXXXXXX号 · Privacy Policy',

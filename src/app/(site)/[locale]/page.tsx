@@ -3,6 +3,7 @@ import { locales } from '@/lib/i18n'
 import { getDict } from '@/content'
 import WorkOrder from '@/components/WorkOrder'
 import { CaseGrid } from '@/components/CaseCards'
+import ProcessFlow from '@/components/ProcessFlow'
 import SlaTable from '@/components/SlaTable'
 import { SectionHead, CtaBand } from '@/components/Sections'
 
@@ -171,8 +172,23 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
         </div>
       </section>
 
+      {/* ---------- cases ---------- */}
+      <section id="cases" className="border-y border-line2">
+        <div className="u-container py-16 lg:py-24">
+          <SectionHead eyebrow={d.cases.eyebrow} title={d.cases.title} />
+
+          <CaseGrid items={d.cases.items} />
+
+          <div className="mt-7 flex flex-wrap items-center justify-between gap-4">
+            <Link href={`/${locale}/cases/`} className="u-link">
+              {d.cases.all} <span className="text-faint">→</span>
+            </Link>
+          </div>
+        </div>
+      </section>
+
       {/* ---------- network + sla ---------- */}
-      <section className="border-y border-line2 bg-bg2/40">
+      <section className="border-b border-line2 bg-bg2/40">
         <div className="u-container py-16 lg:py-24">
           <SectionHead eyebrow={d.net.eyebrow} title={d.net.title}>
             <p className="mt-4 max-w-[520px] text-[15px] leading-[1.9] text-muted">{d.net.sub}</p>
@@ -216,38 +232,11 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
         </div>
       </section>
 
-      {/* ---------- cases ---------- */}
-      <section id="cases" className="border-b border-line2">
-        <div className="u-container py-16 lg:py-24">
-          <SectionHead eyebrow={d.cases.eyebrow} title={d.cases.title} />
-
-          <CaseGrid items={d.cases.items} />
-
-          <div className="mt-7 flex flex-wrap items-center justify-between gap-4">
-            <Link href={`/${locale}/cases/`} className="u-link">
-              {d.cases.all} <span className="text-faint">→</span>
-            </Link>
-          </div>
-        </div>
-      </section>
-
       {/* ---------- process ---------- */}
       <section id="process" className="u-container py-16 lg:py-24">
         <SectionHead eyebrow={d.process.eyebrow} title={d.process.title} />
 
-        <div className="relative">
-          <div className="absolute inset-x-0 top-0 h-px bg-line2" />
-          <div className="absolute inset-x-0 top-0 h-px origin-left bg-ink" data-line />
-          <ol className="grid gap-8 pt-8 sm:grid-cols-2 lg:grid-cols-6 lg:gap-0">
-            {d.process.steps.map((s) => (
-              <li key={s.no} className="lg:border-r lg:border-line lg:pr-5 lg:last:border-r-0" data-reveal>
-                <span className="u-mono text-[10px] tracking-[0.1em] text-faint">{s.no}</span>
-                <h3 className="mt-3 text-[16px] font-semibold">{s.t}</h3>
-                <p className="mt-2 text-[12.5px] leading-[1.8] text-muted">{s.d}</p>
-              </li>
-            ))}
-          </ol>
-        </div>
+        <ProcessFlow flow={d.process.flow} />
       </section>
 
       <CtaBand
