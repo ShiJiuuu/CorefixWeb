@@ -4,8 +4,8 @@ import SocialLinks from './SocialLinks'
 export default function Footer({ dict }: { dict: Dict }) {
   return (
     <footer className="border-t border-line2">
-      <div className="u-container grid gap-10 py-12 md:grid-cols-2 lg:grid-cols-[1.7fr_1fr_1fr_1.2fr] lg:gap-11">
-        <div>
+      <div className="u-container flex flex-col gap-10 py-12 md:flex-row md:flex-wrap lg:flex-nowrap lg:gap-11">
+        <div className="md:w-full md:shrink-0 lg:w-auto lg:min-w-0 lg:flex-[1.7]">
           <div className="mb-5 flex items-center gap-2.5">
             <img
               src="/logo-corefix.png"
@@ -33,8 +33,13 @@ export default function Footer({ dict }: { dict: Dict }) {
           </div>
         </div>
 
-        {dict.footer.cols.map((col) => (
-          <div key={col.t}>
+        {dict.footer.cols.map((col, i) => (
+          <div
+            key={col.t}
+            className={`md:w-[calc(50%_-_1.25rem)] md:shrink-0 lg:w-auto lg:min-w-0 ${
+              i === dict.footer.cols.length - 1 ? 'lg:flex-[1.2]' : 'lg:flex-1'
+            }`}
+          >
             <h4 className="u-label mb-4 font-medium">{col.t}</h4>
             <ul className="space-y-1 text-[13.5px] text-ink2">
               {col.items.map((it) => (

@@ -120,7 +120,9 @@ html.lenis body {
   .u-container {
     margin-inline: auto;
     width: 100%;
-    max-width: 1440px;
+    /* 1440 画板不再是硬边界：视口 ≤1920 时铺满，更宽的屏幕才居中留白。
+       内容块最大 1920，配合 80px 内边距 = 1760px 有效排版宽度。 */
+    max-width: 1920px;
     padding-inline: clamp(20px, 5.5vw, 80px);
   }
   .u-mono {
@@ -162,10 +164,10 @@ html.lenis body {
     background: var(--bg2);
   }
   .u-hero-title {
-    font-size: clamp(42px, 6vw, 84px);
+    font-size: 84px;
   }
   html[lang='en'] .u-hero-title {
-    font-size: clamp(38px, 4.6vw, 64px);
+    font-size: 64px;
     letter-spacing: -0.03em;
   }
   html[lang='zh-tw'] .u-hero-title {

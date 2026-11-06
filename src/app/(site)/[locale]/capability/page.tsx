@@ -40,12 +40,12 @@ export default async function CapabilityPage({ params }: { params: Promise<{ loc
         {d.cap.items.map((c, i) => (
           <article
             key={c.no}
-            className="grid gap-6 border-b border-line py-10 lg:grid-cols-[70px_300px_1fr] lg:gap-8 lg:py-12"
+            className="flex flex-col gap-6 border-b border-line py-10 lg:flex-row lg:items-start lg:gap-8 lg:py-12"
             data-reveal={String(i * 0.03)}
           >
-            <span className="u-mono text-[11px] tracking-[0.1em] text-faint">{c.no}</span>
+            <span className="u-mono text-[11px] tracking-[0.1em] text-faint lg:w-[70px] lg:shrink-0">{c.no}</span>
 
-            <div>
+            <div className="lg:w-[300px] lg:shrink-0">
               <h2 className="text-[26px] font-semibold leading-tight">{c.title}</h2>
               <p className="u-mono mt-2 text-[9.5px] tracking-[0.16em] text-faint">{c.en}</p>
               <div className="mt-6 flex items-baseline gap-2 border-t border-line pt-4 lg:mt-8">
@@ -56,7 +56,7 @@ export default async function CapabilityPage({ params }: { params: Promise<{ loc
               </div>
             </div>
 
-            <div>
+            <div className="lg:min-w-0 lg:max-w-[880px] lg:flex-1">
               <p className="text-[15px] leading-[1.95] text-muted">{c.desc}</p>
               <ul className="mt-5 grid gap-2 sm:grid-cols-2">
                 {c.points.map((pt) => (

@@ -35,8 +35,8 @@ export default function Nav({ locale, dict }: { locale: Locale; dict: Dict }) {
         solid ? 'border-line2' : 'border-line'
       }`}
     >
-      <div className="u-container flex h-[84px] items-center justify-between gap-6">
-        <Link href={`/${locale}/`} className="flex items-center gap-2.5" aria-label="集培优 COREFIX PRO">
+      <div className="u-container flex h-[84px] items-center justify-between gap-4 xl:gap-6">
+        <Link href={`/${locale}/`} className="flex shrink-0 items-center gap-2.5" aria-label="集培优 COREFIX PRO">
           <img
             src="/logo-corefix.png"
             alt="集培优 COREFIX PRO"
@@ -50,14 +50,14 @@ export default function Nav({ locale, dict }: { locale: Locale; dict: Dict }) {
           </span>
         </Link>
 
-        <nav className="hidden items-center gap-8 text-[13.5px] lg:flex">
+        <nav className="hidden min-w-0 items-center gap-5 text-[13.5px] lg:flex xl:gap-8">
           {dict.nav.links.map((l) => {
             const active = isActive(l.href)
             return (
               <Link
                 key={l.href}
                 href={`/${locale}${l.href}/`}
-                className={`relative py-2 transition-colors ${
+                className={`relative whitespace-nowrap py-2 transition-colors ${
                   active ? 'text-ink' : 'text-ink2 hover:text-ink'
                 }`}
               >
@@ -73,10 +73,10 @@ export default function Nav({ locale, dict }: { locale: Locale; dict: Dict }) {
         </nav>
 
         {/* top-right dock */}
-        <div className="flex items-center gap-3">
+        <div className="flex shrink-0 items-center gap-3">
           <a
             href={`tel:${dict.common.phone}`}
-            className="u-mono hidden text-[12.5px] tracking-[0.02em] md:block"
+            className="u-mono hidden whitespace-nowrap text-[12.5px] tracking-[0.02em] xl:block"
           >
             {dict.common.phone}
           </a>

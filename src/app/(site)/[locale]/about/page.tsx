@@ -33,8 +33,8 @@ export default async function AboutPage({ params }: { params: Promise<{ locale: 
       <PageHeader eyebrow={p.eyebrow} title={p.title} desc={p.desc} />
 
       <section className="u-container py-14 lg:py-20">
-        <div className="grid gap-12 lg:grid-cols-[1fr_1fr] lg:gap-20">
-          <div>
+        <div className="flex flex-col gap-12 lg:flex-row lg:gap-20">
+          <div className="min-w-0 lg:flex-1">
             <p className="u-label mb-5">COMPANY</p>
             {p.paras.map((para, i) => (
               <p
@@ -46,10 +46,10 @@ export default async function AboutPage({ params }: { params: Promise<{ locale: 
             ))}
           </div>
 
-          <dl className="grid grid-cols-3 gap-px self-start border border-line2 bg-line">
+          <dl className="grid grid-cols-3 gap-px self-start border border-line2 bg-line lg:min-w-0 lg:flex-1">
             {p.facts.map((f) => (
               <div key={f.l} className="bg-bg px-4 py-7 text-center">
-                <dt className="u-mono text-[clamp(20px,2.2vw,26px)] font-semibold leading-none tracking-tight">
+                <dt className="u-mono text-[26px] font-semibold leading-none tracking-tight">
                   {f.v}
                 </dt>
                 <dd className="mt-3 text-[10.5px] tracking-[0.04em] text-faint">{f.l}</dd>
@@ -60,8 +60,8 @@ export default async function AboutPage({ params }: { params: Promise<{ locale: 
       </section>
 
       <section className="border-y border-line2 bg-bg2/40">
-        <div className="u-container grid gap-12 py-14 lg:grid-cols-2 lg:gap-20 lg:py-20">
-          <div>
+        <div className="u-container flex flex-col gap-12 py-14 lg:flex-row lg:gap-20 lg:py-20">
+          <div className="min-w-0 lg:flex-1">
             <div className="mb-4 flex items-baseline justify-between border-b border-line2 pb-4">
               <h2 className="text-[20px] font-semibold">{p.qualsTitle}</h2>
               <span className="u-mono text-[10px] tracking-[0.14em] text-faint">CERTIFIED</span>
@@ -79,7 +79,7 @@ export default async function AboutPage({ params }: { params: Promise<{ locale: 
             </ul>
           </div>
 
-          <div>
+          <div className="min-w-0 lg:flex-1">
             <div className="mb-4 flex items-baseline justify-between border-b border-line2 pb-4">
               <h2 className="text-[20px] font-semibold">{p.contactTitle}</h2>
               <span className="u-mono text-[10px] tracking-[0.14em] text-faint">CONTACT</span>

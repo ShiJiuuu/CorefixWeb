@@ -7,7 +7,7 @@ export function SectionHead({
   more,
 }: {
   eyebrow: string
-  title: string
+  title: React.ReactNode
   children?: React.ReactNode
   more?: React.ReactNode
 }) {
@@ -15,7 +15,7 @@ export function SectionHead({
     <div className="mb-10 border-b border-line2 pb-6 lg:mb-13">
       <div className="max-w-[720px]" data-reveal>
         <p className="u-label">{eyebrow}</p>
-        <h2 className="mt-4 text-[clamp(30px,3.4vw,50px)] font-semibold">{title}</h2>
+        <h2 className="mt-4 text-[50px] font-semibold">{title}</h2>
         {children}
       </div>
       {more}
@@ -37,10 +37,10 @@ export function PageHeader({
   return (
     <div className="border-b border-line2">
       <div className="u-container">
-        <div className="flex flex-col justify-between gap-8 pb-9 pt-12 lg:flex-row lg:items-end lg:gap-16 lg:pt-14">
+        <div className="flex flex-col justify-between gap-8 pb-9 pt-12 lg:pt-14 xl:flex-row xl:items-end xl:gap-16">
           <div className="max-w-[820px]">
             <p className="u-label">{eyebrow}</p>
-            <h1 className="mt-4 text-[clamp(34px,5vw,64px)] font-semibold">{title}</h1>
+            <h1 className="mt-4 text-[64px] font-semibold">{title}</h1>
           </div>
           {desc ? (
             <p className="max-w-[420px] text-[15.5px] leading-[1.95] text-muted lg:pb-2">{desc}</p>
@@ -73,17 +73,17 @@ export function CtaBand({
 }) {
   return (
     <section id="contact" className="border-t border-line2">
-      <div className="u-container grid gap-10 py-20 lg:grid-cols-[1.25fr_0.75fr] lg:items-end lg:gap-16 lg:py-24">
-        <div data-reveal>
+      <div className="u-container flex flex-col gap-10 py-20 lg:flex-row lg:items-end lg:gap-16 lg:py-24">
+        <div className="min-w-0 lg:flex-[1.25]" data-reveal>
           <p className="u-label">{eyebrow}</p>
-          <h2 className="mt-5 text-[clamp(34px,4.4vw,64px)] font-semibold leading-[1.12]">
+          <h2 className="mt-5 text-[64px] font-semibold leading-[1.12]">
             {title[0]}
             <br />
             <span className="text-muted">{title[1]}</span>
           </h2>
           <p className="mt-6 max-w-[520px] text-[16px] leading-relaxed text-muted">{sub}</p>
         </div>
-        <div className="flex flex-col gap-3" data-reveal="0.1">
+        <div className="flex min-w-0 flex-col gap-3 lg:flex-[0.75]" data-reveal="0.1">
           {buttons.map((b, i) => (
             <a
               key={`${b.label}-${i}`}

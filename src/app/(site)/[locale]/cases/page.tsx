@@ -42,7 +42,7 @@ export default async function CasesPage({ params }: { params: Promise<{ locale: 
                 i % 2 === 1 ? 'border-l pl-5 lg:pl-8' : ''
               } ${i < 2 ? 'border-b lg:border-b-0' : ''}`}
             >
-              <dt className="u-mono text-[clamp(28px,3vw,36px)] font-semibold leading-none tracking-[-0.03em]" data-count={m.v}>
+              <dt className="u-mono text-[36px] font-semibold leading-none tracking-[-0.03em]" data-count={m.v}>
                 {m.v}
               </dt>
               <dd className="mt-3 text-[11.5px] tracking-[0.05em] text-faint">{m.l}</dd>

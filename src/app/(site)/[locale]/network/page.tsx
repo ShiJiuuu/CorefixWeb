@@ -42,8 +42,8 @@ export default async function NetworkPage({ params }: { params: Promise<{ locale
       />
 
       <section className="u-container py-14 lg:py-20">
-        <div className="grid gap-12 lg:grid-cols-[1fr_1.1fr] lg:gap-16">
-          <div>
+        <div className="flex flex-col gap-12 xl:flex-row xl:gap-16">
+          <div className="min-w-0 xl:flex-1">
             <div className="mb-4 flex items-baseline justify-between border-b border-line2 pb-4">
               <h2 className="text-[20px] font-semibold">{p.sitesTitle}</h2>
               <span className="u-mono text-[10px] tracking-[0.14em] text-faint">09 SITES</span>
@@ -70,7 +70,7 @@ export default async function NetworkPage({ params }: { params: Promise<{ locale
             <p className="mt-5 text-[12.5px] leading-[1.9] text-faint">{d.net.note}</p>
           </div>
 
-          <div>
+          <div className="min-w-0 xl:flex-[1.1]">
             <div className="mb-4 flex items-baseline justify-between border-b border-line2 pb-4">
               <h2 className="text-[20px] font-semibold">{p.slaTitle}</h2>
               <span className="u-mono text-[10px] tracking-[0.14em] text-faint">SLA</span>

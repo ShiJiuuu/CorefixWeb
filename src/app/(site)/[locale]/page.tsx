@@ -25,8 +25,8 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
             WebkitMaskImage: 'radial-gradient(ellipse 75% 70% at 65% 35%, #000, transparent 80%)',
           }}
         />
-        <div className="u-container relative grid gap-12 pb-12 pt-14 lg:grid-cols-[1.04fr_0.96fr] lg:gap-14 lg:pb-16 lg:pt-20">
-          <div>
+        <div className="u-container relative flex flex-col gap-12 pb-12 pt-14 lg:gap-14 lg:pb-16 lg:pt-20 xl:flex-row xl:items-start">
+          <div className="min-w-0 xl:flex-[1.04]">
             <p className="u-label flex items-center gap-2.5" data-hero-fade>
               <span className="inline-block h-px w-4 bg-ink" />
               {d.hero.eyebrow}
@@ -74,7 +74,7 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
             </Link>
           </div>
 
-          <div className="lg:pt-2">
+          <div className="min-w-0 lg:max-w-[620px] xl:max-w-none xl:flex-[0.96] xl:pt-2">
             <WorkOrder wo={d.wo} />
             <div className="mt-6 flex flex-wrap gap-x-8 gap-y-3">
               {d.hero.meta.map((m) => (
@@ -101,7 +101,7 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
                 }`}
               >
                 <dt
-                  className="u-mono text-[clamp(28px,3vw,38px)] font-semibold leading-none tracking-[-0.03em]"
+                  className="u-mono text-[38px] font-semibold leading-none tracking-[-0.03em]"
                   data-count={s.v}
                 >
                   {s.v}
@@ -116,7 +116,16 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
 
       {/* ---------- capability ---------- */}
       <section className="u-container py-16 lg:py-24">
-        <SectionHead eyebrow={d.cap.eyebrow} title={d.cap.title.join('')}>
+        <SectionHead
+          eyebrow={d.cap.eyebrow}
+          title={
+            <>
+              {d.cap.title[0]}
+              <br />
+              {d.cap.title[1]}
+            </>
+          }
+        >
           <p className="mt-4 max-w-[560px] text-[15px] leading-[1.9] text-muted">
             {d.page.capability.intro}
           </p>
@@ -127,20 +136,20 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
             <Link
               key={c.no}
               href={`/${locale}/capability/`}
-              className="group grid grid-cols-1 gap-x-6 gap-y-3 border-b border-line py-6 transition-colors duration-200 hover:bg-inv lg:grid-cols-[64px_240px_1fr_168px_52px] lg:items-start lg:py-7"
+              className="group flex flex-col gap-x-6 gap-y-3 border-b border-line py-6 transition-colors duration-200 hover:bg-inv lg:flex-row lg:items-start lg:gap-x-5 lg:py-7 xl:gap-x-6"
               data-reveal={String(i * 0.04)}
             >
-              <span className="u-mono pt-1 text-[11px] tracking-[0.1em] text-faint group-hover:text-invt/60">
+              <span className="u-mono pt-1 text-[11px] tracking-[0.1em] text-faint group-hover:text-invt/60 lg:w-10 lg:shrink-0 xl:w-16">
                 {c.no}
               </span>
-              <h3 className="text-[21px] font-semibold leading-tight group-hover:text-invt">
+              <h3 className="text-[21px] font-semibold leading-tight group-hover:text-invt lg:w-[180px] lg:shrink-0 xl:w-60">
                 {c.title}
                 <small className="u-mono mt-2 block text-[9.5px] font-normal tracking-[0.16em] text-faint group-hover:text-invt/50">
                   {c.en}
                 </small>
               </h3>
-              <p className="text-[14.5px] leading-[1.95] text-muted group-hover:text-invt/70">{c.desc}</p>
-              <div className="lg:text-right">
+              <p className="text-[14.5px] leading-[1.95] text-muted group-hover:text-invt/70 lg:min-w-0 lg:max-w-[660px] lg:flex-1">{c.desc}</p>
+              <div className="lg:w-[120px] lg:shrink-0 lg:text-right xl:w-[168px]">
                 <b className="u-mono block text-[22px] font-semibold tracking-tight group-hover:text-invt">
                   {c.metric}
                 </b>
@@ -148,7 +157,7 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
                   {c.metricLabel}
                 </span>
               </div>
-              <span className="u-mono hidden text-right text-[13px] text-faint transition-opacity group-hover:text-invt lg:block">
+              <span className="u-mono hidden text-right text-[13px] text-faint transition-opacity group-hover:text-invt xl:block xl:w-[52px] xl:shrink-0">
                 →
               </span>
             </Link>
@@ -169,8 +178,8 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
             <p className="mt-4 max-w-[520px] text-[15px] leading-[1.9] text-muted">{d.net.sub}</p>
           </SectionHead>
 
-          <div className="grid gap-12 lg:grid-cols-[1fr_1.15fr] lg:gap-16">
-            <div data-reveal>
+          <div className="flex flex-col gap-12 lg:flex-row lg:gap-16">
+            <div className="min-w-0 lg:flex-1" data-reveal>
               {d.net.sites.slice(0, 5).map((s) => (
                 <div key={s.name} className="flex items-center justify-between border-b border-line py-4">
                   <span className="text-[16px] font-medium">
@@ -199,7 +208,7 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
               </Link>
             </div>
 
-            <div data-reveal="0.08">
+            <div className="min-w-0 lg:flex-[1.15]" data-reveal="0.08">
               <p className="u-label mb-4">{d.net.slaTitle}</p>
               <SlaTable net={d.net} />
             </div>

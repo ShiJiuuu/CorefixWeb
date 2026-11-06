@@ -213,8 +213,8 @@ export default function MapPanel({
   }, [sites])
 
   return (
-    <div className="grid border-b border-line2 lg:grid-cols-[1fr_420px]">
-      <div className="border-line px-5 pb-6 pt-7 sm:px-8 lg:border-r lg:pl-20 lg:pr-6">
+    <div className="mx-auto flex w-full max-w-[1920px] flex-col border-b border-line2 lg:flex-row">
+      <div className="min-w-0 border-line px-5 pb-6 pt-7 sm:px-8 lg:flex-1 lg:border-r lg:pl-20 lg:pr-6">
         <div className="relative h-[420px] overflow-hidden border border-line sm:h-[520px]">
           {/* schematic layer (default) */}
           <div
@@ -303,7 +303,7 @@ export default function MapPanel({
         </div>
       </div>
 
-      <div className="px-5 pb-8 pt-2 sm:px-8 lg:py-7 lg:pl-9 lg:pr-20">
+      <div className="px-5 pb-8 pt-2 sm:px-8 lg:w-[420px] lg:shrink-0 lg:py-7 lg:pl-9 lg:pr-20">
         <div className="border border-line2 p-6" data-reveal>
           <div className="flex items-baseline justify-between gap-4">
             <h3 className="text-[30px] font-semibold leading-none tracking-tight">{current.name}</h3>
