@@ -24,6 +24,11 @@ export type Site = {
 
 export type PageHero = { eyebrow: string; title: string; desc: string }
 
+export type SocialId = 'wechat' | 'mp' | 'douyin' | 'xhs'
+
+/** Footer platform button: clicking it opens `image` (a QR code / contact card) in a modal. */
+export type SocialLink = { id: SocialId; label: string; image: string }
+
 export type CtaButton = {
   label: string
   /** Internal paths are prefixed with the active locale at render time; `tel:` / `https:` are used verbatim. */
@@ -77,11 +82,12 @@ export type Dict = {
   footer: {
     address: string[]
     phone: string
+    social: SocialLink[]
     cols: { t: string; items: string[] }[]
     copyright: string
     icp: string
   }
-  common: { back: string; phone: string }
+  common: { phone: string }
   page: {
     capability: PageHero & { intro: string; detail: string; cta: string }
     network: PageHero & {

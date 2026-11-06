@@ -1,8 +1,7 @@
-import Link from 'next/link'
-import type { Locale } from '@/lib/i18n'
 import type { Dict } from '@/content/types'
+import SocialLinks from './SocialLinks'
 
-export default function Footer({ locale, dict }: { locale: Locale; dict: Dict }) {
+export default function Footer({ dict }: { dict: Dict }) {
   return (
     <footer className="border-t border-line2">
       <div className="u-container grid gap-10 py-12 md:grid-cols-2 lg:grid-cols-[1.7fr_1fr_1fr_1.2fr] lg:gap-11">
@@ -29,6 +28,8 @@ export default function Footer({ locale, dict }: { locale: Locale; dict: Dict })
                 {dict.footer.phone}
               </a>
             </p>
+
+            <SocialLinks items={dict.footer.social} />
           </div>
         </div>
 
@@ -49,12 +50,6 @@ export default function Footer({ locale, dict }: { locale: Locale; dict: Dict })
         <p className="u-mono text-[10.5px] tracking-[0.04em] text-faint">{dict.footer.icp}</p>
       </div>
 
-      <div className="u-container flex items-center justify-between pb-6">
-        <Link href={`/${locale}/`} className="u-mono text-[10px] tracking-[0.16em] text-faint hover:text-ink">
-          ← {dict.common.back}
-        </Link>
-        <span className="u-mono text-[10px] tracking-[0.16em] text-faint">SHANGHAI · CHINA</span>
-      </div>
     </footer>
   )
 }

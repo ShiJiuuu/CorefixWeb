@@ -210,9 +210,14 @@ export const zhCN: Dict = {
     address: [
       '上海集培优信息科技有限公司',
       '上海市长宁区友乐路 299 号 3 号楼 5 层',
-      '上海市浦东新区泥城镇秋山路 1775 号',
     ],
     phone: '021-5176-8787',
+    social: [
+      { id: 'wechat', label: '微信', image: '/social/wechat.jpg' },
+      { id: 'mp', label: '公众号', image: '/social/wxgzh.jpg' },
+      { id: 'douyin', label: '抖音', image: '/social/douyin.jpg' },
+      { id: 'xhs', label: '小红书', image: '/social/rednote.jpg' },
+    ],
     cols: [
       { t: '业务', items: ['硬件维修', '软件调优', '备件供应链', '驻场维保'] },
       { t: '公司', items: ['关于集培优', '服务网络', '资质认证', '加入我们'] },
@@ -222,7 +227,6 @@ export const zhCN: Dict = {
     icp: '沪ICP备XXXXXXXX号 · 隐私政策',
   },
   common: {
-    back: '返回首页',
     phone: '021-5176-8787',
   },
   page: {

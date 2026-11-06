@@ -118,7 +118,7 @@ src/
     globals.css          设计令牌 + 基础样式
   components/
     Nav / Footer / Sections(SectionHead·PageHeader·CtaBand)
-    WorkOrder / CaseCards / MapPanel / SlaTable
+    WorkOrder / CaseCards / MapPanel / SlaTable / SocialLinks / SocialIcons
     ScrollEffects / ThemeToggle / LocaleSwitch
   content/              zh-cn / zh-tw / en + types
   lib/                  i18n.ts + seo.ts（canonical / hreflang / siteUrl）

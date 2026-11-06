@@ -210,9 +210,14 @@ export const en: Dict = {
     address: [
       'Shanghai CoreFix Pro Information Technology Co., Ltd.',
       'Floor 5, Building 3, 299 Youle Road, Changning District, Shanghai',
-      '1775 Qiushan Road, Nicheng, Pudong New Area, Shanghai',
     ],
     phone: '021-5176-8787',
+    social: [
+      { id: 'wechat', label: 'WeChat', image: '/social/wechat.jpg' },
+      { id: 'mp', label: 'Official account', image: '/social/wxgzh.jpg' },
+      { id: 'douyin', label: 'Douyin', image: '/social/douyin.jpg' },
+      { id: 'xhs', label: 'Xiaohongshu', image: '/social/rednote.jpg' },
+    ],
     cols: [
       { t: 'Service', items: ['Hardware repair', 'Software tuning', 'Spare parts', 'Resident maintenance'] },
       { t: 'Company', items: ['About', 'Service network', 'Certifications', 'Careers'] },
@@ -222,7 +227,6 @@ export const en: Dict = {
     icp: '沪ICP备XXXXXXXX号 · Privacy Policy',
   },
   common: {
-    back: 'Back to home',
     phone: '021-5176-8787',
   },
   page: {

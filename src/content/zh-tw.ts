@@ -210,9 +210,14 @@ export const zhTW: Dict = {
     address: [
       '上海集培優信息科技有限公司',
       '上海市長寧區友樂路 299 號 3 號樓 5 層',
-      '上海市浦東新區泥城鎮秋山路 1775 號',
     ],
     phone: '021-5176-8787',
+    social: [
+      { id: 'wechat', label: '微信', image: '/social/wechat.jpg' },
+      { id: 'mp', label: '公眾號', image: '/social/wxgzh.jpg' },
+      { id: 'douyin', label: '抖音', image: '/social/douyin.jpg' },
+      { id: 'xhs', label: '小紅書', image: '/social/rednote.jpg' },
+    ],
     cols: [
       { t: '業務', items: ['硬體維修', '軟體調校', '備件供應鏈', '駐場保養'] },
       { t: '公司', items: ['關於集培優', '服務網路', '資質認證', '加入我們'] },
@@ -222,7 +227,6 @@ export const zhTW: Dict = {
     icp: '滬ICP備XXXXXXXX號 · 隱私政策',
   },
   common: {
-    back: '返回首頁',
     phone: '021-5176-8787',
   },
   page: {
