@@ -113,8 +113,9 @@ npm run clean        # 删掉 .next / out
 - 原始素材在 `assets/source/410.mp4`（1920×1080，124MB），**不进 public、不进构建**；换片时重新压一版：
   `ffmpeg -i assets/source/410.mp4 -an -vf "scale=960:-2,fps=25" -c:v libx264 -preset slow -crf 32 -pix_fmt yuv420p -movflags +faststart public/media/hero.mp4`
 - 播放层是 `absolute inset-0` + `object-cover`，**彩色原样播放**；文字压在一条从左到右由黑渐透明的底板上，所以首屏文案始终可读。
-- 文案区的色板由 `.hero-on-dark`（`globals.css`）局部重映射：`--ink/--muted/--line` 等换成白色系，`.u-btn-solid` 自动变成白底黑字；数据条在视频块之外，仍是常规配色。
+- 深色底上的文字统一用 `.on-dark`（`globals.css`）局部重映射：`--ink/--muted/--line` 等换成白色系，`.u-btn-solid` 自动变成白底黑字；数据条在视频块之外，仍是常规配色。
 - 组件 `HeroVideo.tsx`，`prefers-reduced-motion` 下自动降级为静态首帧。
+- 首页案例区用 `public/media/cases-background.webp`（2000×1120）作背景，盖 60% 黑色蒙版，标题走 `.on-dark` 变白，卡片保持白底黑字。换图直接替换同名文件即可。
 
 ## 品牌资产
 

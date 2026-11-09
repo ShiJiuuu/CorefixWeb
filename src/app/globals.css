@@ -125,8 +125,8 @@ html.lenis body {
     max-width: 1920px;
     padding-inline: clamp(20px, 5.5vw, 80px);
   }
-  /* hero copy sits on a dark video plate, so re-map the theme tokens to light values */
-  .hero-on-dark {
+  /* copy that sits on a dark photo / video: re-map the theme tokens to light values */
+  .on-dark {
     color: var(--ink);
     --ink: #ffffff;
     --ink2: rgba(255, 255, 255, 0.88);
@@ -134,6 +134,32 @@ html.lenis body {
     --faint: rgba(255, 255, 255, 0.55);
     --line: rgba(255, 255, 255, 0.22);
     --line2: rgba(255, 255, 255, 0.38);
+    --inv: #ffffff;
+    --inv-t: #0a0a0a;
+    --bg: #0a0a0a;
+    --bg2: rgba(255, 255, 255, 0.08);
+  }
+  /* frosted case cards: light glass surface, so the text tokens stay dark */
+  .card-glass {
+    color: var(--ink);
+    --ink: #0a0a0a;
+    --ink2: rgba(10, 10, 10, 0.88);
+    --muted: rgba(10, 10, 10, 0.72);
+    --faint: rgba(10, 10, 10, 0.5);
+    --line: rgba(10, 10, 10, 0.14);
+    --line2: rgba(10, 10, 10, 0.26);
+    --bg: #ffffff;
+    --bg2: #f4f4f1;
+  }
+  /* footer sits on a deep green → black band, so the tokens flip to light-on-dark */
+  .footer-green {
+    color: var(--ink);
+    --ink: #ffffff;
+    --ink2: rgba(255, 255, 255, 0.88);
+    --muted: rgba(255, 255, 255, 0.72);
+    --faint: rgba(255, 255, 255, 0.5);
+    --line: rgba(255, 255, 255, 0.16);
+    --line2: rgba(255, 255, 255, 0.3);
     --inv: #ffffff;
     --inv-t: #0a0a0a;
     --bg: #0a0a0a;

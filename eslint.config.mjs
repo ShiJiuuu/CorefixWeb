@@ -5,7 +5,8 @@ import { FlatCompat } from '@eslint/eslintrc'
 const compat = new FlatCompat({ baseDirectory: dirname(fileURLToPath(import.meta.url)) })
 
 const config = [
-  { ignores: ['.next/**', 'out/**', 'node_modules/**', 'next-env.d.ts'] },
+  // `effects/` is a local scratch area for motion experiments, not part of the shipped app
+  { ignores: ['.next/**', 'out/**', 'node_modules/**', 'next-env.d.ts', 'effects/**'] },
   ...compat.extends('next/core-web-vitals', 'next/typescript'),
   {
     // Static export runs with images.unoptimized, so plain <img> is intentional for the

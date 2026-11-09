@@ -3,8 +3,8 @@ import SocialLinks from './SocialLinks'
 
 export default function Footer({ dict }: { dict: Dict }) {
   return (
-    <footer className="border-t border-line2">
-      <div className="u-container flex flex-col gap-10 py-12 md:flex-row md:flex-wrap lg:flex-nowrap lg:gap-11">
+    <footer className="border-t border-black/10 bg-[linear-gradient(to_bottom,#47561b_0%,#2b3510_45%,#0a0a0a_100%)]">
+      <div className="footer-green u-container flex flex-col gap-10 py-12 md:flex-row md:flex-wrap lg:flex-nowrap lg:gap-11">
         {/* brand + slogan + social */}
         <div className="md:w-full md:shrink-0 lg:w-auto lg:min-w-0 lg:flex-[1.5]">
           <div className="mb-5 flex items-center gap-2.5">
@@ -63,9 +63,9 @@ export default function Footer({ dict }: { dict: Dict }) {
         ))}
       </div>
 
-      <div className="u-container flex flex-col gap-2 border-t border-line py-5 md:flex-row md:items-center md:justify-between">
-        <p className="u-mono text-[10.5px] tracking-[0.04em] text-faint">{dict.footer.copyright}</p>
-        <p className="u-mono text-[10.5px] tracking-[0.04em] text-faint">{dict.footer.icp}</p>
+      <div className="u-container flex flex-col gap-2 border-t border-white/15 py-5 md:flex-row md:items-center md:justify-between">
+        <p className="u-mono text-[10.5px] tracking-[0.04em] text-white/55">{dict.footer.copyright}</p>
+        <p className="u-mono text-[10.5px] tracking-[0.04em] text-white/55">{dict.footer.icp}</p>
       </div>
     </footer>
   )

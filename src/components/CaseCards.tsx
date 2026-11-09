@@ -15,6 +15,7 @@ export function CaseCard({
   readLabel,
   headingLevel: Heading = 'h3',
   wide = false,
+  glass = false,
 }: {
   item: CaseStudy
   index?: number
@@ -23,13 +24,17 @@ export function CaseCard({
   headingLevel?: 'h2' | 'h3'
   /** Spans both columns; used for the last card when the count is odd. */
   wide?: boolean
+  /** Frosted, rounded card used when the grid floats on the photo backdrop. */
+  glass?: boolean
 }) {
   return (
     <Link
       href={`/${locale}/cases/${item.slug}/`}
-      className={`group flex flex-col bg-bg p-7 transition-colors duration-200 hover:bg-bg2 lg:p-8 ${
-        wide ? 'md:col-span-2' : ''
-      }`}
+      className={`group flex flex-col p-7 transition-colors duration-200 lg:p-8 ${
+        glass
+          ? 'card-glass rounded-3xl border border-line2 bg-bg/85 backdrop-blur-xl hover:bg-bg'
+          : 'bg-bg hover:bg-bg2'
+      } ${wide ? 'md:col-span-2' : ''}`}
       data-reveal={String(index * 0.03)}
     >
       <div className="flex items-start justify-between gap-4">
@@ -83,16 +88,18 @@ export function CaseGrid({
   locale,
   readLabel,
   headingLevel = 'h3',
+  glass = false,
 }: {
   items: CaseStudy[]
   locale: string
   readLabel: string
   headingLevel?: 'h2' | 'h3'
+  glass?: boolean
 }) {
   const odd = items.length % 2 === 1
 
   return (
-    <div className="grid gap-px border border-line2 bg-line md:grid-cols-2">
+    <div className={glass ? 'grid gap-5 md:grid-cols-2' : 'grid gap-px border border-line2 bg-line md:grid-cols-2'}>
       {items.map((item, i) => (
         <CaseCard
           key={item.slug}
@@ -102,6 +109,7 @@ export function CaseGrid({
           readLabel={readLabel}
           headingLevel={headingLevel}
           wide={odd && i === items.length - 1}
+          glass={glass}
         />
       ))}
     </div>

@@ -29,7 +29,7 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
           </div>
 
           <div className="u-container relative pb-12 pt-14 lg:pb-16 lg:pt-20">
-            <div className="hero-on-dark max-w-[820px]">
+            <div className="on-dark max-w-[820px]">
               <p className="u-label flex items-center gap-2.5" data-hero-fade>
                 <span className="inline-block h-px w-4 bg-ink" />
                 {d.hero.eyebrow}
@@ -162,13 +162,22 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
       </section>
 
       {/* ---------- cases ---------- */}
-      <section id="cases" className="border-y border-line2">
-        <div className="u-container py-16 lg:py-24">
-          <SectionHead eyebrow={d.cases.eyebrow} title={d.cases.title} />
+      <section id="cases" className="relative overflow-hidden border-y border-line2">
+        {/* photographic backdrop, dimmed so the white cards and the headline stay readable */}
+        <div
+          className="pointer-events-none absolute inset-0 bg-[url('/media/cases-background.webp')] bg-cover bg-center"
+          aria-hidden="true"
+        />
+        <div className="pointer-events-none absolute inset-0 bg-black/60" aria-hidden="true" />
 
-          <CaseGrid items={d.cases.items} locale={locale} readLabel={d.cases.read} />
+        <div className="u-container relative py-16 lg:py-24">
+          <div className="on-dark">
+            <SectionHead eyebrow={d.cases.eyebrow} title={d.cases.title} />
+          </div>
 
-          <div className="mt-7 flex flex-wrap items-center justify-between gap-4">
+          <CaseGrid items={d.cases.items} locale={locale} readLabel={d.cases.read} glass />
+
+          <div className="on-dark mt-7 flex flex-wrap items-center justify-between gap-4">
             <Link href={`/${locale}/cases/`} className="u-link">
               {d.cases.all} <span className="text-faint">→</span>
             </Link>
