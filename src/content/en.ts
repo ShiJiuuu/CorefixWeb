@@ -120,7 +120,7 @@ export const en: Dict = {
     items: [
       {
         slug: 'supermicro-h200-nic-no-carrier',
-        client: 'Aidixi',
+        client: 'A Shanghai company',
         device: 'Supermicro H200 server',
         tag: 'Link fault',
         service: 'On-site diagnosis + transceiver replacement',
@@ -170,7 +170,7 @@ export const en: Dict = {
       },
       {
         slug: 'hgx-h100-sxm-socket',
-        client: 'Suzhou Luopu Network',
+        client: 'A Suzhou company',
         device: 'HGX H100 GPU baseboard',
         tag: 'Socket damage',
         service: 'Board-level BGA rework',
@@ -220,7 +220,7 @@ export const en: Dict = {
       },
       {
         slug: 'h100-single-gpu-failure',
-        client: 'Guangzhou Zhimei Internet Technology',
+        client: 'A Guangzhou company',
         device: 'NVIDIA H100 server',
         tag: 'Single card',
         service: 'On-site inspection + failed card removal',
@@ -270,7 +270,7 @@ export const en: Dict = {
       },
       {
         slug: 'a100-no-boot-u9-module',
-        client: 'Shanghai Hanxi Computer',
+        client: 'A Shanghai company',
         device: 'NVIDIA A100',
         tag: 'Power path',
         service: 'Power-on inspection + module replacement + verdict',

@@ -120,7 +120,7 @@ export const zhCN: Dict = {
     items: [
       {
         slug: 'supermicro-h200-nic-no-carrier',
-        client: '埃迪希',
+        client: '上海某公司',
         device: '超微 H200 服务器',
         tag: '链路故障',
         service: '现场排查 + 光模块更换',
@@ -170,7 +170,7 @@ export const zhCN: Dict = {
       },
       {
         slug: 'hgx-h100-sxm-socket',
-        client: '苏州罗普网络',
+        client: '苏州某公司',
         device: 'HGX H100 GPU 底板',
         tag: '接口损坏',
         service: '板级 BGA 返修',
@@ -220,7 +220,7 @@ export const zhCN: Dict = {
       },
       {
         slug: 'h100-single-gpu-failure',
-        client: '广州智美互联科技',
+        client: '广州某公司',
         device: 'NVIDIA H100 服务器',
         tag: '单卡故障',
         service: '上门检测 + 故障部件处理',
@@ -270,7 +270,7 @@ export const zhCN: Dict = {
       },
       {
         slug: 'a100-no-boot-u9-module',
-        client: '上海瀚习计算机',
+        client: '上海某公司',
         device: 'NVIDIA A100',
         tag: '供电故障',
         service: '上电检测 + 供电模块更换 + 故障定论',
