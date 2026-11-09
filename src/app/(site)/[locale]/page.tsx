@@ -18,7 +18,10 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
   return (
     <>
       {/* ---------- hero ---------- */}
-      <section className="relative flex min-h-[calc(100svh_-_var(--dock-h))] flex-col overflow-hidden border-b border-line2">
+      <section
+        data-nav-overlay
+        className="relative -mt-[var(--dock-h)] flex min-h-[100svh] flex-col overflow-hidden border-b border-line2"
+      >
         <div className="relative flex flex-1 flex-col">
           {/* full-colour film; the copy sits on a black plate that fades out to the right */}
           <div className="pointer-events-none absolute inset-0 overflow-hidden" aria-hidden="true">
@@ -28,7 +31,7 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
             <div className="absolute inset-0 bg-gradient-to-r from-black/90 via-black/60 via-45% to-transparent" />
           </div>
 
-          <div className="u-container relative flex flex-1 flex-col pb-12 pt-14 lg:pb-16 lg:pt-20">
+          <div className="u-container relative flex flex-1 flex-col pb-12 pt-[calc(var(--dock-h)+3.5rem)] lg:pb-16 lg:pt-[calc(var(--dock-h)+5rem)]">
             <div className="on-dark flex w-full max-w-[820px] flex-1 flex-col">
               <p className="u-label flex items-center gap-2.5" data-hero-fade>
                 <span className="inline-block h-px w-4 bg-ink" />

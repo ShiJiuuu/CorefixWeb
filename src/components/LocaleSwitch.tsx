@@ -65,8 +65,8 @@ export default function LocaleSwitch({
         className="group grid h-9 w-9 shrink-0 place-items-center rounded-full"
       >
         <span
-          className={`grid h-8 w-8 place-items-center rounded-full border border-line2 bg-bg text-ink transition-transform duration-300 ease-[cubic-bezier(0.2,0.8,0.2,1)] group-hover:scale-105 ${
-            open ? 'scale-105' : ''
+          className={`grid h-8 w-8 place-items-center text-muted transition-transform duration-300 ease-[cubic-bezier(0.2,0.8,0.2,1)] group-hover:scale-105 group-hover:text-ink ${
+            open ? 'scale-105 text-ink' : ''
           }`}
         >
           <svg

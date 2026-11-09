@@ -11,14 +11,29 @@ import type { Dict } from '@/content/types'
 export default function Nav({ locale, dict }: { locale: Locale; dict: Dict }) {
   const pathname = usePathname() || ''
   const [open, setOpen] = useState(false)
-  const [solid, setSolid] = useState(false)
+  // The nav is transparent and floats over the page; while it sits on top of the dark hero film
+  // the text tokens have to flip to light so they stay readable in light mode.
+  const [overHero, setOverHero] = useState(false)
 
   useEffect(() => {
-    const onScroll = () => setSolid(window.scrollY > 12)
-    onScroll()
-    window.addEventListener('scroll', onScroll, { passive: true })
-    return () => window.removeEventListener('scroll', onScroll)
-  }, [])
+    const update = () => {
+      const hero = document.querySelector<HTMLElement>('[data-nav-overlay]')
+      if (!hero) {
+        setOverHero(false)
+        return
+      }
+      const dock =
+        parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--dock-h')) || 0
+      setOverHero(window.scrollY < hero.offsetHeight - dock)
+    }
+    update()
+    window.addEventListener('scroll', update, { passive: true })
+    window.addEventListener('resize', update)
+    return () => {
+      window.removeEventListener('scroll', update)
+      window.removeEventListener('resize', update)
+    }
+  }, [pathname])
 
   useEffect(() => {
     document.body.style.overflow = open ? 'hidden' : ''
@@ -35,14 +50,12 @@ export default function Nav({ locale, dict }: { locale: Locale; dict: Dict }) {
 
   return (
     <>
-    <header
-      className={`sticky top-0 z-50 border-b bg-bg/55 backdrop-blur-xl backdrop-saturate-150 transition-[background-color,border-color,box-shadow] duration-300 supports-[backdrop-filter]:bg-bg/50 ${
-        solid
-          ? 'border-line2 shadow-[0_18px_40px_-32px_rgba(0,0,0,0.45)]'
-          : 'border-line'
-      }`}
-    >
-      <div className="u-container flex h-[var(--dock-h)] items-center gap-4 xl:gap-6">
+    <header className="sticky top-0 z-50">
+      <div
+        className={`u-container flex h-[var(--dock-h)] items-center gap-4 xl:gap-6 ${
+          overHero ? 'on-dark' : ''
+        }`}
+      >
         <Link href={`/${locale}/`} className="mr-auto flex shrink-0 items-center gap-2.5" aria-label="集培优 COREFIX PRO">
           <img
             src="/logo-corefix.png"
@@ -61,8 +74,8 @@ export default function Nav({ locale, dict }: { locale: Locale; dict: Dict }) {
               <Link
                 key={l.href}
                 href={`/${locale}${l.href}/`}
-                className={`relative whitespace-nowrap py-2 transition-colors ${
-                  active ? 'text-ink' : 'text-ink2 hover:text-ink'
+                className={`relative whitespace-nowrap py-2 transition-colors duration-200 ${
+                  active ? 'text-ink' : 'text-muted hover:text-ink'
                 }`}
               >
                 {l.label}
