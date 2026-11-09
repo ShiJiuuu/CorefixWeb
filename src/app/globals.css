@@ -153,8 +153,8 @@ html.lenis body {
     --bg: #ffffff;
     --bg2: #f4f4f1;
   }
-  /* footer sits on a deep green → black band, so the tokens flip to light-on-dark */
-  .footer-green {
+  /* footer sits on a deep teal → black band, so the tokens flip to light-on-dark */
+  .footer-band {
     color: var(--ink);
     --ink: #ffffff;
     --ink2: rgba(255, 255, 255, 0.88);

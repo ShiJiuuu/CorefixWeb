@@ -3,8 +3,8 @@ import SocialLinks from './SocialLinks'
 
 export default function Footer({ dict }: { dict: Dict }) {
   return (
-    <footer className="border-t border-black/10 bg-[linear-gradient(to_bottom,#47561b_0%,#2b3510_45%,#0a0a0a_100%)]">
-      <div className="footer-green u-container flex flex-col gap-10 py-12 md:flex-row md:flex-wrap lg:flex-nowrap lg:gap-11">
+    <footer className="border-t border-black/10 bg-[linear-gradient(to_bottom,#1e6264_0%,#123c3d_45%,#0a0a0a_100%)]">
+      <div className="footer-band u-container flex flex-col gap-10 py-12 md:flex-row md:flex-wrap lg:flex-nowrap lg:gap-11">
         {/* brand + slogan + social */}
         <div className="md:w-full md:shrink-0 lg:w-auto lg:min-w-0 lg:flex-[1.5]">
           <div className="mb-5 flex items-center gap-2.5">

@@ -209,10 +209,19 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
       </section>
 
       {/* ---------- process ---------- */}
-      <section id="process" className="u-container py-16 lg:py-24">
-        <SectionHead eyebrow={d.process.eyebrow} title={d.process.title} />
+      <section id="process" className="relative overflow-hidden">
+        {/* lab photo backdrop, washed out so the diagram stays the focus */}
+        <div
+          className="pointer-events-none absolute inset-0 bg-[url('/media/process-background.webp')] bg-cover bg-center"
+          aria-hidden="true"
+        />
+        <div className="pointer-events-none absolute inset-0 bg-bg/70" aria-hidden="true" />
 
-        <ProcessFlow flow={d.process.flow} />
+        <div className="u-container relative py-16 lg:py-24">
+          <SectionHead eyebrow={d.process.eyebrow} title={d.process.title} />
+
+          <ProcessFlow flow={d.process.flow} />
+        </div>
       </section>
 
       <CtaBand
