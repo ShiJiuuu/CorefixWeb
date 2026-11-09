@@ -167,12 +167,6 @@ export const en: Dict = {
           'With the transceiver replaced, the No-Carrier alarm on brainpf/data cleared, the port came up, and inter-node transfer and training communication recovered.',
           'The whole job was completed on site; neither the server nor any part was shipped back, keeping the outage to the shortest possible window.',
         ],
-        record: [
-          { k: 'Work order', v: 'YX25007495' },
-          { k: 'Equipment', v: 'Supermicro H200 server' },
-          { k: 'Service date', v: '3 October 2026' },
-          { k: 'Status', v: 'Resolved' },
-        ],
       },
       {
         slug: 'hgx-h100-sxm-socket',
@@ -222,12 +216,6 @@ export const en: Dict = {
         outcome: [
           'The HGX H100 baseboard SXM socket was repaired at board level: the GPU enumerates normally, board function is restored, and the customer confirmed the result.',
           'Board-level rework replaced a full board swap, cutting spares cost and downtime — and keeping a repairable board out of scrap.',
-        ],
-        record: [
-          { k: 'Equipment', v: 'HGX H100 GPU baseboard' },
-          { k: 'Scope', v: 'Board-level BGA rework' },
-          { k: 'Service date', v: '10 October 2026' },
-          { k: 'Status', v: 'Confirmed by customer' },
         ],
       },
       {
@@ -279,12 +267,6 @@ export const en: Dict = {
           'With the faulty card out, the server returned to service: the single-card alarm cleared and compute output and stability returned to normal.',
           'The removal followed the site procedure end to end with the serial logged, so the failed part stays traceable for replacement or RMA.',
         ],
-        record: [
-          { k: 'Equipment', v: 'NVIDIA H100 server (single card)' },
-          { k: 'Card identifier', v: '6444—6566' },
-          { k: 'Service date', v: '9 July 2026' },
-          { k: 'Status', v: 'Resolved' },
-        ],
       },
       {
         slug: 'a100-no-boot-u9-module',
@@ -335,12 +317,6 @@ export const en: Dict = {
           'Replacing the U9 module cleared the supply-side fault, and further testing confirmed the GPU core was damaged beyond repair.',
           'The verdict was unambiguous and traceable, so the customer stopped sinking money into an unrepairable card and moved to spares and replacement.',
         ],
-        record: [
-          { k: 'Reported', v: '8 June 2026' },
-          { k: 'Completed', v: '17 June 2026' },
-          { k: 'Serial', v: '1652622000303' },
-          { k: 'Status', v: 'Resolved, inspection verdict issued' },
-        ],
       },
     ],
     detail: {
@@ -352,7 +328,6 @@ export const en: Dict = {
       challenge: 'The problem',
       solution: 'What we did',
       outcome: 'Results and verification',
-      record: 'Service record',
       quote: 'Client feedback',
       related: 'More cases',
       allCases: 'View all cases',

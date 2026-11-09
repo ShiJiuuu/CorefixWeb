@@ -141,19 +141,8 @@ export default async function CaseDetailPage({
             </div>
           </Block>
 
-          <Block no="04" title={t.record}>
-            <dl className="border-t border-line2">
-              {item.record.map((r) => (
-                <div key={r.k} className="flex justify-between gap-8 border-b border-line py-3.5">
-                  <dt className="u-mono pt-0.5 text-[10px] tracking-[0.12em] text-faint">{r.k}</dt>
-                  <dd className="text-right text-[13.5px] font-medium">{r.v}</dd>
-                </div>
-              ))}
-            </dl>
-          </Block>
-
           {item.quote && (
-            <Block no="05" title={t.quote}>
+            <Block no="04" title={t.quote}>
               <blockquote className="border-l-2 border-line2 pl-5">
                 <p className="text-[16px] leading-[1.9]">{item.quote.text}</p>
                 <footer className="u-mono mt-3 text-[10px] tracking-[0.12em] text-faint">

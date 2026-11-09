@@ -33,8 +33,6 @@ export type CaseStudy = {
   challenge: string[]
   solution: CaseStep[]
   outcome: string[]
-  /** Work-order style facts: ticket number, serial, status. */
-  record: { k: string; v: string }[]
   quote?: { text: string; by: string }
 }
 
@@ -134,7 +132,6 @@ export type Dict = {
       challenge: string
       solution: string
       outcome: string
-      record: string
       quote: string
       related: string
       allCases: string
