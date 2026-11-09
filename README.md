@@ -43,11 +43,13 @@ npm run clean        # 删掉 .next / out
 /zh-cn/network     服务网络（覆盖地图 + SLA + 服务点清单）
 /zh-cn/cases       客户案例（指标条 + 2×2 案例卡）
 /zh-cn/cases/[slug] 案例详情（四个案例共用一套模板，slug 三语一致）
-/zh-cn/about       关于我们（公司 / 资质 / 联系）
+/zh-cn/about       关于我们（公司 / 资质证书）
+/zh-cn/news        企业资讯（16 篇公众号文章，按发布时间倒序）
+/zh-cn/news/[slug] 资讯文章（统一模板，Markdown 构建期渲染）
 /zh-tw/...  /en/...  同构
 ```
 
-共 27 个静态页（5 个列表路由 + 4 个案例详情，× 3 语言）+ 品牌化 404。
+共 78 个静态页（6 个列表路由 + 16 篇资讯 + 4 个案例详情，× 3 语言）+ 品牌化 404。
 
 源码目录用 route group 承载两套根布局：`(site)/[locale]/` 负责三语站点，`(redirect)/` 只负责 `/`。两套根布局没有共同父级，因此 404 只能放在 `src/app/global-not-found.tsx`（Next 15 的 `experimental.globalNotFound`）。
 
@@ -107,6 +109,17 @@ npm run clean        # 删掉 .next / out
 - 坐标表是 `[lat, lng]`（和腾讯一致），代码里 `lngLat()` 负责转成高德要求的 `[lng, lat]`，别在表里直接写反。
 - Key 申请：高德开放平台控制台，类型选「Web 端（JS API）」，配域名白名单（开发用 `localhost`）；前端明文 key 请配白名单，商用建议走后端代理。
 
+## 企业资讯
+
+资讯不是写在字典里的，而是 **Markdown 源文件**：`content/news/*.md`，构建时由 `src/lib/news.ts` 读取、`marked` 渲染成 HTML，再套 `src/app/(site)/[locale]/news/[slug]/page.tsx` 这一套模板。
+
+- 每篇的 front matter：`slug` / `title` / `date` / `category`（`company` `tech` `guide` `industry` `service` `case`）/ `source`（公众号原文链接）。
+- 列表页与 sitemap 都从 `getAllNews()` 生成，加文章不需要改代码；`date` 决定排序（新→旧）。
+- 正文样式在 `globals.css` 的 `.article-body`：标题层级、列表、引用、代码块、表格、图片。图片以原始尺寸居中显示，最大不超过正文宽度。
+- 图片存在 `public/news/<slug>/`，**不引用微信图床**，避免防盗链失效。
+- 新文章导入：把公众号导出的 Markdown 放进源目录，改 `scripts/import-wechat.mjs` 顶部的 `MANIFEST`（文件名关键词 → slug / 分类），然后 `node scripts/import-wechat.mjs`。脚本会下载图片、剥掉「来源/发布时间/原文链接」抬头、写回 `content/news/`。
+- 文章正文目前只有简体中文，三语站点共用同一份内容，界面文案（分类、返回、上一篇/下一篇）各自本地化。
+
 ## 首屏视频
 
 - 首页 Hero 背景是一段无声循环视频：`public/media/hero.mp4`（960×540，25fps，H.264，约 7MB）+ 首帧 `hero-poster.jpg`。
@@ -134,7 +147,7 @@ src/
     (site)/[locale]/
       layout.tsx         站点根布局（html lang / 导航 / 页脚 / 动效挂载）
       page.tsx           首页
-      capability|network|cases|about/page.tsx
+      capability|network|cases|about|news/page.tsx
       cases/[slug]/page.tsx  案例详情（固定模板 + generateStaticParams）
     global-not-found.tsx 品牌化 404
     sitemap.ts robots.ts 构建期生成的 SEO 文件
@@ -144,7 +157,9 @@ src/
     WorkOrder / CaseCards / MapPanel / SlaTable / SocialLinks / SocialIcons
     ScrollEffects / ThemeToggle / LocaleSwitch
   content/              zh-cn / zh-tw / en + types
-  lib/                  i18n.ts + seo.ts（canonical / hreflang / siteUrl）
+  content/news/         公众号文章 Markdown（front matter + 正文 + 本地图片路径）
+  lib/                  i18n.ts + seo.ts（canonical / hreflang / siteUrl）+ news.ts（读取/渲染资讯）
+scripts/                import-wechat.mjs（公众号 Markdown 导入脚本）
 public/                 logo-corefix.png / favicon.ico / icon-*.png / apple-touch-icon.png
 design/                 Figma 稿（HTML 画板）
 eslint.config.mjs       flat config（next/core-web-vitals + next/typescript）

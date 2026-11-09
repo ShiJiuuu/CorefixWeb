@@ -1,6 +1,7 @@
 import type { MetadataRoute } from 'next'
 import { locales } from '@/lib/i18n'
 import { caseSlugs } from '@/content'
+import { getNewsSlugs } from '@/lib/news'
 import { absolute, languageAlternates, normalizePath } from '@/lib/seo'
 
 /** Same information architecture as the routes, so adding a locale cannot desync the sitemap. */
@@ -10,6 +11,8 @@ const routes = [
   '/network/',
   '/cases/',
   '/about/',
+  '/news/',
+  ...getNewsSlugs().map((slug) => `/news/${slug}/`),
   ...caseSlugs.map((slug) => `/cases/${slug}/`),
 ]
 
@@ -19,6 +22,7 @@ const priority: Record<string, number> = {
   '/network/': 0.9,
   '/cases/': 0.8,
   '/about/': 0.7,
+  '/news/': 0.7,
 }
 
 export const dynamic = 'force-static'

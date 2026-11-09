@@ -168,5 +168,14 @@ export type Dict = {
       facts: Metric[]
       qualsTitle: string
     }
+    news: PageHero & {
+      listLabel: string
+      back: string
+      sourceLabel: string
+      updatedLabel: string
+      prev: string
+      next: string
+      categories: Record<'company' | 'tech' | 'guide' | 'industry' | 'service' | 'case', string>
+    }
   }
 }
