@@ -34,6 +34,7 @@ export default function Nav({ locale, dict }: { locale: Locale; dict: Dict }) {
   }
 
   return (
+    <>
     <header
       className={`sticky top-0 z-50 border-b bg-bg/55 backdrop-blur-xl backdrop-saturate-150 transition-[background-color,border-color,box-shadow] duration-300 supports-[backdrop-filter]:bg-bg/50 ${
         solid
@@ -81,7 +82,7 @@ export default function Nav({ locale, dict }: { locale: Locale; dict: Dict }) {
         {/* top-right dock */}
         <div className="flex shrink-0 items-center gap-3">
           <ThemeToggle />
-          <div className="hidden items-center md:flex">
+          <div className="hidden items-center lg:flex">
             <LocaleSwitch locale={locale} />
           </div>
           <button
@@ -104,8 +105,17 @@ export default function Nav({ locale, dict }: { locale: Locale; dict: Dict }) {
         </div>
       </div>
 
+    </header>
+
       {open && (
-        <div className="fixed inset-x-0 top-[var(--dock-h)] bottom-0 z-40 flex flex-col justify-between border-t border-line bg-bg px-5 py-8 lg:hidden">
+        <>
+          {/* invisible click-catcher: taps below the panel close the menu instead of hitting the page */}
+          <div
+            className="fixed inset-x-0 top-[var(--dock-h)] bottom-0 z-30 lg:hidden"
+            onClick={() => setOpen(false)}
+            aria-hidden="true"
+          />
+          <div className="fixed inset-x-0 top-[var(--dock-h)] z-40 max-h-[calc(100svh-var(--dock-h))] overflow-y-auto border-y border-line bg-bg px-5 pb-6 pt-1 shadow-[0_26px_44px_-30px_rgba(0,0,0,0.45)] dark:bg-bg2 lg:hidden">
           <nav className="flex flex-col">
             {dict.nav.links.map((l) => (
               <Link
@@ -119,7 +129,7 @@ export default function Nav({ locale, dict }: { locale: Locale; dict: Dict }) {
               </Link>
             ))}
           </nav>
-          <div className="flex items-center justify-between">
+          <div className="mt-6 flex items-center justify-between">
             <div className="flex items-center gap-2.5">
               <LocaleSwitch locale={locale} placement="up" />
             </div>
@@ -127,8 +137,9 @@ export default function Nav({ locale, dict }: { locale: Locale; dict: Dict }) {
               {dict.common.phone}
             </a>
           </div>
-        </div>
+          </div>
+        </>
       )}
-    </header>
+    </>
   )
 }

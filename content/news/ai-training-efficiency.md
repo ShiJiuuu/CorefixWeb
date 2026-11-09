@@ -5,13 +5,13 @@ date: "2026-08-18"
 category: "industry"
 source: "https://mp.weixin.qq.com/s/CWE-LR7Jtd-uoeP0Wj7PtA"
 ---
-![图1](/news/ai-training-efficiency/img-01.png)
+![](/news/ai-training-efficiency/img-01.png)
 
 我们最近接触的一个案例很有代表性：某互联网企业把AI训练集群从原来的80卡扩展到300多卡，本来预期训练速度能同步提升，结果反而出现了性能波动——原本稳定运行的训练任务频繁卡顿，监控显示GPU平均利用率只有40%出头，但检查下来GPU本身没有任何硬件异常，温度、功耗都在正常范围。
 
 工程团队花了两周排查，最后发现问题根本不在GPU数量上：30%的时间GPU在等待存储系统读取训练数据，20%的时间在多卡之间的梯度同步上卡住，还有15%的时间因为调度不合理，部分GPU处于闲置状态。真正影响训练效率的，是整个系统多个环节协同不畅造成的等待。
 
-![图2](/news/ai-training-efficiency/img-02.png)
+![](/news/ai-training-efficiency/img-02.png)
 
 这也是现在很多企业都在遇到的问题：当GPU集群从几十卡扩展到几百卡、上千卡之后，大家逐渐发现，单纯加卡并不能直接解决效率问题。
 
@@ -27,7 +27,7 @@ source: "https://mp.weixin.qq.com/s/CWE-LR7Jtd-uoeP0Wj7PtA"
 
 AI训练从来不是单靠GPU就能完成的事，它是一个涉及多个层级的系统工程，我们把它拆成五个层面，就很容易理解问题出在哪里：
 
-![图3](/news/ai-training-efficiency/img-03.png)
+![](/news/ai-training-efficiency/img-03.png)
 
 计算层：GPU本身的计算效率有没有跑满，模型有没有适配好GPU的计算特性，有没有出现计算单元空转的情况。
 
@@ -43,7 +43,7 @@ AI训练从来不是单靠GPU就能完成的事，它是一个涉及多个层级
 
 ## 03 为什么传统监控越来越难用？
 
-![图4](/news/ai-training-efficiency/img-04.png)
+![](/news/ai-training-efficiency/img-04.png)
 
 过去大家管GPU集群，主要看几个单点指标：GPU利用率、温度、功耗、显存占用，就像只看流水线工人的干活速度，不管其他环节有没有问题。
 
@@ -55,7 +55,7 @@ AI训练从来不是单靠GPU就能完成的事，它是一个涉及多个层级
 
 我们观察到，能够持续提升GPU集群效率的团队，通常具备了三个核心能力：
 
-![图5](/news/ai-training-efficiency/img-05.png)
+![](/news/ai-training-efficiency/img-05.png)
 
 第一是跨层分析的能力，能把计算、通信、存储、调度、能源这五个层级的数据拉通来看，而不是只盯着单点指标；第二是根因定位的能力，能快速从一堆异常指标里找到真正影响效率的核心问题，而不是头疼医头脚疼医脚；第三是预测优化的能力，能提前发现潜在的问题，比如提前预判散热系统可能撑不住即将到来的训练高峰、存储IO快要达到瓶颈，提前处理避免问题爆发。
 
@@ -72,11 +72,3 @@ AI训练从来不是单靠GPU就能完成的事，它是一个涉及多个层级
 上海集培优信息科技有限公司
 
 GPU 服务器第三方维修、维保、运维
-
-扫码加入GPU维修维保交流群
-
-![图6](/news/ai-training-efficiency/img-06.png)
-
-扫码添加集培优工程师获取服务支持
-
-![图7](/news/ai-training-efficiency/img-07.jpg)

@@ -5,7 +5,7 @@ date: "2026-05-15"
 category: "service"
 source: "https://mp.weixin.qq.com/s/MT_7SuI86WpuSBn5QRbxAw"
 ---
-![图1](/news/four-level-response/img-01.jpg)
+![](/news/four-level-response/img-01.jpg)
 
 在AI大模型训练、算力集群常态化运行的当下，没有任何一家企业能够规避硬件故障风险。
 
@@ -43,7 +43,7 @@ source: "https://mp.weixin.qq.com/s/MT_7SuI86WpuSBn5QRbxAw"
 
 **适用场景**：单张GPU异常降频、算力波动、程序运行卡顿、队列堆积拥堵。
 
-![图2](/news/four-level-response/img-02.png)
+![](/news/four-level-response/img-02.png)
 
 ### P3｜提示级故障
 
@@ -83,7 +83,7 @@ source: "https://mp.weixin.qq.com/s/MT_7SuI86WpuSBn5QRbxAw"
 
 很多企业算力运维存在普遍乱象：轻微报错过度处理、重大故障拖延处置、人力浪费、业务损耗严重。
 
-![图3](/news/four-level-response/img-03.png)
+![](/news/four-level-response/img-03.png)
 
 集培优四级故障响应体系，完美解决行业痛点：
 
@@ -103,5 +103,3 @@ source: "https://mp.weixin.qq.com/s/MT_7SuI86WpuSBn5QRbxAw"
 从故障应急响应、日常巡检维保，到硬件维修升级、技术培训赋能，全链路守护企业算力资产。
 
 算力有难题，就找集培优。
-
-![图4](/news/four-level-response/img-04.png)

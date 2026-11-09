@@ -5,7 +5,6 @@ date: "2026-05-09"
 category: "service"
 source: "https://mp.weixin.qq.com/s/nBojiWT5K1I9-Ascdfpp0Q"
 ---
-华东第一家GPU维修中心，已维修GPU服务器2000+台，上海临港2500平维修基地，欢迎关注合作
 
 在AI算力高速发展的当下，GPU服务器作为企业核心算力资产，其维修规范度直接决定设备使用寿命与业务连续性。不规范的维修操作，不仅无法根治故障，更易造成二次损伤，让算力资产蒙受额外损失，耽误业务推进。
 
@@ -21,7 +20,7 @@ source: "https://mp.weixin.qq.com/s/nBojiWT5K1I9-Ascdfpp0Q"
 - 全程视频留档：拍摄完整入库视频，清晰记录设备外观、接口状态、配件完整性，留存原始凭证，杜绝交接争议；
 - 一机一档建档：同步在工单系统建立专属设备档案，录入设备信息、客户需求，全程跟踪维修进度，实现全流程溯源。
 
-![图1](/news/repair-workflow/img-01.jpg)
+![](/news/repair-workflow/img-01.jpg)
 
 ## 二、专业检测：精准定位，拒绝盲目维修
 
@@ -51,7 +50,7 @@ source: "https://mp.weixin.qq.com/s/nBojiWT5K1I9-Ascdfpp0Q"
 
 维修完成后，并非直接进入交付环节，而是强制回流至测试环节，确保故障彻底修复，杜绝隐性隐患。
 
-![图2](/news/repair-workflow/img-02.jpg)
+![](/news/repair-workflow/img-02.jpg)
 
 ## 五、严苛测试：多层验证，保障稳定交付
 
@@ -64,7 +63,7 @@ source: "https://mp.weixin.qq.com/s/nBojiWT5K1I9-Ascdfpp0Q"
 
 我们坚持“维修—测试—复检—返修”闭环流程，绝不将亚健康、有隐患的设备交付给客户。
 
-![图3](/news/repair-workflow/img-03.jpg)
+![](/news/repair-workflow/img-03.jpg)
 
 ## 六、规范出库：闭环交付，安心托付
 
@@ -74,7 +73,7 @@ source: "https://mp.weixin.qq.com/s/nBojiWT5K1I9-Ascdfpp0Q"
 - 整理全套检测报告、维修报告、测试报告，统一归档，客户可随时调取查阅；
 - 工单系统正式完结流程，同步安排发货，全程可查、可追溯，让客户全程安心。
 
-![图4](/news/repair-workflow/img-04.jpg)
+![](/news/repair-workflow/img-04.jpg)
 
 ## 选择集培优的核心优势
 

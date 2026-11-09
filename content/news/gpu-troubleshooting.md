@@ -5,7 +5,7 @@ date: "2026-05-06"
 category: "guide"
 source: "https://mp.weixin.qq.com/s/W_me_jgEVl7V-2FiCc6NEQ"
 ---
-![图1](/news/gpu-troubleshooting/img-01.jpg)
+![](/news/gpu-troubleshooting/img-01.jpg)
 
 在AI算力集群、数据中心日常运维中，GPU服务器属于核心算力资产。相比普通服务器，H系列、B系列高端GPU服务器结构精密、功耗极高、集成度极强。
 
@@ -52,7 +52,7 @@ source: "https://mp.weixin.qq.com/s/W_me_jgEVl7V-2FiCc6NEQ"
 - 显存ECC高频报错、显存读写异常
 - 驱动频繁崩溃、内核报错、业务持续性极差
 
-![图2](/news/gpu-troubleshooting/img-02.png)
+![](/news/gpu-troubleshooting/img-02.png)
 
 ### 5. 物理硬件损坏类
 
@@ -124,7 +124,7 @@ Xid报错是GPU维修的核心依据，不同代码对应固定故障范围，�
 
 大量机房故障并非设备自然损坏，而是运维操作不规范导致，整理行业通用避坑要点：
 
-![图3](/news/gpu-troubleshooting/img-03.jpg)
+![](/news/gpu-troubleshooting/img-03.jpg)
 
 - 严禁热插拔GPU设备，极易击穿PCIe总线，造成不可逆硬件损伤
 - 机房设备每半年深度除尘一次，积灰是过热降频、宕机的首要原因
@@ -138,5 +138,3 @@ Xid报错是GPU维修的核心依据，不同代码对应固定故障范围，�
 GPU服务器作为算力产业的核心资产，设备的稳定性、完好度直接决定企业算力成本与业务产能。多数隐性故障无法通过简单重启、重装驱动修复，需要依靠专业的硬件分层检测、精准的维修工艺与严格的上机验收体系。
 
 **上海集培优信息科技**依托全国八大算力节点布局、2000+台服务器实战维修经验，专注H系列、B系列服务器维保、运维、故障维修、性能调优与技术培训，精准解决各类GPU疑难故障，为全国数据中心与科创企业算力设备稳定运行保驾护航。
-
-![图4](/news/gpu-troubleshooting/img-04.png)

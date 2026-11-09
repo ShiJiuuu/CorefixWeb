@@ -54,47 +54,49 @@ export default async function ArticlePage({
   return (
     <>
       <article className="u-container pb-14 pt-7 lg:pb-20 lg:pt-9">
-        <div className="flex items-center justify-between gap-6">
-          <Link
-            href={`/${locale}/news/`}
-            className="u-mono text-[10.5px] tracking-[0.14em] text-muted transition-colors hover:text-ink"
-          >
-            ← {p.back}
-          </Link>
-          <span className="u-mono text-[10.5px] tracking-[0.1em] text-faint">
-            {formatNewsDate(article.date)}
-          </span>
-        </div>
-
-        <header className="mt-8 max-w-[900px]">
-          <span className="u-mono border border-line2 px-2.5 py-1 text-[9.5px] tracking-[0.12em] text-muted">
-            {p.categories[article.category]}
-          </span>
-          <h1 className="mt-5 text-[28px] font-semibold leading-[1.32] lg:text-[38px]">
-            {article.title}
-          </h1>
-          <div className="mt-6 flex flex-wrap items-center gap-x-6 gap-y-3 border-t border-line pt-5">
-            <span className="u-mono text-[10px] tracking-[0.12em] text-faint">
-              {p.updatedLabel} {formatNewsDate(article.date)}
+        <div className="mx-auto w-full max-w-[720px]">
+          <div className="flex items-center justify-between gap-6">
+            <Link
+              href={`/${locale}/news/`}
+              className="u-mono text-[10.5px] tracking-[0.14em] text-muted transition-colors hover:text-ink"
+            >
+              ← {p.back}
+            </Link>
+            <span className="u-mono text-[10.5px] tracking-[0.1em] text-faint">
+              {formatNewsDate(article.date)}
             </span>
-            {article.source && (
-              <a
-                href={article.source}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="u-link"
-              >
-                {p.sourceLabel} <span className="text-faint">↗</span>
-              </a>
-            )}
           </div>
-        </header>
 
-        <div
-          className="article-body mt-10 max-w-[720px]"
-          lang="zh-CN"
-          dangerouslySetInnerHTML={{ __html: article.html }}
-        />
+          <header className="mt-8">
+            <span className="u-mono border border-line2 px-2.5 py-1 text-[9.5px] tracking-[0.12em] text-muted">
+              {p.categories[article.category]}
+            </span>
+            <h1 className="mt-5 text-[26px] font-semibold leading-[1.36] lg:text-[34px]">
+              {article.title}
+            </h1>
+            <div className="mt-6 flex flex-wrap items-center gap-x-6 gap-y-3 border-t border-line pt-5">
+              <span className="u-mono text-[10px] tracking-[0.12em] text-faint">
+                {p.updatedLabel} {formatNewsDate(article.date)}
+              </span>
+              {article.source && (
+                <a
+                  href={article.source}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="u-link"
+                >
+                  {p.sourceLabel} <span className="text-faint">↗</span>
+                </a>
+              )}
+            </div>
+          </header>
+
+          <div
+            className="article-body mt-10"
+            lang="zh-CN"
+            dangerouslySetInnerHTML={{ __html: article.html }}
+          />
+        </div>
       </article>
 
       {(newer || older) && (
