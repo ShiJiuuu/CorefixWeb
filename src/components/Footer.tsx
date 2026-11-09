@@ -15,10 +15,7 @@ export default function Footer({ dict }: { dict: Dict }) {
               height={231}
               className="h-9 w-9 shrink-0 object-contain"
             />
-            <span className="flex flex-col leading-none">
-              <span className="text-[17px] font-semibold tracking-[0.08em]">集培优</span>
-              <span className="u-mono mt-1 text-[8px] tracking-[0.22em] text-faint">COREFIX PRO</span>
-            </span>
+            <span className="text-[17px] font-semibold leading-none tracking-[0.08em]">集培优</span>
           </div>
 
           <p className="text-[18px] font-semibold leading-[1.5] tracking-[0.02em]">
