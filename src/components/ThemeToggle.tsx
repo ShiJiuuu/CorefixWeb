@@ -4,6 +4,11 @@ import { useEffect, useState } from 'react'
 
 const KEY = 'cf-theme'
 
+/**
+ * Theme button: a single black disc with a lime moon/sun — no track, no sliding.
+ * Icon is driven by the `dark:` class on <html> so there is no post-hydration
+ * flicker; React state only feeds `aria-checked`.
+ */
 export default function ThemeToggle() {
   const [dark, setDark] = useState(false)
 
@@ -23,24 +28,40 @@ export default function ThemeToggle() {
   return (
     <button
       type="button"
+      role="switch"
+      aria-checked={dark}
+      aria-label="Toggle color theme"
       onClick={toggle}
-      aria-label={dark ? 'Switch to light mode' : 'Switch to dark mode'}
-      className="group flex h-9 items-center gap-2 rounded-full bg-accent p-1 text-[#0a0a0a] transition-transform duration-300 hover:scale-[1.03] sm:pl-3 sm:pr-1"
+      className="group grid h-9 w-9 shrink-0 place-items-center rounded-full"
     >
-      <span className="u-mono hidden text-[9.5px] font-semibold tracking-[0.14em] sm:inline">
-        {dark ? 'DARK' : 'LIGHT'}
-      </span>
-      <span className="grid h-7 w-7 place-items-center rounded-full bg-[#0a0a0a]">
-        {dark ? (
-          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#A9CB39" strokeWidth="1.8">
-            <circle cx="12" cy="12" r="4.2" />
-            <path d="M12 2v2.4M12 19.6V22M2 12h2.4M19.6 12H22M4.9 4.9l1.7 1.7M17.4 17.4l1.7 1.7M19.1 4.9l-1.7 1.7M6.6 17.4l-1.7 1.7" />
-          </svg>
-        ) : (
-          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#A9CB39" strokeWidth="1.8">
-            <path d="M20 14.5A8.5 8.5 0 1 1 9.5 4a7 7 0 0 0 10.5 10.5Z" />
-          </svg>
-        )}
+      <span className="grid h-7 w-7 place-items-center rounded-full bg-[#0a0a0a] transition-transform duration-300 ease-[cubic-bezier(0.2,0.8,0.2,1)] group-hover:scale-105 dark:ring-1 dark:ring-white/25">
+        {/* moon — light mode */}
+        <svg
+          className="dark:hidden"
+          width="13"
+          height="13"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="#A9CB39"
+          strokeWidth="1.8"
+          aria-hidden="true"
+        >
+          <path d="M20 14.5A8.5 8.5 0 1 1 9.5 4a7 7 0 0 0 10.5 10.5Z" />
+        </svg>
+        {/* sun — dark mode */}
+        <svg
+          className="hidden dark:block"
+          width="13"
+          height="13"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="#A9CB39"
+          strokeWidth="1.8"
+          aria-hidden="true"
+        >
+          <circle cx="12" cy="12" r="4.2" />
+          <path d="M12 2v2.4M12 19.6V22M2 12h2.4M19.6 12H22M4.9 4.9l1.7 1.7M17.4 17.4l1.7 1.7M19.1 4.9l-1.7 1.7M6.6 17.4l-1.7 1.7" />
+        </svg>
       </span>
     </button>
   )

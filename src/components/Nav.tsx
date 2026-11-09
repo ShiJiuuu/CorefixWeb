@@ -41,8 +41,8 @@ export default function Nav({ locale, dict }: { locale: Locale; dict: Dict }) {
           : 'border-line'
       }`}
     >
-      <div className="u-container flex h-[84px] items-center justify-between gap-4 xl:gap-6">
-        <Link href={`/${locale}/`} className="flex shrink-0 items-center gap-2.5" aria-label="集培优 COREFIX PRO">
+      <div className="u-container flex h-[84px] items-center gap-4 xl:gap-6">
+        <Link href={`/${locale}/`} className="mr-auto flex shrink-0 items-center gap-2.5" aria-label="集培优 COREFIX PRO">
           <img
             src="/logo-corefix.png"
             alt="集培优 COREFIX PRO"
@@ -75,24 +75,15 @@ export default function Nav({ locale, dict }: { locale: Locale; dict: Dict }) {
           })}
         </nav>
 
+        {/* hairline divider between the links and the controls */}
+        <span aria-hidden="true" className="hidden h-5 w-px shrink-0 bg-line2 lg:block" />
+
         {/* top-right dock */}
         <div className="flex shrink-0 items-center gap-3">
-          <a
-            href={`tel:${dict.common.phone}`}
-            className="u-mono hidden whitespace-nowrap text-[12.5px] tracking-[0.02em] xl:block"
-          >
-            {dict.common.phone}
-          </a>
-          <div className="hidden items-center gap-2.5 md:flex">
+          <ThemeToggle />
+          <div className="hidden items-center md:flex">
             <LocaleSwitch locale={locale} />
           </div>
-          <ThemeToggle />
-          <Link
-            href={`/${locale}/#contact`}
-            className="hidden h-9 items-center border border-line2 px-4 text-[12.5px] font-semibold transition-colors hover:bg-ink hover:text-invt md:flex"
-          >
-            {dict.nav.cta}
-          </Link>
           <button
             type="button"
             onClick={() => setOpen((v) => !v)}
@@ -127,18 +118,10 @@ export default function Nav({ locale, dict }: { locale: Locale; dict: Dict }) {
                 <span className="u-mono text-[11px] text-faint">→</span>
               </Link>
             ))}
-            <Link
-              href={`/${locale}/#contact`}
-              onClick={() => setOpen(false)}
-              className="flex items-center justify-between border-b border-line py-5 text-[22px] font-semibold"
-            >
-              {dict.nav.cta}
-              <span className="u-mono text-[11px] text-faint">→</span>
-            </Link>
           </nav>
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2.5">
-              <LocaleSwitch locale={locale} />
+              <LocaleSwitch locale={locale} placement="up" />
             </div>
             <a href={`tel:${dict.common.phone}`} className="u-mono text-[13px]">
               {dict.common.phone}
