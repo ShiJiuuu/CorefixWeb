@@ -1,15 +1,30 @@
 'use client'
 
 import { useEffect, useState } from 'react'
+import { usePathname } from 'next/navigation'
 
 const KEY = 'cf-theme'
 
 export default function ThemeToggle() {
   const [dark, setDark] = useState(false)
+  const pathname = usePathname()
 
+  // Re-apply on mount and after every route change: navigating between locales re-renders the
+  // root <html>, which drops the imperatively added `dark` class even though the choice is stored.
   useEffect(() => {
-    setDark(document.documentElement.classList.contains('dark'))
-  }, [])
+    let stored: string | null = null
+    try {
+      stored = localStorage.getItem(KEY)
+    } catch {}
+    if (stored !== 'dark' && stored !== 'light') {
+      // No stored choice (e.g. ?theme=dark): mirror whatever the bootstrap script decided.
+      setDark(document.documentElement.classList.contains('dark'))
+      return
+    }
+    const isDark = stored === 'dark'
+    document.documentElement.classList.toggle('dark', isDark)
+    setDark(isDark)
+  }, [pathname])
 
   function toggle() {
     const next = !document.documentElement.classList.contains('dark')
