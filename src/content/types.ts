@@ -1,5 +1,16 @@
 export type Metric = { v: string; l: string }
 
+/** Interactive module keys of the hero B300 exploded view. */
+export type ServerModuleKey =
+  | 'gpu'
+  | 'gpu-board'
+  | 'cpu'
+  | 'net'
+  | 'storage'
+  | 'cooling'
+  | 'power'
+  | 'chassis'
+
 export type Cap = {
   no: string
   title: string
@@ -95,6 +106,13 @@ export type Dict = {
     sub: string
     ctas: { label: string; href: string }[]
     netBar: { label: string; cta: string }
+    /** Interactive exploded B300 model under the hero copy. */
+    model: {
+      label: string
+      hint: string
+      meta: string
+      modules: { id: ServerModuleKey; title: string; en: string; desc: string }[]
+    }
   }
   stats: Metric[]
   cap: {

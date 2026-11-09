@@ -3,8 +3,8 @@ import { locales } from '@/lib/i18n'
 import { getDict } from '@/content'
 import { CaseGrid } from '@/components/CaseCards'
 import ProcessFlow from '@/components/ProcessFlow'
-import HeroVideo from '@/components/HeroVideo'
 import SlaTable from '@/components/SlaTable'
+import ServerModel from '@/components/server-model/ServerModel'
 import { SectionHead, CtaBand } from '@/components/Sections'
 
 export function generateStaticParams() {
@@ -18,6 +18,7 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
   return (
     <>
       {/* ---------- hero ---------- */}
+<<<<<<< Updated upstream
       <section
         data-nav-overlay
         className="relative -mt-[var(--dock-h)] flex min-h-[100svh] flex-col overflow-hidden border-b border-line2"
@@ -33,6 +34,12 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
 
           <div className="u-container relative flex flex-1 flex-col pb-12 pt-[calc(var(--dock-h)+3.5rem)] lg:pb-16 lg:pt-[calc(var(--dock-h)+5rem)]">
             <div className="on-dark flex w-full max-w-[820px] flex-1 flex-col">
+=======
+      <section className="u-gridbg relative flex min-h-[calc(100svh_-_var(--dock-h))] flex-col overflow-hidden border-b border-line2 bg-bg">
+        <div className="u-container relative flex flex-1 flex-col pb-12 pt-14 lg:pb-16 lg:pt-20">
+          <div className="relative flex flex-1 flex-col">
+            <div className="flex w-full max-w-[820px] flex-1 flex-col">
+>>>>>>> Stashed changes
               <p className="u-label flex items-center gap-2.5" data-hero-fade>
                 <span className="inline-block h-px w-4 bg-ink" />
                 {d.hero.eyebrow}
@@ -63,6 +70,11 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
                 <Link href={`/${locale}${d.hero.ctas[1].href}/`} className="u-btn u-btn-line">
                   {d.hero.ctas[1].label}
                 </Link>
+              </div>
+
+              {/* B300 exploded model: in flow on tablet/mobile, overlaid on the right from xl up */}
+              <div className="mt-10 w-full xl:absolute xl:top-0 xl:right-0 xl:mt-0 xl:w-[50%] xl:max-w-[880px]">
+                <ServerModel model={d.hero.model} />
               </div>
 
               <div className="mt-auto pt-9">

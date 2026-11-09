@@ -9,7 +9,7 @@ export default function Footer({ dict }: { dict: Dict }) {
         <div className="md:w-full md:shrink-0 lg:w-auto lg:min-w-0 lg:flex-[1.5]">
           <div className="mb-5 flex items-center gap-2.5">
             <img
-              src="/logo-corefix.png"
+              src="/logo-white.png"
               alt="集培优 COREFIX PRO"
               width={231}
               height={231}

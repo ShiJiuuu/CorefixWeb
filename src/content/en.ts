@@ -24,6 +24,61 @@ export const en: Dict = {
       { label: 'View capability', href: '/capability' },
     ],
     netBar: { label: 'SERVICE NETWORK / 28 CITIES · 7×24', cta: 'Open network map' },
+    model: {
+      label: 'Exploded view of the NVIDIA B300 8U GPU server',
+      hint: 'Hover or tap a module',
+      meta: '8U · 356 × 449 × 950 mm · 8× B300',
+      modules: [
+        {
+          id: 'gpu',
+          title: 'GPU module',
+          en: 'COMPUTE',
+          desc: 'Eight NVIDIA B300 GPUs — the main compute engines for training and inference, linked by NVLink.',
+        },
+        {
+          id: 'gpu-board',
+          title: 'GPU baseboard',
+          en: 'BASEBOARD',
+          desc: 'The baseboard and NVLink fabric that connect all eight GPUs into one shared memory domain.',
+        },
+        {
+          id: 'cpu',
+          title: 'CPU & memory',
+          en: 'CONTROL',
+          desc: 'Dual Xeon 6700/6500 processors and 32 DDR5 DIMMs handle scheduling, data prep and PCIe.',
+        },
+        {
+          id: 'net',
+          title: 'Network',
+          en: 'OSFP 800G',
+          desc: 'Eight front-panel OSFP 800G ports provide east-west scale-out for every GPU.',
+        },
+        {
+          id: 'storage',
+          title: 'Local storage',
+          en: 'E1.S + M.2',
+          desc: 'Eight E1.S NVMe bays and two M.2 slots hold the OS, datasets and checkpoints.',
+        },
+        {
+          id: 'cooling',
+          title: 'Cooling',
+          en: 'AIRFLOW',
+          desc: 'Twelve rear hot-swap fans plus four internal fans move air front to back under BMC control.',
+        },
+        {
+          id: 'power',
+          title: 'Power',
+          en: '3+3 REDUNDANT',
+          desc: 'Six 6600W Titanium PSUs in 3+3 redundancy feed the eight GPUs and the rest of the system.',
+        },
+        {
+          id: 'chassis',
+          title: 'Chassis',
+          en: '8U CHASSIS',
+          desc: '8U rack chassis, 356 × 449 × 950 mm, with front-service GPU and CPU drawers.',
+        },
+      ],
+    },
   },
   stats: [
     { v: '99.2%', l: 'Repair success rate' },

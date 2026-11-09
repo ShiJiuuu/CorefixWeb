@@ -24,6 +24,61 @@ export const zhCN: Dict = {
       { label: '查看服务能力', href: '/capability' },
     ],
     netBar: { label: 'SERVICE NETWORK / 28 CITIES · 7×24', cta: '查看服务网络地图' },
+    model: {
+      label: 'NVIDIA B300 8U 服务器分解图',
+      hint: '悬停或点击查看模块',
+      meta: '8U · 356 × 449 × 950 mm · 8× B300',
+      modules: [
+        {
+          id: 'gpu',
+          title: 'GPU 模组',
+          en: 'COMPUTE',
+          desc: '8 颗 NVIDIA B300 GPU，负责训练与推理的主力算力；卡间通过 NVLink 共享显存。',
+        },
+        {
+          id: 'gpu-board',
+          title: 'GPU 基板',
+          en: 'BASEBOARD',
+          desc: '承载 8 颗 GPU 的基板与 NVLink 交换链路，把 8 张卡连成统一显存域。',
+        },
+        {
+          id: 'cpu',
+          title: 'CPU 与内存',
+          en: 'CONTROL',
+          desc: '双路 Xeon 6700/6500 与 32 条 DDR5，负责调度、数据预处理和 PCIe 设备管理。',
+        },
+        {
+          id: 'net',
+          title: '网络接口',
+          en: 'OSFP 800G',
+          desc: '前面板 8 个 OSFP 800G 端口，为每颗 GPU 提供东西向 Scale-out 网络。',
+        },
+        {
+          id: 'storage',
+          title: '本地存储',
+          en: 'E1.S + M.2',
+          desc: '8 个 E1.S NVMe 与 2 个 M.2，存放系统、数据集和训练检查点。',
+        },
+        {
+          id: 'cooling',
+          title: '散热',
+          en: 'AIRFLOW',
+          desc: '12 个后置热插拔风扇加 4 个内置风扇，从前到后建立风道，按 BMC 温控曲线调速。',
+        },
+        {
+          id: 'power',
+          title: '供电',
+          en: '3+3 REDUNDANT',
+          desc: '6 个 6600W 钛金电源，3+3 冗余，为 8 颗 GPU 和整机提供稳定供电。',
+        },
+        {
+          id: 'chassis',
+          title: '机箱结构',
+          en: '8U CHASSIS',
+          desc: '8U 机架式机箱，356 × 449 × 950 mm；GPU 与 CPU 双抽屉，前后维护。',
+        },
+      ],
+    },
   },
   stats: [
     { v: '99.2%', l: '维修成功率' },
