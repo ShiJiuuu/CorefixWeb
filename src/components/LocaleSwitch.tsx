@@ -65,7 +65,7 @@ export default function LocaleSwitch({
         className="group grid h-9 w-9 shrink-0 place-items-center rounded-full"
       >
         <span
-          className={`grid h-8 w-8 place-items-center rounded-full bg-[#0a0a0a] transition-transform duration-300 ease-[cubic-bezier(0.2,0.8,0.2,1)] group-hover:scale-105 dark:ring-1 dark:ring-white/25 ${
+          className={`grid h-8 w-8 place-items-center rounded-full border border-line2 bg-bg text-ink transition-transform duration-300 ease-[cubic-bezier(0.2,0.8,0.2,1)] group-hover:scale-105 ${
             open ? 'scale-105' : ''
           }`}
         >
@@ -74,7 +74,7 @@ export default function LocaleSwitch({
             height="16"
             viewBox="0 0 24 24"
             fill="none"
-            stroke="#A9CB39"
+            stroke="currentColor"
             strokeWidth="1.5"
             aria-hidden="true"
           >

@@ -49,16 +49,16 @@ export default function ThemeToggle() {
       onClick={toggle}
       className="group grid h-9 w-9 shrink-0 place-items-center rounded-full"
     >
-      <span className="grid h-8 w-8 place-items-center rounded-full bg-[#0a0a0a] transition-transform duration-300 ease-[cubic-bezier(0.2,0.8,0.2,1)] group-hover:scale-105 dark:ring-1 dark:ring-white/25">
+      <span className="grid h-8 w-8 place-items-center rounded-full border border-line2 bg-bg text-ink transition-transform duration-300 ease-[cubic-bezier(0.2,0.8,0.2,1)] group-hover:scale-105">
         {/* sun — current theme is light */}
         <svg
           className="dark:hidden"
-          width="13"
-          height="13"
+          width="15"
+          height="15"
           viewBox="0 0 24 24"
           fill="none"
-          stroke="#A9CB39"
-          strokeWidth="1.8"
+          stroke="currentColor"
+          strokeWidth="1.6"
           aria-hidden="true"
         >
           <circle cx="12" cy="12" r="4.2" />
@@ -67,12 +67,12 @@ export default function ThemeToggle() {
         {/* moon — current theme is dark */}
         <svg
           className="hidden dark:block"
-          width="13"
-          height="13"
+          width="15"
+          height="15"
           viewBox="0 0 24 24"
           fill="none"
-          stroke="#A9CB39"
-          strokeWidth="1.8"
+          stroke="currentColor"
+          strokeWidth="1.6"
           aria-hidden="true"
         >
           <path d="M20 14.5A8.5 8.5 0 1 1 9.5 4a7 7 0 0 0 10.5 10.5Z" />
