@@ -22,6 +22,8 @@
 }
 
 :root {
+  /* sticky header height, shared by the nav, the hero's viewport fill and anchor offsets */
+  --dock-h: 60px;
   --bg: #ffffff;
   --bg2: #f4f4f1;
   --card: #ffffff;

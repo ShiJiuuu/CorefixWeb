@@ -1,0 +1,637 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Exploded View — AI System</title>
+<style>
+  *{ margin:0; padding:0; box-sizing:border-box; }
+  html,body{ width:100%; height:100%; background:#000; overflow:hidden; }
+  body{
+    font-family:"Helvetica Neue",Helvetica,Arial,sans-serif;
+    color:#fff; -webkit-font-smoothing:antialiased; text-rendering:geometricPrecision;
+  }
+  #stage{
+    position:absolute; left:50%; top:50%; width:1920px; height:1080px;
+    transform:translate(-50%,-50%) scale(var(--fit,1));
+    background:#000; overflow:hidden;
+  }
+  svg#scene{ position:absolute; left:0; top:0; width:1920px; height:1080px; display:block; }
+
+  /* ---------- faces ---------- */
+  polygon{ stroke-linejoin:round; }
+  path,line,polygon,circle{ stroke-linecap:round; }
+  .ft{ fill:#171717; } .fs{ fill:#070707; } .ff{ fill:#0b0b0b; }
+  .sh.ft{ fill:#1d1d1d; }
+  .sh.fs{ fill:#080808; }
+  .sh.ff{ fill:#111111; }
+  .plate{ fill-opacity:var(--pf,1); }
+  .pkg{ fill:#1c1c1c; } .die{ fill:#2e2e2e; } .hbm{ fill:#242424; }
+  .f1{ fill:#090909; } .f2{ fill:#242424; } .led{ fill:#e8e8e8; }
+  svg#scene *{ vector-effect:non-scaling-stroke; }
+  .st1{ stroke:rgba(255,255,255,.60); stroke-width:1.05px; }
+  .st2{ stroke:rgba(255,255,255,.32); stroke-width:0.95px; }
+  .st3{ stroke:rgba(255,255,255,.17); stroke-width:0.90px; }
+  .l1{ fill:none; stroke:rgba(255,255,255,.55); stroke-width:1.00px; }
+  .l2{ fill:none; stroke:rgba(255,255,255,.30); stroke-width:0.90px; }
+  .l3{ fill:none; stroke:rgba(255,255,255,.14); stroke-width:0.85px; }
+  .l4{ fill:none; stroke:rgba(255,255,255,.23); stroke-width:0.90px; }
+  .ghost{ fill:none; stroke:rgba(255,255,255,.13); stroke-width:0.85px; stroke-dasharray:2 8; }
+
+  /* ---------- hud ---------- */
+  #hud{ position:absolute; left:0; top:0; width:1920px; height:1080px; pointer-events:none; }
+  .anno{
+    position:absolute; left:1520px; top:372px; width:364px; opacity:0;
+  }
+  .anno .idx{ display:flex; align-items:center; gap:14px; }
+  .anno .idx span{
+    font-family:ui-monospace,"SF Mono",Menlo,Consolas,monospace;
+    font-size:16px; letter-spacing:.18em; color:#9c9c9c;
+  }
+  .anno .idx .n{ color:#f2f2f2; }
+  .anno .idx i{ flex:1; height:1px; background:rgba(255,255,255,.20); transform-origin:left center; }
+  .anno h2{
+    margin-top:26px; font-size:42px; font-weight:300; line-height:1.04;
+    letter-spacing:.035em; text-transform:uppercase; color:#f7f7f7;
+  }
+  .anno p{
+    margin-top:18px; width:342px; font-size:21px; line-height:1.62;
+    letter-spacing:.004em; color:#8e8e8e;
+  }
+  .anno .meta{
+    margin-top:26px; font-family:ui-monospace,"SF Mono",Menlo,Consolas,monospace;
+    font-size:16px; letter-spacing:.18em; color:#6f6f6f;
+  }
+  #veil{ position:absolute; inset:0; background:#000; pointer-events:none; }
+</style>
+</head>
+<body>
+  <div id="stage">
+    <svg id="scene" viewBox="0 0 1920 1080" width="1920" height="1080">
+      <g id="camera"><g id="world"></g></g>
+      <g id="leaders"></g>
+    </svg>
+    <div id="hud"></div>
+    <div id="veil"></div>
+  </div>
+
+<script>
+(function () {
+  'use strict';
+
+  /* =====================================================================
+     projection:  x → right, y → up, z → into the chassis (up-right on screen)
+     ===================================================================== */
+  var NS = 'http://www.w3.org/2000/svg';
+  var OX = 700, OY = 730, DEP = 0.52, VER = -0.40;
+
+  function P(x, y, z) { return [OX + x + DEP * z, OY - y + VER * z]; }
+  function nf(v) { return Math.round(v * 100) / 100; }
+  function clamp01(v) { return v < 0 ? 0 : v > 1 ? 1 : v; }
+  function smooth(a, b, x) { var u = clamp01((x - a) / (b - a)); return u * u * (3 - 2 * u); }
+  function lerp(a, b, u) { return a + (b - a) * u; }
+
+  function el(tag, cls, parent, attrs) {
+    var n = document.createElementNS(NS, tag);
+    if (cls) n.setAttribute('class', cls);
+    if (attrs) for (var k in attrs) n.setAttribute(k, attrs[k]);
+    parent.appendChild(n);
+    return n;
+  }
+  function poly(parent, arr, cls) {
+    var pts = [];
+    for (var i = 0; i < arr.length; i++) pts.push(nf(arr[i][0]) + ',' + nf(arr[i][1]));
+    return el('polygon', cls, parent, { points: pts.join(' ') });
+  }
+  function grp(parent, cls) { return el('g', cls || null, parent); }
+
+  /* every solid registers its volume so ?audit can prove nothing interpenetrates */
+  var PARTS = [];
+  function reg(name, x, y, z, w, h, d) {
+    PARTS.push({ n: name, x0: x, y0: y, z0: z, x1: x + w, y1: y + h, z1: z + d });
+  }
+
+  function box(parent, x, y, z, w, h, d, cls, name) {
+    if (name) reg(name, x, y, z, w, h, d);
+    poly(parent, [P(x, y + h, z), P(x + w, y + h, z), P(x + w, y + h, z + d), P(x, y + h, z + d)], cls + ' ft');
+    poly(parent, [P(x + w, y, z), P(x + w, y, z + d), P(x + w, y + h, z + d), P(x + w, y + h, z)], cls + ' fs');
+    poly(parent, [P(x, y, z), P(x + w, y, z), P(x + w, y + h, z), P(x, y + h, z)], cls + ' ff');
+  }
+  function slab(parent, x, z, w, d, y, cls) {
+    return poly(parent, [P(x, y, z), P(x + w, y, z), P(x + w, y, z + d), P(x, y, z + d)], cls);
+  }
+  function frect(parent, x1, y1, x2, y2, z, cls) {
+    return poly(parent, [P(x1, y1, z), P(x2, y1, z), P(x2, y2, z), P(x1, y2, z)], cls);
+  }
+  function seg(parent, a, b, cls) {
+    var A = P(a[0], a[1], a[2]), B = P(b[0], b[1], b[2]);
+    return el('line', cls, parent, { x1: nf(A[0]), y1: nf(A[1]), x2: nf(B[0]), y2: nf(B[1]) });
+  }
+  function dot(parent, x, y, z, r, cls) {
+    var C = P(x, y, z);
+    return el('circle', cls, parent, { cx: nf(C[0]), cy: nf(C[1]), r: r });
+  }
+
+  /* =====================================================================
+     scene
+     ===================================================================== */
+  var world = document.getElementById('world');
+  var camG = document.getElementById('camera');
+  var stage = document.getElementById('stage');
+  var hud = document.getElementById('hud');
+  var veil = document.getElementById('veil');
+  var leaderG = document.getElementById('leaders');
+
+  /* ---- ghost envelope (the chassis footprint, stays put) ---- */
+  var gEnv = grp(world);
+  poly(gEnv, [P(0, 0, -14), P(600, 0, -14), P(600, 330, -14), P(0, 330, -14)], 'ghost');
+  poly(gEnv, [P(0, 330, -14), P(600, 330, -14), P(600, 330, 300), P(0, 330, 300)], 'ghost');
+  poly(gEnv, [P(600, 0, -14), P(600, 0, 300), P(600, 330, 300), P(600, 330, -14)], 'ghost');
+  seg(gEnv, [0, 0, 300], [600, 0, 300], 'ghost');
+  seg(gEnv, [0, 0, 300], [0, 330, 300], 'ghost');
+
+  /* ---- chassis floor (under everything) ---- */
+  var gFloor = grp(world);
+  box(gFloor, 0, 0, 0, 600, 8, 300, 'st2 sh plate', 'floor');
+
+  /* ---- far side wall: built early so it can never paint over the trays ---- */
+  var gLeft = grp(world);
+  box(gLeft, 0, 8, 0, 8, 314, 300, 'st1 sh', 'wall-left');
+
+  /* ---- power: twelve supplies, two rows of six, at the rear ---- */
+  var gPower = grp(world);
+  for (var prow = 0; prow < 2; prow++) {
+    for (var pcol = 0; pcol < 6; pcol++) {
+      var px = 10 + pcol * 98, py = 132 + prow * 40;
+      box(gPower, px, py, 206, 90, 32, 80, 'st1', 'psu');
+      /* rear module front face: vent field, latch bar, status led */
+      for (var pv = 0; pv < 4; pv++) frect(gPower, px + 10, py + 7 + pv * 3.4, px + 78, py + 8.4 + pv * 3.4, 205.6, 'l3');
+      frect(gPower, px + 10, py + 23, px + 78, py + 24.6, 205.6, 'l2');
+      dot(gPower, px + 84, py + 16, 205.6, 1.7, 'led');
+    }
+  }
+
+  /* ---- main board: cpu, memory, storage, network ---- */
+  var gBoard = grp(world);
+  box(gBoard, 20, 20, 185, 560, 8, 105, 'st2 plate', 'mainboard');
+  var zCpu = grp(gBoard), zMem = grp(gBoard), zSto = grp(gBoard), zNet = grp(gBoard);
+  var boardZones = [zCpu, zMem, zSto, zNet];
+
+  /* two cpu sockets with finned heatsinks */
+  for (var c = 0; c < 2; c++) {
+    var cz = 190 + c * 52;
+    box(zCpu, 40, 28, cz, 105, 44, 46, 'st1', 'cpu');
+    for (var f = 0; f < 9; f++) seg(zCpu, [46 + f * 11.5, 72.4, cz + 4], [46 + f * 11.5, 72.4, cz + 42], 'l2');
+    frect(zCpu, 40, 28, 145, 30, cz - 0.4, 'l3');
+  }
+
+  /* memory banks: eight dimms per channel row, sixteen in total */
+  for (var mrow = 0; mrow < 2; mrow++) {
+    var mz = 196 + mrow * 50;
+    for (var md = 0; md < 8; md++) {
+      var mx = 160 + md * 16;
+      box(zMem, mx, 28, mz, 8, 40, 40, 'st2', 'dimm');
+      frect(zMem, mx + 1, 63, mx + 7, 66, mz - 0.4, 'l3');
+    }
+  }
+
+  /* cache storage: eight e1.s drives */
+  for (var s = 0; s < 8; s++) {
+    var sx = 300 + s * 34;
+    box(zSto, sx, 28, 196, 26, 46, 24, 'st1', 'e1s');
+    frect(zSto, sx + 4, 32, sx + 22, 35, 195.6, 'l3');
+    frect(zSto, sx + 4, 66, sx + 22, 70, 195.6, 'l2');
+    frect(zSto, sx + 10, 42, sx + 16, 60, 195.6, 'l3');
+  }
+
+  /* network: eight osfp cages on two cards */
+  for (var n = 0; n < 2; n++) {
+    var nx = 300 + n * 136;
+    box(zNet, nx, 28, 246, 128, 42, 40, 'st1', 'nic');
+    for (var p = 0; p < 4; p++) {
+      frect(zNet, nx + 10 + p * 28, 34, nx + 32 + p * 28, 52, 245.6, 'l2');
+    }
+  }
+
+  /* ---- nvlink fabric board ---- */
+  var gFabric = grp(world);
+  box(gFabric, 20, 58, 55, 560, 8, 115, 'st2 plate', 'fabric-tray');
+  var chips = [];
+  for (var ch = 0; ch < 4; ch++) {
+    var chx = 45 + ch * 130;
+    var cg = grp(gFabric);
+    chips.push(cg);
+    box(cg, chx, 66, 75, 100, 6, 50, 'st1', 'nvswitch');
+    for (var rr = 1; rr <= 2; rr++) {
+      slab(cg, chx - rr * 10, 75 - rr * 10, 100 + rr * 20, 50 + rr * 20, 66.2, 'l3');
+    }
+    slab(cg, chx + 34, 88, 32, 24, 72.2, 'st3 pkg');
+  }
+
+  /* ---- compute tray: eight gpu modules ---- */
+  var gCompute = grp(world);
+  box(gCompute, 20, 118, 55, 560, 10, 120, 'st2 plate', 'gpu-baseboard');
+  var gpuMods = [];
+  for (var row = 0; row < 2; row++) {
+    for (var g = 0; g < 4; g++) {
+      var mg = grp(gCompute);
+      gpuMods.push(mg);
+      var gx = 20 + g * 140, gz = row ? 122 : 62;
+      box(mg, gx, 128, gz, 128, 30, 52, 'st1', 'gpu-module');
+      /* package */
+      slab(mg, gx + 35, gz + 3, 58, 46, 158.25, 'st2 pkg');
+      slab(mg, gx + 39, gz + 7, 50, 38, 158.32, 'l3');
+      slab(mg, gx + 52, gz + 14, 24, 24, 158.45, 'st2 die');
+      slab(mg, gx + 55, gz + 17, 18, 18, 158.52, 'l3');
+      for (var h = 0; h < 4; h++) {
+        slab(mg, gx + 37, gz + 4 + h * 11, 10, 10, 158.45, 'st2 hbm');
+        slab(mg, gx + 81, gz + 4 + h * 11, 10, 10, 158.45, 'st2 hbm');
+        slab(mg, gx + 39.5, gz + 6.5 + h * 11, 5, 5, 158.52, 'l3');
+        slab(mg, gx + 83.5, gz + 6.5 + h * 11, 5, 5, 158.52, 'l3');
+      }
+      /* corner marks */
+      slab(mg, gx + 6, gz + 6, 5, 5, 158.3, 'l3');
+      slab(mg, gx + 117, gz + 6, 5, 5, 158.3, 'l3');
+      slab(mg, gx + 6, gz + 41, 5, 5, 158.3, 'l3');
+      slab(mg, gx + 117, gz + 41, 5, 5, 158.3, 'l3');
+    }
+  }
+
+  /* ---- side wall (near side only: the far wall is built at the bottom of the stack) ---- */
+  var gRight = grp(world);
+  box(gRight, 592, 8, 0, 8, 314, 300, 'st1 sh', 'wall-right');
+  for (var rv = 0; rv < 6; rv++) seg(gRight, [599.6, 40 + rv * 46, 40], [599.6, 40 + rv * 46, 260], 'l3');
+
+  /* ---- front assembly: fan cage, then a bezel that sits proud of the chassis ---- */
+  var gFront = grp(world);
+  box(gFront, 14, 14, 8, 572, 302, 40, 'st2 plate', 'fan-cage');
+  for (var frow = 0; frow < 2; frow++) {
+    for (var fcol = 0; fcol < 4; fcol++) {
+      fan(gFront, 14 + 143 * (fcol + 0.5), 14 + 75.5 + frow * 151, 64, fcol * 0.42 + frow * 0.9, 7.2);
+    }
+  }
+  /* bezel frame: entirely in front of the chassis face, so it touches nothing */
+  box(gFront, 0, 316, -14, 600, 14, 14, 'st1', 'bezel-top');
+  box(gFront, 0, 0, -14, 600, 14, 14, 'st1', 'bezel-bottom');
+  box(gFront, 0, 14, -14, 14, 302, 14, 'st1', 'bezel-left');
+  box(gFront, 586, 14, -14, 14, 302, 14, 'st1', 'bezel-right');
+  /* pull handles */
+  box(gFront, 3, 40, -22, 10, 250, 8, 'st1', 'handle-left');
+  box(gFront, 587, 40, -22, 10, 250, 8, 'st1', 'handle-right');
+  /* bezel face: controls on the top rail, vents on the bottom rail, inset accent line */
+  dot(gFront, 30, 323, -14.6, 4.2, 'f2 l2');
+  dot(gFront, 47, 323, -14.6, 3.2, 'f1 l2');
+  dot(gFront, 61, 323, -14.6, 1.8, 'led');
+  frect(gFront, 76, 322.4, 348, 323.4, -14.6, 'l3');
+  frect(gFront, 520, 322.4, 572, 323.4, -14.6, 'l3');
+  for (var l = 0; l < 3; l++) frect(gFront, 26 + l * 16, 4, 34 + l * 16, 10, -14.6, 'l2');
+  frect(gFront, 14, 314.6, 586, 315.6, -14.4, 'l3');
+  frect(gFront, 14, 14.4, 586, 15.4, -14.4, 'l3');
+  frect(gFront, 14.4, 15, 15.4, 315, -14.4, 'l3');
+  frect(gFront, 584.6, 15, 585.6, 315, -14.4, 'l3');
+
+  function fan(parent, cx, cy, R, phase, z) {
+    var C = P(cx, cy, z);
+    el('circle', 'f1 st3', parent, { cx: nf(C[0]), cy: nf(C[1]), r: R });
+    el('circle', 'f1 l3', parent, { cx: nf(C[0]), cy: nf(C[1]), r: R * 1.045 });
+    for (var i = 0; i < 9; i++) {
+      var a = phase + i * Math.PI * 2 / 9;
+      var a2 = a + 0.34;
+      var p0 = P(cx + R * 0.30 * Math.cos(a), cy + R * 0.30 * Math.sin(a), z);
+      var pc = P(cx + R * 0.70 * Math.cos(a + 0.20), cy + R * 0.70 * Math.sin(a + 0.20), z);
+      var p1 = P(cx + R * 0.94 * Math.cos(a2), cy + R * 0.94 * Math.sin(a2), z);
+      el('path', 'l4', parent, {
+        d: 'M' + nf(p0[0]) + ',' + nf(p0[1]) +
+           ' Q' + nf(pc[0]) + ',' + nf(pc[1]) + ' ' + nf(p1[0]) + ',' + nf(p1[1]),
+        fill: 'none'
+      });
+    }
+    el('circle', 'f2 l2', parent, { cx: nf(C[0]), cy: nf(C[1]), r: R * 0.185 });
+  }
+
+  /* ---- shell lid ---- */
+  var gTop = grp(world);
+  box(gTop, 0, 322, 0, 600, 8, 300, 'st1 sh', 'lid');
+  poly(gTop, [P(22, 330.4, 22), P(578, 330.4, 22), P(578, 330.4, 278), P(22, 330.4, 278)], 'l3');
+  seg(gTop, [22, 330.4, 150], [578, 330.4, 150], 'l3');
+
+  /* =====================================================================
+     data
+     ===================================================================== */
+  var GROUPS = {
+    board:   { g: gBoard,   dx:  10, dy:  -25, delay: 0.00 },
+    fabric:  { g: gFabric,  dx:  15, dy: -135, delay: 0.10 },
+    compute: { g: gCompute, dx:  30, dy: -170, delay: 0.15 },
+    power:   { g: gPower,   dx:  30, dy: -200, delay: 0.07 },
+    front:   { g: gFront,   dx: -170, dy:  240, delay: 0.21 },
+    top:     { g: gTop,     dx:   0, dy: -215, delay: 0.25 },
+    left:    { g: gLeft,    dx: -60, dy:  -30, delay: 0.17 },
+    right:   { g: gRight,   dx:  60, dy:  -30, delay: 0.17 },
+    floor:   { g: gFloor,   dx:   0, dy:    0, delay: 0.00 }
+  };
+
+  var SUBZONES = [
+    { group: 'compute', els: gpuMods,    key: 'mod' },
+    { group: 'board',   els: boardZones, key: 'zone' },
+    { group: 'fabric',  els: chips,      key: 'chip' }
+  ];
+
+  var BEAT_T0 = 4.15, BEAT_DUR = 1.6;
+
+  /* sub = the part of the module we frame, in assembled world units */
+  var BEATS = [
+    { group: 'compute', sub: [20, 118, 55, 580, 162, 175], mw: 1020, mh: 600, an: [560, 158, 140],
+      n: '01', title: 'GPU Module', meta: 'COMPUTE',
+      body: 'Eight accelerated compute engines for training, fine-tuning and inference.' },
+    { group: 'compute', mod: [2], sub: [335, 128, 65, 393, 162, 115], mw: 780, mh: 560, an: [391, 158, 88],
+      n: '02', title: 'HBM Memory', meta: 'ON PACKAGE',
+      body: 'High-bandwidth memory stacked beside each die, keeping data next to the compute.' },
+    { group: 'board', zone: [0, 1], sub: [40, 28, 190, 145, 72, 288], mw: 960, mh: 560, an: [140, 58, 236],
+      n: '03', title: 'CPU', meta: 'CONTROL',
+      body: 'The control plane. Schedules work and keeps every accelerator fed.' },
+    { group: 'fabric', chip: [1], sub: [165, 66, 70, 285, 74, 130], mw: 960, mh: 460, an: [272, 72, 100],
+      n: '04', title: 'Switch Fabric', meta: 'FABRIC',
+      body: 'All-to-all fabric. Every GPU reads and writes the memory of every other GPU.' },
+    { group: 'board', zone: [2], sub: [300, 28, 196, 564, 74, 220], mw: 1020, mh: 520, an: [556, 60, 204],
+      n: '05', title: 'Storage', meta: 'LOCAL STORE',
+      body: 'Local NVMe for datasets, checkpoints and model weights.' },
+    { group: 'board', zone: [3], sub: [300, 28, 246, 564, 70, 286], mw: 1020, mh: 520, an: [560, 56, 262],
+      n: '06', title: 'Network', meta: 'SCALE-OUT',
+      body: 'Scale-out links to every other node in the cluster.' },
+    { group: 'power', sub: [10, 132, 206, 590, 204, 286], mw: 1020, mh: 520, an: [251, 148, 206],
+      n: '07', title: 'Power', meta: 'POWER',
+      body: 'Twelve redundant supplies, even at sustained full load.' },
+    { group: 'front', sub: [0, 0, -22, 600, 330, 48], mw: 1010, mh: 640, an: [371.5, 240.5, 7],
+      n: '08', title: 'Cooling', meta: 'AIRFLOW',
+      body: 'Eight fan modules move air front to back.' }
+  ];
+
+  BEATS.forEach(function (b, i) {
+    b.t = BEAT_T0 + i * BEAT_DUR;
+    b.t1 = b.t + BEAT_DUR;
+  });
+
+  /* ---- annotation cards ---- */
+  var cards = BEATS.map(function (b) {
+    var root = document.createElement('div');
+    root.className = 'anno';
+    root.innerHTML =
+      '<div class="idx"><span class="n">' + b.n + '</span>' +
+      '<i></i><span>0' + BEATS.length + '</span></div>' +
+      '<h2>' + b.title + '</h2><p>' + b.body + '</p>' +
+      '<div class="meta">' + b.meta + '</div>';
+    hud.appendChild(root);
+    return {
+      root: root,
+      idx: root.querySelector('.idx'),
+      rule: root.querySelector('.idx i'),
+      h2: root.querySelector('h2'),
+      p: root.querySelector('p'),
+      meta: root.querySelector('.meta'),
+      b: b
+    };
+  });
+
+  /* ---- leader ---- */
+  var lLine = el('line', 'l1', leaderG, { x1: 0, y1: 0, x2: 0, y2: 0 });
+  lLine.style.stroke = 'rgba(255,255,255,.4)';
+  var lDot = el('circle', 'led', leaderG, { cx: 0, cy: 0, r: 2.6 });
+  var lEnd = el('rect', 'led', leaderG, { x: 0, y: 0, width: 0, height: 0 });
+
+  /* =====================================================================
+     camera
+     ===================================================================== */
+  var EX0 = 1.80, EX1 = 3.35, CL0 = 16.95, CL1 = 18.20, TOTAL = 20.0;
+
+  function beatPoint(b, key) {
+    var G = GROUPS[b.group];
+    var q = P(b[key][0], b[key][1], b[key][2]);
+    return [q[0] + G.dx, q[1] + G.dy];
+  }
+
+  /* frames the module: fits its projected box into mw x mh, centred on (sx, sy) */
+  function frameOf(b) {
+    var G = GROUPS[b.group], r = b.sub;
+    var xs = [], ys = [];
+    for (var i = 0; i < 8; i++) {
+      var q = P(i & 1 ? r[3] : r[0], i & 2 ? r[4] : r[1], i & 4 ? r[5] : r[2]);
+      xs.push(q[0] + G.dx); ys.push(q[1] + G.dy);
+    }
+    var x0 = Math.min.apply(null, xs), x1 = Math.max.apply(null, xs);
+    var y0 = Math.min.apply(null, ys), y1 = Math.max.apply(null, ys);
+    var s = Math.min(b.mw / (x1 - x0 + 1), b.mh / (y1 - y0 + 1), 9);
+    return { s: s, cx: (x0 + x1) / 2, cy: (y0 + y1) / 2, sx: 960, sy: 520 };
+  }
+
+  var CAM = [{ t: 0, cx: 1078, cy: 505, s: 1.06, sx: 1020, sy: 525 }];
+  CAM.push({ t: EX0, cx: 1078, cy: 505, s: 1.06, sx: 1020, sy: 525 });
+  CAM.push({ t: EX1 + 0.25, cx: 1030, cy: 517, s: 0.82, sx: 1000, sy: 520 });
+  CAM.push({ t: BEAT_T0, cx: 1030, cy: 517, s: 0.82, sx: 1000, sy: 520 });
+  BEATS.forEach(function (b, i) {
+    b.cam = frameOf(b);
+    CAM.push({ t: b.t + 0.55, cx: b.cam.cx, cy: b.cam.cy, s: b.cam.s, sx: b.cam.sx, sy: b.cam.sy });
+    CAM.push({ t: b.t1, cx: b.cam.cx, cy: b.cam.cy, s: b.cam.s, sx: b.cam.sx, sy: b.cam.sy });
+  });
+  CAM.push({ t: CL1 + 0.25, cx: 1078, cy: 505, s: 1.06, sx: 1020, sy: 525 });
+  CAM.push({ t: TOTAL, cx: 1078, cy: 505, s: 1.06, sx: 1020, sy: 525 });
+
+  function camAt(t) {
+    if (t <= CAM[0].t) return CAM[0];
+    for (var i = 0; i < CAM.length - 1; i++) {
+      var a = CAM[i], b = CAM[i + 1];
+      if (t <= b.t) {
+        var dt = b.t - a.t;
+        var u = dt > 0 ? (t - a.t) / dt : 1;
+        u = u < 0.5 ? 4 * u * u * u : 1 - Math.pow(-2 * u + 2, 3) / 2;
+        return {
+          cx: lerp(a.cx, b.cx, u), cy: lerp(a.cy, b.cy, u),
+          s: Math.exp(lerp(Math.log(a.s), Math.log(b.s), u)),
+          sx: lerp(a.sx, b.sx, u), sy: lerp(a.sy, b.sy, u)
+        };
+      }
+    }
+    return CAM[CAM.length - 1];
+  }
+
+  /* =====================================================================
+     render
+     ===================================================================== */
+  function explodeAt(t, delay) {
+    var a = smooth(EX0 + delay, EX1 + delay, t);
+    var c = smooth(CL0 + delay, CL1 + delay, t);
+    return a * (1 - c);
+  }
+
+  function beatWeight(t, b) {
+    var a = smooth(b.t + 0.05, b.t + 0.50, t);
+    var d = 1 - smooth(b.t1 - 0.26, b.t1 + 0.02, t);
+    return Math.min(a, d);
+  }
+
+  function render(t) {
+    veil.style.opacity = String(introFade ? 1 - smooth(0, 0.45, t) : 0);
+
+    /* camera */
+    var c = camAt(t);
+    var tx = c.sx - c.cx * c.s, ty = c.sy - c.cy * c.s;
+    camG.setAttribute('transform', 'translate(' + nf(tx) + ' ' + nf(ty) + ') scale(' + c.s.toFixed(4) + ')');
+
+    /* large surfaces dissolve as the camera moves in */
+    world.style.setProperty('--pf', Math.max(0.22, Math.min(1, (3.0 - c.s) / 1.8)).toFixed(3));
+
+    /* explode */
+    var pTop = 0;
+    for (var name in GROUPS) {
+      var G = GROUPS[name];
+      var p = explodeAt(t, G.delay);
+      if (name === 'top') pTop = p;
+      G.g.setAttribute('transform', 'translate(' + nf(G.dx * p) + ' ' + nf(G.dy * p) + ')');
+    }
+    const shellFade = (1 - pTop).toFixed(3);
+    gTop.style.fillOpacity = shellFade;
+    gLeft.style.fillOpacity = shellFade;
+    gRight.style.fillOpacity = shellFade;
+    gFloor.style.fillOpacity = shellFade;
+
+    /* focus */
+    var maxW = 0, focus = {};
+    for (var i = 0; i < BEATS.length; i++) {
+      var w = beatWeight(t, BEATS[i]);
+      if (w > maxW) maxW = w;
+      var gg = BEATS[i].group;
+      if (!(gg in focus) || w > focus[gg]) focus[gg] = w;
+    }
+    for (var name2 in GROUPS) {
+      var f = focus[name2] || 0;
+      var isShell = (name2 === 'top' || name2 === 'left' || name2 === 'right' || name2 === 'floor');
+      var base = isShell ? 0.72 : 1;
+      GROUPS[name2].g.style.opacity = (base * (1 - 0.78 * maxW * (1 - f))).toFixed(3);
+    }
+
+    /* sub-zone focus (which module inside a group is being shown) */
+    for (var zi = 0; zi < SUBZONES.length; zi++) {
+      var sz = SUBZONES[zi], gw = 0, q;
+      for (q = 0; q < BEATS.length; q++) if (BEATS[q].group === sz.group) gw = Math.max(gw, beatWeight(t, BEATS[q]));
+      for (var ei = 0; ei < sz.els.length; ei++) {
+        if (gw < 0.002) { sz.els[ei].style.opacity = '1'; continue; }
+        var zf = 0;
+        for (q = 0; q < BEATS.length; q++) {
+          if (BEATS[q].group !== sz.group) continue;
+          var sel = BEATS[q][sz.key];
+          if (!sel || sel.indexOf(ei) >= 0) zf = Math.max(zf, beatWeight(t, BEATS[q]));
+        }
+        sz.els[ei].style.opacity = (1 - 0.83 * gw * (1 - zf)).toFixed(3);
+      }
+    }
+
+    /* cards + leader */
+    var bestA = 0, bestI = -1;
+    for (var j = 0; j < cards.length; j++) {
+      var b = BEATS[j];
+      var a = smooth(b.t + 0.26, b.t + 0.64, t) * (1 - smooth(b.t1 - 0.30, b.t1 - 0.05, t));
+      var card = cards[j];
+      card.root.style.opacity = a.toFixed(3);
+      if (a > bestA) { bestA = a; bestI = j; }
+      var a2 = smooth(b.t + 0.34, b.t + 0.72, t) * (1 - smooth(b.t1 - 0.30, b.t1 - 0.05, t));
+      var a3 = smooth(b.t + 0.30, b.t + 0.68, t) * (1 - smooth(b.t1 - 0.30, b.t1 - 0.05, t));
+      card.rule.style.transform = 'scaleX(' + a3.toFixed(3) + ')';
+      card.h2.style.transform = 'translateY(' + nf(12 * (1 - a2)) + 'px)';
+      card.p.style.opacity = a2.toFixed(3);
+      card.meta.style.opacity = a3.toFixed(3);
+      card.idx.style.transform = 'translateX(' + nf(-10 * (1 - a3)) + 'px)';
+    }
+
+    if (bestI >= 0 && bestA > 0.01) {
+      var bb = BEATS[bestI];
+      var q = beatPoint(bb, 'an');
+      var ax = q[0] * c.s + tx, ay = q[1] * c.s + ty;
+      var ex = 1508, ey = 384;
+      var draw = smooth(bb.t + 0.20, bb.t + 0.72, t);
+      leaderG.style.opacity = (bestA * 0.9).toFixed(3);
+      lLine.setAttribute('x1', nf(ax)); lLine.setAttribute('y1', nf(ay));
+      lLine.setAttribute('x2', nf(lerp(ax, ex - 8, draw))); lLine.setAttribute('y2', nf(lerp(ay, ey, draw)));
+      lDot.setAttribute('cx', nf(ax)); lDot.setAttribute('cy', nf(ay));
+      lEnd.setAttribute('x', nf(ex - 3)); lEnd.setAttribute('y', nf(ey - 3));
+      lEnd.setAttribute('width', 6); lEnd.setAttribute('height', 6);
+      lEnd.style.opacity = draw.toFixed(3);
+      lDot.style.opacity = draw.toFixed(3);
+    } else {
+      leaderG.style.opacity = '0';
+    }
+  }
+
+  /* =====================================================================
+     playback
+     ===================================================================== */
+  var T = 0, playing = true, raf = 0, last = 0, introFade = true;
+
+  function tick(now) {
+    if (!last) last = now;
+    var dt = (now - last) / 1000;
+    last = now;
+    if (playing) {
+      T += dt;
+      if (T > TOTAL) { T -= TOTAL; introFade = false; }
+    }
+    render(T);
+    raf = requestAnimationFrame(tick);
+  }
+
+  function fit() {
+    var s = Math.min(window.innerWidth / 1920, window.innerHeight / 1080);
+    stage.style.setProperty('--fit', String(s));
+  }
+
+  window.seek = function (t) { playing = false; T = t; render(t); };
+  window.play = function () { playing = true; last = 0; };
+  window.pause = function () { playing = false; };
+
+  var qs = new URLSearchParams(location.search);
+  if (qs.has('only')) {
+    var keep = qs.get('only').split(',');
+    for (var gn in GROUPS) {
+      if (keep.indexOf(gn) < 0) GROUPS[gn].g.style.display = 'none';
+    }
+    gEnv.style.display = 'none';
+  }
+  if (qs.has('hidehud')) hud.style.display = 'none';
+  if (qs.has('t')) {
+    playing = false;
+    render(parseFloat(qs.get('t')) || 0);
+  } else {
+    render(0);
+    raf = requestAnimationFrame(tick);
+  }
+
+  /* ?audit — reports every pair of solids that occupy the same volume */
+  if (qs.has('audit')) {
+    var hits = [], TOL = 0.6;
+    for (var ai = 0; ai < PARTS.length; ai++) {
+      for (var bi = ai + 1; bi < PARTS.length; bi++) {
+        var A = PARTS[ai], B = PARTS[bi];
+        var ox = Math.min(A.x1, B.x1) - Math.max(A.x0, B.x0);
+        var oy = Math.min(A.y1, B.y1) - Math.max(A.y0, B.y0);
+        var oz = Math.min(A.z1, B.z1) - Math.max(A.z0, B.z0);
+        if (ox > TOL && oy > TOL && oz > TOL) {
+          hits.push(A.n + '(' + [A.x0, A.y0, A.z0].join(',') + ')' + ' x ' +
+                    B.n + '(' + [B.x0, B.y0, B.z0].join(',') + ')' + ' => ' +
+                    nf(ox) + '/' + nf(oy) + '/' + nf(oz));
+        }
+      }
+    }
+    var pre = document.createElement('pre');
+    pre.id = 'audit';
+    pre.textContent = 'AUDIT parts=' + PARTS.length + ' overlaps=' + hits.length + '\n' + hits.join('\n');
+    document.body.appendChild(pre);
+  }
+
+  window.addEventListener('resize', fit);
+  fit();
+
+  window.addEventListener('keydown', function (e) {
+    if (e.code === 'Space') { e.preventDefault(); playing ? window.pause() : window.play(); }
+  });
+})();
+</script>
+</body>
+</html>

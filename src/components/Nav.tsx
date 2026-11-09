@@ -41,7 +41,7 @@ export default function Nav({ locale, dict }: { locale: Locale; dict: Dict }) {
           : 'border-line'
       }`}
     >
-      <div className="u-container flex h-[84px] items-center gap-4 xl:gap-6">
+      <div className="u-container flex h-[var(--dock-h)] items-center gap-4 xl:gap-6">
         <Link href={`/${locale}/`} className="mr-auto flex shrink-0 items-center gap-2.5" aria-label="集培优 COREFIX PRO">
           <img
             src="/logo-corefix.png"
@@ -105,7 +105,7 @@ export default function Nav({ locale, dict }: { locale: Locale; dict: Dict }) {
       </div>
 
       {open && (
-        <div className="fixed inset-x-0 top-[84px] bottom-0 z-40 flex flex-col justify-between border-t border-line bg-bg px-5 py-8 lg:hidden">
+        <div className="fixed inset-x-0 top-[var(--dock-h)] bottom-0 z-40 flex flex-col justify-between border-t border-line bg-bg px-5 py-8 lg:hidden">
           <nav className="flex flex-col">
             {dict.nav.links.map((l) => (
               <Link

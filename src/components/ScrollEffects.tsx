@@ -120,7 +120,8 @@ export default function ScrollEffects() {
       const target = document.querySelector(href)
       if (!target) return
       e.preventDefault()
-      if (lenis) lenis.scrollTo(target as HTMLElement, { offset: -84 })
+      const dock = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--dock-h')) || 0
+      if (lenis) lenis.scrollTo(target as HTMLElement, { offset: -dock })
       else (target as HTMLElement).scrollIntoView({ behavior: 'smooth' })
     }
     document.addEventListener('click', onClick)

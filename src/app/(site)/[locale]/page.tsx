@@ -18,8 +18,8 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
   return (
     <>
       {/* ---------- hero ---------- */}
-      <section className="relative overflow-hidden border-b border-line2">
-        <div className="relative">
+      <section className="relative flex min-h-[calc(100svh_-_var(--dock-h))] flex-col overflow-hidden border-b border-line2">
+        <div className="relative flex flex-1 flex-col">
           {/* full-colour film; the copy sits on a black plate that fades out to the right */}
           <div className="pointer-events-none absolute inset-0 overflow-hidden" aria-hidden="true">
             <div className="absolute inset-0">
@@ -28,8 +28,8 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
             <div className="absolute inset-0 bg-gradient-to-r from-black/90 via-black/60 via-45% to-transparent" />
           </div>
 
-          <div className="u-container relative pb-12 pt-14 lg:pb-16 lg:pt-20">
-            <div className="on-dark max-w-[820px]">
+          <div className="u-container relative flex flex-1 flex-col pb-12 pt-14 lg:pb-16 lg:pt-20">
+            <div className="on-dark flex w-full max-w-[820px] flex-1 flex-col">
               <p className="u-label flex items-center gap-2.5" data-hero-fade>
                 <span className="inline-block h-px w-4 bg-ink" />
                 {d.hero.eyebrow}
@@ -62,45 +62,23 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
                 </Link>
               </div>
 
-              <Link
-                href={`/${locale}/network/`}
-                className="group mt-9 flex items-center justify-between gap-4 border border-line2 px-5 py-4 transition-colors hover:bg-bg2"
-                data-hero-fade
-              >
-                <span className="u-mono text-[9.5px] leading-[1.7] tracking-[0.16em] text-faint">
-                  {d.hero.netBar.label}
-                </span>
-                <span className="flex items-center gap-2 whitespace-nowrap text-[12px] font-semibold">
-                  {d.hero.netBar.cta}
-                  <span className="u-mono transition-transform group-hover:translate-x-1">→</span>
-                </span>
-              </Link>
+              <div className="mt-auto pt-9">
+                <Link
+                  href={`/${locale}/network/`}
+                  className="group flex items-center justify-between gap-4 border border-line2 px-5 py-4 transition-colors hover:bg-bg2"
+                  data-hero-fade
+                >
+                  <span className="u-mono text-[9.5px] leading-[1.7] tracking-[0.16em] text-faint">
+                    {d.hero.netBar.label}
+                  </span>
+                  <span className="flex items-center gap-2 whitespace-nowrap text-[12px] font-semibold">
+                    {d.hero.netBar.cta}
+                    <span className="u-mono transition-transform group-hover:translate-x-1">→</span>
+                  </span>
+                </Link>
+              </div>
             </div>
           </div>
-        </div>
-
-        <div className="u-container relative">
-          <dl className="grid grid-cols-2 border-t border-line2 lg:grid-cols-4">
-            {d.stats.map((s, i) => (
-              <div
-                key={s.l}
-                className={`border-line py-6 lg:py-7 ${i < 2 ? 'border-b lg:border-b-0' : ''} ${
-                  i % 2 === 1 ? '' : 'pr-5 lg:pr-8'
-                } ${i > 0 ? 'lg:border-l lg:pl-8' : ''} ${i === 1 ? 'border-l pl-5 lg:pl-8' : ''} ${
-                  i === 2 ? 'lg:border-l-0' : ''
-                }`}
-              >
-                <dt
-                  className="u-mono text-[38px] font-semibold leading-none tracking-[-0.03em]"
-                  data-count={s.v}
-                >
-                  {s.v}
-                </dt>
-                <dd className="mt-3 text-[11.5px] tracking-[0.05em] text-faint">{s.l}</dd>
-              </div>
-            ))}
-          </dl>
-          <div className="border-t border-line2" />
         </div>
       </section>
 
