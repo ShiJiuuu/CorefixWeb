@@ -71,8 +71,9 @@ export function CtaBand({
   buttons: Dict['cta']['buttons']
   locale: string
 }) {
+  // 隐藏：机器停一天，业务就少一天（CTA 栏）。保留源码，仅不显示
   return (
-    <section id="contact" className="border-t border-line2">
+    <section id="contact" className="hidden border-t border-line2">
       <div className="u-container flex flex-col gap-10 py-20 lg:flex-row lg:items-end lg:gap-16 lg:py-24">
         <div className="min-w-0 lg:flex-[1.25]" data-reveal>
           <p className="u-label">{eyebrow}</p>
