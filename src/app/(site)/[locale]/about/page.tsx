@@ -66,7 +66,7 @@ export default async function AboutPage({ params }: { params: Promise<{ locale: 
             <span className="u-mono text-[10px] tracking-[0.14em] text-faint">CERTIFIED</span>
           </div>
         </div>
-        <div className="mt-8 pb-14 lg:mt-10 lg:pb-20">
+        <div className="u-container mt-8 pb-14 lg:mt-10 lg:pb-20">
           <CertificateMarquee locale={locale as Locale} label={p.qualsTitle} />
         </div>
       </section>

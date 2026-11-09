@@ -39,7 +39,9 @@ const CERTS: Cert[] = [
  * One endless row of certificate scans. The list is rendered twice and the
  * track slides by exactly half its width, so the loop has no visible seam.
  * The animation is pure CSS: it starts with the page and keeps running while
- * the section is still off-screen (and it never pauses on hover).
+ * the section is still off-screen (and it never pauses on hover). The row sits
+ * inside the page container and is masked at both ends, so cards fade out
+ * instead of being cut off at the edges.
  */
 export default function CertificateMarquee({ locale, label }: { locale: Locale; label: string }) {
   const langs: Lang[] = locale === 'en' ? ['EN', 'CN'] : ['CN', 'EN']
@@ -51,8 +53,16 @@ export default function CertificateMarquee({ locale, label }: { locale: Locale; 
     })),
   )
 
+  const fade =
+    'linear-gradient(to right, transparent 0, #000 clamp(28px, 6vw, 88px), #000 calc(100% - clamp(28px, 6vw, 88px)), transparent 100%)'
+
   return (
-    <div className="overflow-hidden" role="group" aria-label={label}>
+    <div
+      className="overflow-hidden"
+      style={{ maskImage: fade, WebkitMaskImage: fade }}
+      role="group"
+      aria-label={label}
+    >
       <div className="flex w-max [animation:cf-marquee_30s_linear_infinite] motion-reduce:[animation:none]">
         {[...slides, ...slides].map((slide, i) => (
           <img
