@@ -49,7 +49,7 @@ export default function ThemeToggle() {
       onClick={toggle}
       className="group grid h-9 w-9 shrink-0 place-items-center rounded-full"
     >
-      <span className="grid h-7 w-7 place-items-center rounded-full bg-[#0a0a0a] transition-transform duration-300 ease-[cubic-bezier(0.2,0.8,0.2,1)] group-hover:scale-105 dark:ring-1 dark:ring-white/25">
+      <span className="grid h-8 w-8 place-items-center rounded-full bg-[#0a0a0a] transition-transform duration-300 ease-[cubic-bezier(0.2,0.8,0.2,1)] group-hover:scale-105 dark:ring-1 dark:ring-white/25">
         {/* moon — light mode */}
         <svg
           className="dark:hidden"

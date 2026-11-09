@@ -62,23 +62,27 @@ export default function LocaleSwitch({
         aria-haspopup="menu"
         aria-expanded={open}
         aria-label="Language"
-        className={`grid h-9 w-9 place-items-center text-ink transition-opacity hover:opacity-60 ${
-          open ? 'opacity-60' : ''
-        }`}
+        className="group grid h-9 w-9 shrink-0 place-items-center rounded-full"
       >
-        <svg
-          width="32"
-          height="32"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="1"
-          aria-hidden="true"
+        <span
+          className={`grid h-8 w-8 place-items-center rounded-full bg-[#0a0a0a] transition-transform duration-300 ease-[cubic-bezier(0.2,0.8,0.2,1)] group-hover:scale-105 dark:ring-1 dark:ring-white/25 ${
+            open ? 'scale-105' : ''
+          }`}
         >
-          <circle cx="12" cy="12" r="9" />
-          <path d="M3.6 9h16.8M3.6 15h16.8" />
-          <path d="M12 3c2.4 2.7 3.6 5.8 3.6 9s-1.2 6.3-3.6 9c-2.4-2.7-3.6-5.8-3.6-9S9.6 5.7 12 3Z" />
-        </svg>
+          <svg
+            width="16"
+            height="16"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="#A9CB39"
+            strokeWidth="1.5"
+            aria-hidden="true"
+          >
+            <circle cx="12" cy="12" r="7.6" />
+            <path d="M4.4 12h15.2" />
+            <ellipse cx="12" cy="12" rx="3.4" ry="7.6" />
+          </svg>
+        </span>
       </button>
 
       {open && (
