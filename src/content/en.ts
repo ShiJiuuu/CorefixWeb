@@ -443,14 +443,6 @@ export const en: Dict = {
         { v: '60+', l: 'Engineers' },
       ],
       qualsTitle: 'Certifications',
-      quals: ['ISO 9001 Quality Management', 'ISO 14001 Environmental Management', 'ISO 45001 Occupational Health & Safety', 'AAA credit rating (9 certificates)'],
-      contactTitle: 'Visit us',
-      contact: [
-        { k: 'Headquarters', v: 'Floor 5, Building 3, 299 Youle Road, Changning District, Shanghai' },
-        { k: 'Repair base', v: '1775 Qiushan Road, Nicheng, Pudong New Area, Shanghai' },
-        { k: 'Hotline', v: '021-5176-8787' },
-        { k: 'Hours', v: '24/7 response, including holidays' },
-      ],
     },
   },
 }

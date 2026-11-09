@@ -1,9 +1,9 @@
-import Link from 'next/link'
 import type { Metadata } from 'next'
 import { locales, type Locale } from '@/lib/i18n'
 import { getDict } from '@/content'
 import { pageMetadata } from '@/lib/seo'
 import { PageHeader, CtaBand } from '@/components/Sections'
+import CertificateMarquee from '@/components/CertificateMarquee'
 
 export function generateStaticParams() {
   return locales.map((locale) => ({ locale }))
@@ -60,42 +60,14 @@ export default async function AboutPage({ params }: { params: Promise<{ locale: 
       </section>
 
       <section className="border-y border-line2 bg-bg2/40">
-        <div className="u-container flex flex-col gap-12 py-14 lg:flex-row lg:gap-20 lg:py-20">
-          <div className="min-w-0 lg:flex-1">
-            <div className="mb-4 flex items-baseline justify-between border-b border-line2 pb-4">
-              <h2 className="text-[20px] font-semibold">{p.qualsTitle}</h2>
-              <span className="u-mono text-[10px] tracking-[0.14em] text-faint">CERTIFIED</span>
-            </div>
-            <ul>
-              {p.quals.map((q) => (
-                <li
-                  key={q}
-                  className="flex items-center justify-between border-b border-line py-4 text-[14.5px]"
-                >
-                  {q}
-                  <span className="u-mono text-[10px] text-faint">✓</span>
-                </li>
-              ))}
-            </ul>
+        <div className="u-container pt-14 lg:pt-20">
+          <div className="flex items-baseline justify-between border-b border-line2 pb-4">
+            <h2 className="text-[20px] font-semibold">{p.qualsTitle}</h2>
+            <span className="u-mono text-[10px] tracking-[0.14em] text-faint">CERTIFIED</span>
           </div>
-
-          <div className="min-w-0 lg:flex-1">
-            <div className="mb-4 flex items-baseline justify-between border-b border-line2 pb-4">
-              <h2 className="text-[20px] font-semibold">{p.contactTitle}</h2>
-              <span className="u-mono text-[10px] tracking-[0.14em] text-faint">CONTACT</span>
-            </div>
-            <dl>
-              {p.contact.map((c) => (
-                <div key={c.k} className="flex justify-between gap-6 border-b border-line py-4">
-                  <dt className="u-mono pt-1 text-[10px] tracking-[0.1em] text-faint">{c.k}</dt>
-                  <dd className="max-w-[320px] text-right text-[14px] leading-relaxed">{c.v}</dd>
-                </div>
-              ))}
-            </dl>
-            <Link href={`/${locale}/network/`} className="u-link mt-6 inline-flex">
-              {d.net.cta} <span className="text-faint">→</span>
-            </Link>
-          </div>
+        </div>
+        <div className="mt-8 pb-14 lg:mt-10 lg:pb-20">
+          <CertificateMarquee locale={locale as Locale} label={p.qualsTitle} />
         </div>
       </section>
 

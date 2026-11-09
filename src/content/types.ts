@@ -167,9 +167,6 @@ export type Dict = {
       paras: string[]
       facts: Metric[]
       qualsTitle: string
-      quals: string[]
-      contactTitle: string
-      contact: { k: string; v: string }[]
     }
   }
 }

@@ -10,12 +10,13 @@ const config = [
   ...compat.extends('next/core-web-vitals', 'next/typescript'),
   {
     // Static export runs with images.unoptimized, so plain <img> is intentional for the
-    // two brand assets that must also work without the Next image runtime.
+    // brand assets and certificate scans that must also work without the Next image runtime.
     files: [
       'src/components/Nav.tsx',
       'src/components/Footer.tsx',
       'src/components/SocialLinks.tsx',
       'src/components/HeroVideo.tsx',
+      'src/components/CertificateMarquee.tsx',
     ],
     rules: { '@next/next/no-img-element': 'off' },
   },
