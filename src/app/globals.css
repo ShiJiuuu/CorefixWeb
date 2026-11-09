@@ -237,6 +237,18 @@ html.lenis body {
   background-size: 64px 64px;
 }
 
+/* dropdown panels (language menu) */
+@keyframes cf-pop {
+  from {
+    opacity: 0;
+    transform: translateY(-4px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
 @keyframes cf-pulse {
   0% {
     transform: translate(-50%, -50%) scale(0.4);
