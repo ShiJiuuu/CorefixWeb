@@ -50,6 +50,13 @@ export async function generateMetadata({
 
 const themeScript = `(function(){try{var q=location.search;var t=localStorage.getItem('cf-theme');if(q.indexOf('theme=dark')>-1){t='dark'}else if(q.indexOf('theme=light')>-1){t='light'}if(t==='dark'){document.documentElement.classList.add('dark')}}catch(e){}})()`
 
+/**
+ * Hide the hero copy on the very first paint so the intro never flashes in and out
+ * before hydration. Only applied when JS is running and motion is allowed; the
+ * global stylesheet keys off `.js-motion`, and GSAP's inline styles take over.
+ */
+const motionScript = `(function(){try{if(!window.matchMedia('(prefers-reduced-motion: reduce)').matches){document.documentElement.classList.add('js-motion')}}catch(e){}})()`
+
 export default async function LocaleLayout({
   children,
   params,
@@ -65,6 +72,7 @@ export default async function LocaleLayout({
     <html lang={locale} suppressHydrationWarning>
       <body>
         <script dangerouslySetInnerHTML={{ __html: themeScript }} />
+        <script dangerouslySetInnerHTML={{ __html: motionScript }} />
         <Nav locale={locale as Locale} dict={dict} />
         <main>{children}</main>
         <Footer dict={dict} />
