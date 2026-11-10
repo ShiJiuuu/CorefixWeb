@@ -13,7 +13,9 @@ export default function Nav({ locale, dict }: { locale: Locale; dict: Dict }) {
   const [open, setOpen] = useState(false)
   // The nav is transparent and floats over the page; while it sits on top of the dark hero film
   // the text tokens have to flip to light so they stay readable in light mode.
-  const [overHero, setOverHero] = useState(false)
+  const [overHero, setOverHero] = useState(
+    pathname === `/${locale}` || pathname === `/${locale}/`,
+  )
   // Once the page scrolls, the bar takes on the page background (white in light mode, black in dark).
   const [scrolled, setScrolled] = useState(false)
 

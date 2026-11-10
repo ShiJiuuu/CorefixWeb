@@ -5,11 +5,18 @@ import { CaseGrid } from '@/components/CaseCards'
 import ProcessFlow from '@/components/ProcessFlow'
 import SlaTable from '@/components/SlaTable'
 import ServerModel from '@/components/server-model/ServerModel'
+import ServerRevealVideo from '@/components/ServerRevealVideo'
 import { SectionHead, CtaBand } from '@/components/Sections'
 
 export function generateStaticParams() {
   return locales.map((locale) => ({ locale }))
 }
+
+/**
+ * B300-3D演示模组 —— 暂从首页隐藏，代码与资源保留。
+ * 改回 true 即可在原位置恢复显示。
+ */
+const SHOW_B300_MODEL = false
 
 export default async function HomePage({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = await params
@@ -18,7 +25,18 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
   return (
     <>
       {/* ---------- hero ---------- */}
-      <section className="u-gridbg relative -mt-[var(--dock-h)] flex min-h-[100svh] flex-col overflow-hidden border-b border-line2 bg-bg">
+      <section
+        data-nav-overlay
+        className="on-dark relative -mt-[var(--dock-h)] flex min-h-[100svh] flex-col overflow-hidden border-b border-line2 bg-black"
+      >
+        {/* B300-3D演示模组：全幅背景影片，取代原先的白色网格底 */}
+        <ServerRevealVideo />
+        <div
+          className="pointer-events-none absolute inset-0 bg-gradient-to-r from-black/90 via-black/60 to-black/25 md:via-black/30 md:to-transparent"
+          aria-hidden="true"
+        />
+        <div className="pointer-events-none absolute inset-0 bg-black/60 md:bg-black/30 lg:bg-transparent" aria-hidden="true" />
+
         <div className="u-container relative flex flex-1 flex-col pb-12 pt-[calc(var(--dock-h)+3.5rem)] lg:pb-16 lg:pt-[calc(var(--dock-h)+5rem)]">
           <div className="relative flex flex-1 flex-col">
             <div className="flex w-full max-w-[820px] flex-1 flex-col">
@@ -54,10 +72,12 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
                 </Link>
               </div>
 
-              {/* B300 exploded model: in flow on tablet/mobile, overlaid on the right from xl up */}
-              <div className="mt-10 w-full xl:absolute xl:top-0 xl:right-0 xl:mt-0 xl:w-[50%] xl:max-w-[880px]">
-                <ServerModel model={d.hero.model} />
-              </div>
+              {/* B300-3D演示模组：默认隐藏（SHOW_B300_MODEL），代码保留在原位 */}
+              {SHOW_B300_MODEL && (
+                <div className="mt-10 w-full xl:absolute xl:top-0 xl:right-0 xl:mt-0 xl:w-[50%] xl:max-w-[880px]">
+                  <ServerModel model={d.hero.model} />
+                </div>
+              )}
 
               <div className="mt-auto pt-9">
                 <Link
