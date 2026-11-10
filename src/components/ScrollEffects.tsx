@@ -56,12 +56,17 @@ export default function ScrollEffects() {
         } else {
           gsap.set(lines, { yPercent: 115 })
           gsap.set(fades, { opacity: 0, y: 18 })
-          const tl = gsap.timeline({ delay: 0.12 })
-          tl.to(lines, { yPercent: 0, duration: 1.05, stagger: 0.08, ease: 'power3.out' }).to(
-            fades,
-            { opacity: 1, y: 0, duration: 0.85, stagger: 0.07, ease: 'power2.out' },
-            0.35,
-          )
+          // 首次加载先让背景影片起播 2s，再进入 Hero 文案
+          const tl = gsap.timeline({ delay: 2 })
+          // Reveal only when the timeline starts: the CSS opacity keeps the copy
+          // out of the first paint without touching the transforms GSAP animates.
+          tl.set(lines, { opacity: 1 }, 0)
+            .to(lines, { yPercent: 0, duration: 1.05, stagger: 0.08, ease: 'power3.out' })
+            .to(
+              fades,
+              { opacity: 1, y: 0, duration: 0.85, stagger: 0.07, ease: 'power2.out' },
+              0.35,
+            )
         }
       }
 

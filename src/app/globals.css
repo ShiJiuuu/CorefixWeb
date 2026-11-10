@@ -232,6 +232,12 @@ html.lenis body {
   }
 }
 
+/* hero intro: pre-hydration hidden state, so the copy never flashes before GSAP takes over */
+html.js-motion [data-hero-line],
+html.js-motion [data-hero-fade] {
+  opacity: 0;
+}
+
 /* decorative grid, maps */
 .u-gridbg {
   background-image: linear-gradient(var(--grid) 1px, transparent 1px),

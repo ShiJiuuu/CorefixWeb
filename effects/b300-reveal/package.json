@@ -1,0 +1,38 @@
+{
+  "name": "b300-reveal",
+  "version": "1.0.0",
+  "description": "Procedural 3D reveal of the SuperServer SYS-822GS-NB3RT",
+  "repository": {},
+  "license": "UNLICENSED",
+  "engines": {
+    "node": "^18.18.0 || ^20.9.0 || >=21.1.0"
+  },
+  "private": true,
+  "dependencies": {
+    "@react-three/fiber": "^9.2.0",
+    "@remotion/cli": "4.0.542",
+    "@remotion/three": "^4.0.542",
+    "@types/three": "^0.180.0",
+    "react": "19.3.1",
+    "react-dom": "19.3.1",
+    "remotion": "4.0.542",
+    "three": "^0.180.0"
+  },
+  "devDependencies": {
+    "@remotion/eslint-config-flat": "4.0.542",
+    "@types/react": "19.3.0",
+    "@types/web": "0.0.166",
+    "eslint": "9.39.5",
+    "prettier": "3.8.1",
+    "typescript": "5.9.3"
+  },
+  "scripts": {
+    "dev": "remotion studio",
+    "build": "remotion bundle",
+    "upgrade": "remotion upgrade",
+    "lint": "eslint src && tsc"
+  },
+  "allowScripts": {
+    "esbuild": false
+  }
+}
