@@ -5,8 +5,8 @@ import type { Site } from '@/content/types'
 
 /* Schematic positions (percentages of the map box). Index-aligned with dict.net.sites. */
 const POS: [number, number][] = [
-  [66.2, 82],
   [78.0, 63.2],
+  [66.2, 82],
   [69.7, 39.2],
   [53.6, 43.1],
   [64.7, 36.1],
