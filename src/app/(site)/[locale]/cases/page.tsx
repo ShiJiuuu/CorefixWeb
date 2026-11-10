@@ -64,7 +64,7 @@ export default async function CasesPage({ params }: { params: Promise<{ locale: 
             {d.net.cta} <span className="text-faint">→</span>
           </Link>
           <Link href={`/${locale}/about/`} className="u-link">
-            {d.nav.links[3].label} <span className="text-faint">→</span>
+            {d.nav.links.find((l) => l.href === '/about')?.label} <span className="text-faint">→</span>
           </Link>
         </div>
       </section>
