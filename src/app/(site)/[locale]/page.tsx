@@ -18,8 +18,8 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
   return (
     <>
       {/* ---------- hero ---------- */}
-      <section className="u-gridbg relative flex min-h-[calc(100svh_-_var(--dock-h))] flex-col overflow-hidden border-b border-line2 bg-bg">
-        <div className="u-container relative flex flex-1 flex-col pb-12 pt-14 lg:pb-16 lg:pt-20">
+      <section className="u-gridbg relative -mt-[var(--dock-h)] flex min-h-[100svh] flex-col overflow-hidden border-b border-line2 bg-bg">
+        <div className="u-container relative flex flex-1 flex-col pb-12 pt-[calc(var(--dock-h)+3.5rem)] lg:pb-16 lg:pt-[calc(var(--dock-h)+5rem)]">
           <div className="relative flex flex-1 flex-col">
             <div className="flex w-full max-w-[820px] flex-1 flex-col">
               <p className="u-label flex items-center gap-2.5" data-hero-fade>

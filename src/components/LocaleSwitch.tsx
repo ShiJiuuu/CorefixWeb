@@ -62,16 +62,16 @@ export default function LocaleSwitch({
         aria-haspopup="menu"
         aria-expanded={open}
         aria-label="Language"
-        className="group grid h-9 w-9 shrink-0 place-items-center rounded-full"
+        className="group grid h-11 w-11 shrink-0 place-items-center rounded-full"
       >
         <span
-          className={`grid h-8 w-8 place-items-center text-muted transition-transform duration-300 ease-[cubic-bezier(0.2,0.8,0.2,1)] group-hover:scale-105 group-hover:text-ink ${
+          className={`grid h-10 w-10 place-items-center text-muted transition-transform duration-300 ease-[cubic-bezier(0.2,0.8,0.2,1)] group-hover:scale-105 group-hover:text-ink ${
             open ? 'scale-105 text-ink' : ''
           }`}
         >
           <svg
-            width="16"
-            height="16"
+            width="26"
+            height="26"
             viewBox="0 0 24 24"
             fill="none"
             stroke="currentColor"

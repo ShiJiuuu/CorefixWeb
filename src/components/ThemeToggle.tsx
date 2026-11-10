@@ -47,28 +47,28 @@ export default function ThemeToggle() {
       aria-checked={dark}
       aria-label="Toggle color theme"
       onClick={toggle}
-      className="group grid h-9 w-9 shrink-0 place-items-center rounded-full"
+      className="group grid h-11 w-11 shrink-0 place-items-center rounded-full"
     >
-      <span className="grid h-8 w-8 place-items-center text-muted transition-transform duration-300 ease-[cubic-bezier(0.2,0.8,0.2,1)] group-hover:scale-105 group-hover:text-ink">
+      <span className="grid h-10 w-10 place-items-center text-muted transition-transform duration-300 ease-[cubic-bezier(0.2,0.8,0.2,1)] group-hover:scale-105 group-hover:text-ink">
         {/* sun — current theme is light */}
         <svg
           className="dark:hidden"
-          width="15"
-          height="15"
+          width="26"
+          height="26"
           viewBox="0 0 24 24"
           fill="none"
           stroke="currentColor"
           strokeWidth="1.6"
           aria-hidden="true"
         >
-          <circle cx="12" cy="12" r="4.2" />
-          <path d="M12 2v2.4M12 19.6V22M2 12h2.4M19.6 12H22M4.9 4.9l1.7 1.7M17.4 17.4l1.7 1.7M19.1 4.9l-1.7 1.7M6.6 17.4l-1.7 1.7" />
+          <circle cx="12" cy="12" r="4.4" />
+          <path d="M12 2v3.3M12 18.7v3.3M2 12h3.3M18.7 12h3.3M4.6 4.6l2.3 2.3M17.1 17.1l2.3 2.3M19.4 4.6l-2.3 2.3M6.9 17.1l-2.3 2.3" />
         </svg>
         {/* moon — current theme is dark */}
         <svg
           className="hidden dark:block"
-          width="15"
-          height="15"
+          width="26"
+          height="26"
           viewBox="0 0 24 24"
           fill="none"
           stroke="currentColor"

@@ -14,9 +14,13 @@ export default function Nav({ locale, dict }: { locale: Locale; dict: Dict }) {
   // The nav is transparent and floats over the page; while it sits on top of the dark hero film
   // the text tokens have to flip to light so they stay readable in light mode.
   const [overHero, setOverHero] = useState(false)
+  // Once the page scrolls, the bar takes on the page background (white in light mode, black in dark).
+  const [scrolled, setScrolled] = useState(false)
 
   useEffect(() => {
     const update = () => {
+      const y = window.scrollY
+      setScrolled(y > 8)
       const hero = document.querySelector<HTMLElement>('[data-nav-overlay]')
       if (!hero) {
         setOverHero(false)
@@ -24,7 +28,7 @@ export default function Nav({ locale, dict }: { locale: Locale; dict: Dict }) {
       }
       const dock =
         parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--dock-h')) || 0
-      setOverHero(window.scrollY < hero.offsetHeight - dock)
+      setOverHero(y < hero.offsetHeight - dock)
     }
     update()
     window.addEventListener('scroll', update, { passive: true })
@@ -50,10 +54,14 @@ export default function Nav({ locale, dict }: { locale: Locale; dict: Dict }) {
 
   return (
     <>
-    <header className="sticky top-0 z-50">
+    <header
+      className={`sticky top-0 z-50 transition-colors duration-300 ${
+        scrolled ? 'border-b border-line bg-bg' : 'border-b border-transparent bg-transparent'
+      }`}
+    >
       <div
         className={`u-container flex h-[var(--dock-h)] items-center gap-4 xl:gap-6 ${
-          overHero ? 'on-dark' : ''
+          overHero && !scrolled ? 'on-dark' : ''
         }`}
       >
         <Link href={`/${locale}/`} className="mr-auto flex shrink-0 items-center gap-2.5" aria-label="集培优 COREFIX PRO">
