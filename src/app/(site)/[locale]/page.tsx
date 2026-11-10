@@ -100,7 +100,7 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
       </section>
 
       {/* ---------- capability ---------- */}
-      <section className="u-container py-16 lg:py-24">
+      <section id="capability" className="u-container py-16 lg:py-24">
         <SectionHead
           eyebrow={d.cap.eyebrow}
           title={
@@ -116,37 +116,63 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
           </p>
         </SectionHead>
 
-        <div className="border-t border-line2">
-          {d.cap.items.map((c, i) => (
-            <Link
-              key={c.no}
-              href={`/${locale}/capability/`}
-              className="group flex flex-col gap-x-6 gap-y-3 border-b border-line py-6 transition-colors duration-200 hover:bg-inv lg:flex-row lg:items-start lg:gap-x-5 lg:py-7 xl:gap-x-6"
-              data-reveal={String(i * 0.04)}
-            >
-              <span className="u-mono pt-1 text-[11px] tracking-[0.1em] text-faint group-hover:text-invt/60 lg:w-10 lg:shrink-0 xl:w-16">
-                {c.no}
-              </span>
-              <h3 className="text-[21px] font-semibold leading-tight group-hover:text-invt lg:w-[180px] lg:shrink-0 xl:w-60">
-                {c.title}
-                <small className="u-mono mt-2 block text-[9.5px] font-normal tracking-[0.16em] text-faint group-hover:text-invt/50">
-                  {c.en}
-                </small>
-              </h3>
-              <p className="text-[14.5px] leading-[1.95] text-muted group-hover:text-invt/70 lg:min-w-0 lg:max-w-[660px] lg:flex-1">{c.desc}</p>
-              <div className="lg:w-[120px] lg:shrink-0 lg:text-right xl:w-[168px]">
-                <b className="u-mono block text-[22px] font-semibold tracking-tight group-hover:text-invt">
-                  {c.metric}
-                </b>
-                <span className="mt-1 block text-[10.5px] tracking-[0.05em] text-faint group-hover:text-invt/50">
-                  {c.metricLabel}
-                </span>
+        <div className="grid gap-4 xl:grid-cols-12 xl:gap-5">
+          {/* B300-3D演示模组：交互分解图 */}
+          <div
+            className="flex flex-col border border-line2 bg-bg2/60 p-5 xl:col-span-7 xl:p-6"
+            data-reveal
+          >
+            <div className="flex items-start justify-between gap-4">
+              <div className="min-w-0">
+                <p className="u-mono text-[9px] tracking-[0.18em] text-faint">
+                  B300 / INTERACTIVE MODEL
+                </p>
+                <h3 className="mt-2 text-[19px] font-semibold leading-snug">
+                  {d.hero.model.label}
+                </h3>
               </div>
-              <span className="u-mono hidden text-right text-[13px] text-faint transition-opacity group-hover:text-invt xl:block xl:w-[52px] xl:shrink-0">
-                →
+              <span className="u-mono hidden shrink-0 pt-0.5 text-[9px] tracking-[0.16em] text-faint sm:block">
+                EXPLODED VIEW
               </span>
-            </Link>
-          ))}
+            </div>
+
+            <div className="mt-2 flex min-h-0 flex-1 items-center">
+              <ServerModel model={d.hero.model} />
+            </div>
+
+            <div className="mt-4 border-t border-line pt-3">
+              <p className="u-mono text-[8.5px] leading-[1.9] tracking-[0.06em] text-faint">
+                8× B300 · 32× DDR5 · 8× OSFP 800G · 6× 6600W PSU · 12+4 FANS
+              </p>
+            </div>
+          </div>
+
+          {/* 8 capability titles: horizontal rows, no supporting copy */}
+          <div className="grid gap-2 lg:grid-cols-2 xl:col-span-5 xl:flex xl:flex-col">
+            {d.cap.items.map((c, i) => (
+              <Link
+                key={c.no}
+                href={`/${locale}${d.cap.moreHref}/`}
+                className="group flex min-h-[56px] flex-1 items-center gap-4 border border-line2 bg-card px-5 transition-colors duration-200 hover:border-ink hover:bg-inv"
+                data-reveal={String(i * 0.03)}
+              >
+                <span className="u-mono shrink-0 text-[10px] tracking-[0.14em] text-faint transition-colors group-hover:text-invt/50">
+                  {c.no}
+                </span>
+                <h3 className="min-w-0 flex-1 truncate text-[16px] font-semibold tracking-tight transition-colors group-hover:text-invt sm:text-[17px]">
+                  {c.title}
+                </h3>
+                <div className="ml-auto shrink-0 text-right sm:flex sm:items-baseline sm:gap-2.5 sm:text-left">
+                  <b className="u-mono block text-[17px] font-semibold leading-none tracking-tight transition-colors group-hover:text-invt sm:text-[19px]">
+                    {c.metric}
+                  </b>
+                  <span className="mt-1 block text-[8.5px] leading-tight tracking-[0.03em] text-faint transition-colors group-hover:text-invt/50 sm:mt-0 sm:text-[9.5px] sm:whitespace-nowrap">
+                    {c.metricLabel}
+                  </span>
+                </div>
+              </Link>
+            ))}
+          </div>
         </div>
 
         <div className="mt-7 flex flex-wrap items-center justify-between gap-4">

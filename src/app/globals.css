@@ -610,7 +610,11 @@ html.js-motion [data-hero-fade] {
   stroke-width: 0.5;
 }
 
-/* assembly → exploded */
+/* assembly → exploded: before the in-view trigger fires, hold the assembled state */
+.sm[data-animate='false'] .sm-explode {
+  transform: translate(var(--ex, 0px), var(--ey, 0px));
+}
+
 @keyframes sm-explode {
   from {
     transform: translate(var(--ex, 0px), var(--ey, 0px));

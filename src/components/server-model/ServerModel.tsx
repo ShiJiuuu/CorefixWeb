@@ -44,8 +44,26 @@ export default function ServerModel({ model }: { model: ModelCopy }) {
   const currentNo = current ? pad(model.modules.findIndex((m) => m.id === current.id) + 1) : pad(0)
 
   useEffect(() => {
-    const timer = window.setTimeout(() => setEntered(true), 1900)
-    return () => window.clearTimeout(timer)
+    const el = rootRef.current
+    if (!el) return
+    if (
+      window.matchMedia('(prefers-reduced-motion: reduce)').matches ||
+      !('IntersectionObserver' in window)
+    ) {
+      setEntered(true)
+      return
+    }
+    // Play the assembly once, when the model actually reaches the viewport.
+    const io = new IntersectionObserver(
+      ([entry]) => {
+        if (!entry.isIntersecting) return
+        setEntered(true)
+        io.disconnect()
+      },
+      { threshold: 0.25 },
+    )
+    io.observe(el)
+    return () => io.disconnect()
   }, [])
 
   useEffect(() => {
@@ -117,7 +135,7 @@ export default function ServerModel({ model }: { model: ModelCopy }) {
       ref={rootRef}
       className="sm"
       data-active={active ?? ''}
-      data-animate={entered ? 'false' : 'true'}
+      data-animate={entered ? 'true' : 'false'}
       aria-label={model.label}
       onPointerLeave={onPointerLeave}
     >
