@@ -531,13 +531,8 @@ export const en: Dict = {
     capability: {
       eyebrow: 'CAPABILITY',
       title: 'From silicon to cluster, one repair chain',
-<<<<<<< HEAD
-      desc: 'Five capabilities chain together: strip, repair, test, stock, stay. One engineering standard runs through all of them — so a repaired card does not just power on, it returns to the training queue.',
-      intro: 'Every repair happens inside our 2,500㎡ Shanghai repair base, which includes a 1,000㎡ Class 10,000 cleanroom and is equipped with X-ray inspection and BGA rework stations.',
-=======
       desc: 'Eight capabilities feed each other, covering the whole arc from a fault appearing to the server running stable again — diagnosis · chip-level repair · quality validation · O&M support.',
       intro: 'Every repair happens at our 2,500㎡ Lingang base in Shanghai, which includes a 1,000㎡ class-10,000 cleanroom with X-ray inspection and BGA rework lines.',
->>>>>>> f4d0dabab2f46bd599d9937531e7cdd86deb516a
       detail: 'Details',
       cta: 'Talk to an engineer',
     },
