@@ -3,7 +3,6 @@ import type { Metadata } from 'next'
 import { locales, type Locale } from '@/lib/i18n'
 import { getDict } from '@/content'
 import { pageMetadata } from '@/lib/seo'
-import { CaseGrid } from '@/components/CaseCards'
 import { PageHeader, CtaBand } from '@/components/Sections'
 
 export function generateStaticParams() {
@@ -28,6 +27,8 @@ export default async function CasesPage({ params }: { params: Promise<{ locale: 
   const { locale } = await params
   const d = getDict(locale)
   const p = d.page.cases
+  /** Newest first; the stored order is editorial, the list is chronological. */
+  const items = [...d.cases.items].sort((a, b) => b.dateISO.localeCompare(a.dateISO))
 
   return (
     <>
@@ -52,21 +53,36 @@ export default async function CasesPage({ params }: { params: Promise<{ locale: 
       </section>
 
       <section className="u-container py-14 lg:py-20">
-        <CaseGrid
-          items={d.cases.items}
-          locale={locale}
-          readLabel={d.cases.read}
-          headingLevel="h2"
-        />
-
-        <div className="mt-8 flex flex-wrap items-center justify-between gap-4">
-          <Link href={`/${locale}/network/`} className="u-link">
-            {d.net.cta} <span className="text-faint">→</span>
-          </Link>
-          <Link href={`/${locale}/about/`} className="u-link">
-            {d.nav.links.find((l) => l.href === '/about')?.label} <span className="text-faint">→</span>
-          </Link>
+        <div className="flex items-baseline justify-start gap-4 border-b border-line2 pb-4">
+          <span className="u-mono text-[10px] tracking-[0.14em] text-faint">
+            {String(items.length).padStart(2, '0')} CASES
+          </span>
         </div>
+
+        {items.map((item, i) => (
+          <Link
+            key={item.slug}
+            href={`/${locale}/cases/${item.slug}/`}
+            className="group grid gap-x-10 gap-y-3 border-b border-line py-7 transition-colors hover:bg-bg2 lg:grid-cols-[196px_1fr] lg:items-start lg:py-8"
+            data-reveal={String(Math.min(i, 6) * 0.03)}
+          >
+            <p className="u-mono text-[14px] leading-[1.7] tracking-[0.05em] text-muted">
+              {item.date}
+            </p>
+
+            <div className="min-w-0">
+              <h2 className="text-[19px] font-semibold leading-[1.55] lg:text-[22px]">
+                {item.title}
+              </h2>
+              <p className="u-mono mt-2.5 text-[10.5px] tracking-[0.08em] text-faint">
+                {item.client} · {item.device} · {item.service}
+              </p>
+              <p className="mt-2.5 max-w-[780px] text-[13.5px] leading-[1.9] text-muted">
+                {item.summary}
+              </p>
+            </div>
+          </Link>
+        ))}
       </section>
 
       <CtaBand

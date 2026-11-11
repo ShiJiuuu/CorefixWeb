@@ -268,6 +268,7 @@ export const en: Dict = {
         tag: 'Link fault',
         service: 'On-site diagnosis + transceiver replacement',
         date: '3 October 2026',
+        dateISO: '2026-10-03',
         title: 'Supermicro H200 NIC No-Carrier: link isolation and transceiver replacement',
         summary:
           'The brainpf/data NIC kept reporting No-Carrier. Working segment by segment through the fibre patch leads and the transceiver isolated the fault, and the link came back up after an on-site replacement.',
@@ -318,6 +319,7 @@ export const en: Dict = {
         tag: 'Socket damage',
         service: 'Board-level BGA rework',
         date: '10 October 2026',
+        dateISO: '2026-10-10',
         title: 'HGX H100 baseboard SXM socket: board-level BGA rework and validation',
         summary:
           'A damaged SXM socket left the GPU undetectable. After a 48-hour bake-out, BGA removal and resocketing, and pin-by-pin continuity checks, the GPU enumerated again — board-level rework instead of a full board replacement.',
@@ -358,7 +360,7 @@ export const en: Dict = {
         ],
         outcome: [
           'The HGX H100 baseboard SXM socket was repaired at board level: the GPU enumerates normally, board function is restored, and the customer confirmed the result.',
-          'Board-level rework replaced a full board swap, cutting spares cost and downtime — and keeping a repairable board out of scrap.',
+          'Board-level rework replaced a full board swap, cutting spares cost and downtime — and avoiding an unnecessary whole-board replacement.',
         ],
       },
       {
@@ -366,8 +368,9 @@ export const en: Dict = {
         client: 'A Guangzhou company',
         device: 'NVIDIA H100 server',
         tag: 'Single card',
-        service: 'On-site inspection + failed card removal',
+        service: 'On-site inspection + faulty card removal',
         date: '9 July 2026',
+        dateISO: '2026-07-09',
         title: 'NVIDIA H100 single-GPU fault: on-site isolation and card removal',
         summary:
           'A single GPU fault cut into the chassis compute output. The engineer attended site, powered down, pulled the card under ESD control and logged its serial, then validated the server over multiple reboot cycles.',
@@ -408,7 +411,7 @@ export const en: Dict = {
         ],
         outcome: [
           'With the faulty card out, the server returned to service: the single-card alarm cleared and compute output and stability returned to normal.',
-          'The removal followed the site procedure end to end with the serial logged, so the failed part stays traceable for replacement or RMA.',
+          'The removal followed the site procedure end to end with the serial logged, so the faulty part stays traceable for replacement or RMA.',
         ],
       },
       {
@@ -418,15 +421,16 @@ export const en: Dict = {
         tag: 'Power path',
         service: 'Power-on inspection + module replacement + verdict',
         date: '8 — 17 June 2026',
+        dateISO: '2026-06-08',
         title: 'NVIDIA A100 no-boot: U9 module replacement and core damage verdict',
         summary:
-          'No-boot reproduced on the bench. Step-by-step measurement along the power path pointed to the U9 power module; after replacement the retest confirmed the GPU core was damaged beyond repair, with a clear verdict in nine days.',
+          'No-boot reproduced on the bench. Step-by-step measurement along the power path pointed to the U9 power module; after replacement the retest completed core-level diagnosis, with a clear verdict in nine days.',
         metrics: [
           { v: '9 days', l: 'Report to verdict' },
           { v: 'U9', l: 'Module isolated' },
         ],
         challenge: [
-          'An A100 card would not boot on power-up. The device could not start and the workload stopped with it.',
+          'An A100 card would not boot on power-up. the card would not start and the workload went offline with it.',
           'The initial read pointed at the power path, but that path has several conversion stages: the fault could sit in a power module, or it could already have reached the GPU core.',
           'The customer needed more than a repair — they needed a verdict they could act on: whether the card was still worth investing in.',
         ],
@@ -449,7 +453,7 @@ export const en: Dict = {
           },
           {
             t: 'Retest and core assessment',
-            d: 'Powered up again after replacement; testing confirmed the GPU core was damaged and beyond repair.',
+            d: 'Powered up again after replacement; core-level diagnosis confirmed the extent of the damage and defined the verdict.',
           },
           {
             t: 'Verdict',
@@ -457,8 +461,161 @@ export const en: Dict = {
           },
         ],
         outcome: [
-          'Replacing the U9 module cleared the supply-side fault, and further testing confirmed the GPU core was damaged beyond repair.',
-          'The verdict was unambiguous and traceable, so the customer stopped sinking money into an unrepairable card and moved to spares and replacement.',
+          'Replacing the U9 module cleared the supply-side fault, and the retest completed the GPU core diagnosis with a clear verdict inside nine days.',
+          'The verdict was clear and traceable, so the customer could move straight to spares and replacement and keep downtime to a minimum.',
+        ],
+      },
+      {
+        slug: 'supermicro-h200-ecc-alert',
+        client: 'A client in Shanghai',
+        device: 'Supermicro H200 server',
+        tag: 'ECC alert',
+        service: 'Off-rack inspection + ECC count clear + stress retest',
+        date: '26 March 2026',
+        dateISO: '2026-03-26',
+        title: 'Supermicro H200 ECC alert: off-rack count clear and stress retest',
+        summary:
+          'The BMC kept raising ECC alerts, so the server was taken off-rack, the ECC count cleared and its baseline rebuilt; repeated stress tests after restarting showed no recurrence.',
+        metrics: [
+          { v: '1 unit', l: 'Alert cleared' },
+          { v: '0', l: 'Test recurrences' },
+        ],
+        challenge: [
+          'A Supermicro H200 server at the customer site raised a BMC alert pointing at memory ECC counters, putting the node at risk of further degradation or a crash.',
+          'The cause pointed to accumulated ECC counts: without clearing the counters the alert returns, and a remote reboot does not fix the root cause.',
+          'The customer wanted the unit taken off-rack, counters cleared and the result retested, without disturbing the rest of the data hall — and with a verdict they could audit afterwards.',
+        ],
+        solution: [
+          {
+            t: 'Intake',
+            d: 'The fault was logged on 26 March 2026; serial number, model and BMC alert details were verified.',
+          },
+          {
+            t: 'On-site verification',
+            d: 'BMC logs and node status were checked to confirm the alert source, and the issue was pinned to ECC counters before agreeing a plan.',
+          },
+          {
+            t: 'Off-rack handling',
+            d: 'The server was taken off-rack to data-hall standards, with cables labelled and components protected against handling damage.',
+          },
+          {
+            t: 'ECC count clear',
+            d: 'The node\u2019s ECC counters were cleared and the baseline rebuilt, removing the effect of historical count accumulation.',
+          },
+          {
+            t: 'Stress retest',
+            d: 'After bringing the node back up, several stress rounds ran while status and alerts were watched; nothing recurred.',
+          },
+          {
+            t: 'Handover',
+            d: 'The customer confirmed the server was running normally and signed off; the ticket was closed with a full record.',
+          },
+        ],
+        outcome: [
+          'Off-rack handling, an ECC count clear and stress retesting removed the alert; repeated tests produced no recurrence.',
+          'The server is back to stable operation and business continuity is protected, with an auditable record of what was done.',
+        ],
+      },
+      {
+        slug: 'supermicro-h200-gpu-slowdown',
+        client: 'A client in Shanghai',
+        device: 'Supermicro H200 server',
+        tag: 'Performance throttling',
+        service: 'Fault isolation + stress verification',
+        date: '13 July 2026',
+        dateISO: '2026-07-13',
+        title: 'Supermicro H200 GPU slowdown: parameter checks and full-load stress verification',
+        summary:
+          'GPUs dropped into slowdown with output below baseline; on-site checks ruled out cooling and power faults, and full-load stress tests after a restart showed no recurrence.',
+        metrics: [
+          { v: '1 unit', l: 'Throttling cleared' },
+          { v: 'Full load', l: 'Stress passed' },
+        ],
+        challenge: [
+          'GPUs in a Supermicro H200 server entered slowdown, with compute output below normal and training and inference performance falling with it.',
+          'A single occurrence does not pin the root cause: cooling, power, running state or counters all had to be checked before a stress test could confirm anything.',
+          'The customer wanted environmental and hardware faults ruled out first, then a full-load stress test to prove the problem would not return during peak workload.',
+        ],
+        solution: [
+          {
+            t: 'Intake',
+            d: 'The fault was logged and the slowdown symptoms, affected node and business impact were confirmed.',
+          },
+          {
+            t: 'On-site isolation',
+            d: 'GPU status, temperature and power draw were checked, ruling out cooling and power-supply faults.',
+          },
+          {
+            t: 'Restart and reset',
+            d: 'The node was restarted to standard procedure, resetting GPU running state and related counters.',
+          },
+          {
+            t: 'Stress testing',
+            d: 'GPUs were stress-tested at full load after the restart, with performance output and alerts monitored throughout.',
+          },
+          {
+            t: 'Result verification',
+            d: 'Tests came back clean: compute output returned to normal and the slowdown did not recur.',
+          },
+          {
+            t: 'Handover',
+            d: 'The work was completed and confirmed with the customer on 13 July 2026, closing the ticket.',
+          },
+        ],
+        outcome: [
+          'Parameter checks, a restart and stress verification cleared the slowdown; test results showed no anomalies.',
+          'Compute output returned to normal and the customer\u2019s training and inference workloads are running stably again.',
+        ],
+      },
+      {
+        slug: 'gigabyte-cpu0-cold-solder',
+        client: 'A technology company',
+        device: 'GIGABYTE motherboards × 5',
+        tag: 'Board-level repair',
+        service: 'Board-level inspection + cold-joint repair',
+        date: '10 August 2026 — 14 August 2026',
+        dateISO: '2026-08-10',
+        title: 'GIGABYTE CPU0 cold solder joints: five boards repaired and bench-verified',
+        summary:
+          'All five GIGABYTE boards had cold CPU0 joints and could not detect CPU0, with slight board warping already present; repair risk was assessed first, the process adjusted, then every board passed bench verification.',
+        metrics: [
+          { v: '5 boards', l: 'Repaired' },
+          { v: '0', l: 'Boards replaced' },
+        ],
+        challenge: [
+          'Five GIGABYTE motherboards sent in by the customer all showed cold CPU0 solder joints, so CPU0 could not be detected and the boards could not be used.',
+          'Inspection also found the boards were already slightly warped: a conventional reflow of the CPU socket or a high-stress repair could make the warping worse and lower the repair success rate.',
+          'The customer wanted the fault repaired without adding board damage, replacing a whole-board swap with board-level repair.',
+        ],
+        solution: [
+          {
+            t: 'Intake',
+            d: 'Five faulty boards were received on 10 August 2026; models and failure batches were logged and one repair plan agreed.',
+          },
+          {
+            t: 'Fault inspection',
+            d: 'Each board was inspected individually to confirm cold CPU0 joints, recording joint condition and the surrounding board state.',
+          },
+          {
+            t: 'Board condition assessment',
+            d: 'The risk from existing board warping was assessed: conventional reflow or a high-stress repair could worsen it and lower the repair success rate.',
+          },
+          {
+            t: 'Process adjustment',
+            d: 'The repair process was reworked around that risk, avoiding a second stress impact on the board while keeping the repair result intact.',
+          },
+          {
+            t: 'Cold-joint repair',
+            d: 'CPU0 joints were repaired to the revised process, board by board, with process parameters recorded.',
+          },
+          {
+            t: 'Bench verification and handover',
+            d: 'All repairs were finished on 14 August 2026; each board passed CPU detection and stability tests before delivery.',
+          },
+        ],
+        outcome: [
+          'All five boards were repaired and passed bench verification, and the equipment is running normally again.',
+          'Board-level repair instead of whole-board replacement cut both spare-part cost and waiting time for the customer.',
         ],
       },
     ],
@@ -607,26 +764,13 @@ export const en: Dict = {
       eyebrow: 'CAREERS',
       title: 'Join us',
       desc: 'A full-stack compute services company: turnkey EPC compute build-out, energy optimisation, security upgrades and cloud integration. Beyond the technical work, we care whether each customer\'s need is actually met.',
-      profileTitle: 'Company profile',
-      profile: [
-        { k: 'Industry', v: 'Internet · compute infrastructure' },
-        { k: 'Headcount', v: '20–99' },
-        { k: 'Office', v: 'Tower T3, 5F, East Hongqiao Center, 299 Youle Rd, Changning, Shanghai' },
-        { k: 'Hours', v: '10:00–19:00 · weekends off' },
-      ],
       openingsTitle: 'Open roles',
       openingsNote: '3 open positions · updated 11 Nov 2026',
-      commonPerksTitle: 'Benefits',
-      commonPerks: [
-        'Salary set by capability (one-month probation)',
-        'Social insurance and housing fund paid from day one',
-        'Afternoon tea, holiday dinners and holiday allowances',
-      ],
       openings: [
         {
           title: 'General ledger accountant',
           salary: 'RMB 8–13K',
-          meta: ['Shanghai · Changning (East Hongqiao)', '3–5 years', "Bachelor's"],
+          meta: ['Shanghai · Changning (East Hongqiao)', "Bachelor's or above"],
           dutiesTitle: 'Responsibilities',
           duties: [
             'Own the books end to end: vouchers, statements, tax payments',
@@ -648,7 +792,7 @@ export const en: Dict = {
         {
           title: 'HR manager / supervisor',
           salary: 'RMB 12–15K',
-          meta: ['Shanghai · Changning (East Hongqiao)', '3–5 years', "Bachelor's"],
+          meta: ['Shanghai · Changning (East Hongqiao)', "Bachelor's or above"],
           dutiesTitle: 'Responsibilities',
           duties: [
             'Own recruitment end to end, from demand intake to onboarding, responding fast to hiring needs',
@@ -667,7 +811,7 @@ export const en: Dict = {
         {
           title: 'Legal specialist / assistant (intern)',
           salary: 'RMB 150–200/day',
-          meta: ['Shanghai · Changning (East Hongqiao)', 'Internship · 3 days/week', 'LL.M. student'],
+          meta: ['Shanghai · Changning (East Hongqiao)', 'LL.M. student'],
           dutiesTitle: 'Responsibilities',
           duties: [
             'Second- or third-year full-time LL.M. student at a leading law school (graduating 2027 or 2028)',
@@ -688,56 +832,14 @@ export const en: Dict = {
           ],
         },
       ],
-      perksTitle: 'Benefits & growth',
-      perks: [
-        {
-          t: 'Benefits',
-          items: [
-            'Social insurance & housing fund',
-            'Supplementary medical cover',
-            'Annual bonus',
-            'Performance bonus',
-            'Guaranteed base pay',
-            'Base plus commission',
-            'Company travel',
-            'Snacks & afternoon tea',
-            'Team dinners & outings',
-            'Wi-Fi at work',
-            'Holiday perks',
-            'Birthday perks',
-          ],
-        },
-        {
-          t: 'Growth',
-          items: [
-            'Review-based promotion',
-            'Project bonus',
-            'Team bonus',
-            'Individual bonus',
-            'Performance commission',
-            'Buddy system',
-            'One-to-one mentor',
-            'Paid onboarding training',
-            'Regular internal training',
-            'Professional skills training',
-            'Network building',
-          ],
-        },
-      ],
       applyTitle: 'How to apply',
       apply: [
         { k: 'CV to', v: 'hr@aspiretec.com.cn', href: 'mailto:hr@aspiretec.com.cn' },
-        { k: 'Phone', v: '+86 21-5176 8787', href: 'tel:+862151768787' },
+        { k: 'Phone', v: '+86 021-5176-8787', href: 'tel:+862151768787' },
         { k: 'Address', v: 'Tower T3, 5F, Aspire Center, Lane 299 Youle Rd, Changning, Shanghai' },
-        {
-          k: 'BOSS Zhipin',
-          v: 'View the company page',
-          href: 'https://www.zhipin.com/gongsi/2bbbea78137cddbb1HJz3d-4ElY~.html',
-        },
       ],
       quote:
         'We hire on character first and put people where they are strongest. Comfortable offices, real room to grow and competitive pay — we would like you to grow with us.',
-      note: 'Roles are collected from the company\'s official BOSS Zhipin page, updated 11 Nov 2026; BOSS Zhipin remains the source of truth.',
     },
     news: {
       eyebrow: 'NEWS',

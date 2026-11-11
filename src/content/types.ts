@@ -51,6 +51,8 @@ export type CaseStudy = {
   service: string
   /** Service window, already formatted for display. */
   date: string
+  /** Machine-readable start date (YYYY-MM-DD); drives the newest-first order on /cases. */
+  dateISO: string
   title: string
   summary: string
   /** The card shows the first two; the detail page shows all of them. */
@@ -201,19 +203,12 @@ export type Dict = {
       qualsTitle: string
     }
     careers: PageHero & {
-      profileTitle: string
-      profile: { k: string; v: string }[]
       openingsTitle: string
       openingsNote: string
-      commonPerksTitle: string
-      commonPerks: string[]
       openings: Job[]
-      perksTitle: string
-      perks: { t: string; items: string[] }[]
       applyTitle: string
       apply: { k: string; v: string; href?: string }[]
       quote: string
-      note: string
     }
     news: PageHero & {
       listLabel: string
