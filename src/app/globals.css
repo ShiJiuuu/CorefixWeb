@@ -238,6 +238,33 @@ html.js-motion [data-hero-fade] {
   opacity: 0;
 }
 
+/* homepage news carousel — full-bleed track, fluid card widths, no visible scrollbar */
+.news-track {
+  --news-pad: clamp(20px, 5.5vw, 80px);
+  padding-inline: var(--news-pad);
+  scroll-padding-inline: var(--news-pad);
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.news-track::-webkit-scrollbar {
+  display: none;
+}
+.news-card {
+  flex: 0 0 84vw;
+  max-width: 380px;
+}
+@media (min-width: 640px) {
+  .news-card {
+    flex-basis: clamp(280px, 42vw, 420px);
+    max-width: none;
+  }
+}
+@media (min-width: 1024px) {
+  .news-card {
+    flex-basis: clamp(300px, 27vw, 420px);
+  }
+}
+
 /* decorative grid, maps */
 .u-gridbg {
   background-image: linear-gradient(var(--grid) 1px, transparent 1px),

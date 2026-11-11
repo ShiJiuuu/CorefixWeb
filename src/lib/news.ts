@@ -13,10 +13,18 @@ export type NewsArticle = {
   /** Link back to the original WeChat post. */
   source: string
   excerpt: string
+  /** Card cover: an explicit front-matter `cover:` path, or the first image in the body. */
+  cover: string
+  /** Whole minutes, estimated from the body when `readTime:` is absent. */
+  readTime: number
   html: string
 }
 
 const DIR = path.join(process.cwd(), 'content', 'news')
+const COVER_DIR = path.join(process.cwd(), 'public', 'news-covers')
+
+const MD_IMAGE = /!\[[^\]]*\]\(\s*<?([^)\s>]+)[^)]*\)/i
+const HTML_IMAGE = /<img[^>]+src=["']([^"']+)["']/i
 
 function parseFrontMatter(raw: string) {
   const match = raw.match(/^---\r?\n([\s\S]*?)\r?\n---\r?\n?/)
@@ -33,6 +41,38 @@ function parseFrontMatter(raw: string) {
   }
 
   return { meta, body: raw.slice(match[0].length).trim() }
+}
+
+/** Front matter wins; otherwise the first image the author put in the body. */
+function coverOf(meta: Record<string, string>, body: string) {
+  const declared = (meta.cover || '').trim()
+  if (declared) return declared
+  const md = body.match(MD_IMAGE)
+  if (md) return md[1]
+  const html = body.match(HTML_IMAGE)
+  if (html) return html[1]
+  return ''
+}
+
+/**
+ * A cover large enough for the 900 × 675 card, built by scripts/build-news-covers.mjs.
+ * Falls back to the original image when the thumbnail pipeline has not run.
+ */
+function cardCover(slug: string, cover: string) {
+  if (!cover || /^(https?:)?\/\//i.test(cover) || cover.startsWith('data:')) return cover
+  return fs.existsSync(path.join(COVER_DIR, `${slug}.webp`)) ? `/news-covers/${slug}.webp` : cover
+}
+
+/** Chinese prose reads at roughly 380 characters a minute; count both scripts. */
+function estimateReadTime(body: string) {
+  const text = body
+    .replace(/!\[[^\]]*\]\([^)]*\)/g, ' ')
+    .replace(/<[^>]+>/g, ' ')
+    .replace(/\[([^\]]*)\]\([^)]*\)/g, '$1')
+    .replace(/[#>*_`|~-]/g, ' ')
+  const cjk = (text.match(/[\u3400-\u9fff]/g) || []).length
+  const words = (text.match(/[A-Za-z0-9]+/g) || []).length
+  return Math.max(2, Math.round(cjk / 380 + words / 220))
 }
 
 /** First real paragraph, used as the summary on the index and in the meta description. */
@@ -67,6 +107,8 @@ export function getAllNews(): NewsArticle[] {
     .map((file) => {
       const raw = fs.readFileSync(path.join(DIR, file), 'utf8')
       const { meta, body } = parseFrontMatter(raw)
+      const declaredRead = Number.parseInt(meta.readTime || '', 10)
+      const cover = coverOf(meta, body)
       return {
         slug: meta.slug,
         title: meta.title,
@@ -74,6 +116,8 @@ export function getAllNews(): NewsArticle[] {
         category: meta.category as NewsCategory,
         source: meta.source ?? '',
         excerpt: excerptOf(body),
+        cover: cardCover(meta.slug, cover),
+        readTime: Number.isFinite(declaredRead) && declaredRead > 0 ? declaredRead : estimateReadTime(body),
         html: marked.parse(body, { gfm: true, async: false }) as string,
       }
     })

@@ -120,6 +120,15 @@ npm run clean        # 删掉 .next / out
 - 新文章导入：把公众号导出的 Markdown 放进源目录，改 `scripts/import-wechat.mjs` 顶部的 `MANIFEST`（文件名关键词 → slug / 分类），然后 `node scripts/import-wechat.mjs`。脚本会下载图片、剥掉「来源/发布时间/原文链接」抬头、写回 `content/news/`。
 - 文章正文目前只有简体中文，三语站点共用同一份内容，界面文案（分类、返回、上一篇/下一篇）各自本地化。
 
+### 首页「企业资讯」轮播
+
+- 位置：`src/app/(site)/[locale]/page.tsx` 的「六步闭环」之后、页脚之前；数据直接来自 `getAllNews()`，和 `/news/` 同源。新增或修改 `content/news/*.md` 后，**重新构建/部署**即可同步，首页不需要单独维护。
+- 组件：`src/components/NewsCarousel.tsx`（客户端）。轨道是原生 `scroll-snap` 横向滚动，箭头 / 键盘 ←→ / 触控板 / 手指都能用；不自动播放，完全手动浏览。
+- 卡片：桌面约 3 张 + 右侧露出下一张，宽度用 `clamp()` 随视口伸缩；移动端一张多。浅色主题白底黑字，深色主题自动跟随站点色板。
+- 封面：`cover:` 优先，缺省取正文首图；`scripts/build-news-covers.mjs` 会裁成 900×675 的 WebP 放到 `public/news-covers/<slug>.webp`，`npm run dev` / `npm run build` 前自动执行，也可 `npm run covers` 手动跑。没有可用封面时自动降级为「网格 + 大号序号」。
+- 可选 front matter：`cover:`（指定封面）、`coverPos:`（sharp 裁切位置，默认 `attention`）、`readTime:`（分钟，缺省按正文长度估算）。
+- 封面统一黑白由 CSS `grayscale` 完成，原图不动；首页只传标题 / 日期 / 分类 / 摘要 / 封面，不加载正文。
+
 ## 首屏视频
 
 - 首页 Hero 背景是一段无声循环视频：`public/media/hero.mp4`（960×540，25fps，H.264，约 7MB）+ 首帧 `hero-poster.jpg`。

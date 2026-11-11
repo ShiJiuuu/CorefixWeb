@@ -1,0 +1,429 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>上海集培优 · 首页「企业资讯」轮播 · 效果稿</title>
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  :root{
+    --bg:#FFFFFF; --bg2:#F4F4F1; --card:#FFFFFF;
+    --ink:#0A0A0A; --ink2:#2E2E2C; --muted:#6E6E6A; --faint:#9C9C97;
+    --line:rgba(10,10,10,.12); --line2:rgba(10,10,10,.28);
+    --inv:#0A0A0A; --inv-t:#FFFFFF;
+    --grid:rgba(10,10,10,.055);
+    --cardbody:#0B0B0B; --paper2:#F4F4F1; --ghost:rgba(10,10,10,.17);
+    --canvas:#E8E8E5;
+    --mono:ui-monospace,"SF Mono",SFMono-Regular,Menlo,Consolas,monospace;
+  }
+  .theme-dark{
+    --bg:#0A0A0A; --bg2:#111110; --card:#0E0E0D;
+    --ink:#F3F3F0; --ink2:#CFCFC9; --muted:#8C8C86; --faint:#66665F;
+    --line:rgba(255,255,255,.14); --line2:rgba(255,255,255,.26);
+    --inv:#F3F3F0; --inv-t:#0A0A0A;
+    --cardbody:#111110; --paper2:#171715; --ghost:rgba(255,255,255,.13);
+  }
+  html,body{background:var(--canvas);color:#0A0A0A;
+    font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","PingFang SC","HarmonyOS Sans SC","Microsoft YaHei",system-ui,sans-serif;
+    -webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
+  .mono{font-family:var(--mono);font-variant-numeric:tabular-nums}
+
+  /* ---------- board chrome ---------- */
+  .topbar{display:flex;align-items:center;gap:14px;padding:14px 30px;background:#EDEDEA;
+    border-bottom:1px solid rgba(10,10,10,.12);font-size:12px;color:#6E6E6A}
+  .topbar b{color:#0A0A0A;font-weight:600;font-size:13px;letter-spacing:.01em}
+  .topbar .sp{flex:1}
+  .topbar .chip{border:1px solid rgba(10,10,10,.22);border-radius:3px;padding:3px 8px;
+    font-family:var(--mono);font-size:9.5px;letter-spacing:.08em;color:#3B3B38}
+  .canvas{padding:38px 30px 80px;display:flex;flex-direction:column;gap:48px;align-items:flex-start}
+  .board-wrap{width:1440px}
+  .board-label{display:flex;align-items:baseline;gap:12px;margin-bottom:12px;
+    font-family:var(--mono);font-size:10.5px;letter-spacing:.14em;color:#5E5E5A;text-transform:uppercase}
+  .board-label b{color:#0A0A0A;font-size:11px;letter-spacing:.1em}
+  .board-label em{margin-left:auto;font-style:normal;color:#8A8A85}
+  .board{width:1440px;background:var(--bg);color:var(--ink);overflow:hidden;
+    box-shadow:0 30px 80px -60px rgba(0,0,0,.55);border:1px solid rgba(10,10,10,.14)}
+
+  /* ---------- section ---------- */
+  .news-section{border-top:1px solid var(--line2);background:var(--bg);padding:96px 0}
+  .u-container{padding-inline:clamp(20px,5.5vw,80px)}
+  .u-label{font-family:var(--mono);font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--faint)}
+  .news-head{display:flex;align-items:flex-end;justify-content:space-between;gap:60px;
+    border-bottom:1px solid var(--line2);padding-bottom:26px;margin-bottom:40px}
+  .news-head h2{margin-top:16px;font-size:50px;font-weight:600;line-height:1.15;letter-spacing:-.02em;color:var(--ink)}
+  .news-sub{margin-top:16px;max-width:560px;font-size:15px;line-height:1.9;color:var(--muted)}
+  .news-side{display:flex;flex-direction:column;align-items:flex-end;gap:18px;padding-bottom:4px;flex:none}
+  .news-side .meta{font-family:var(--mono);font-size:9.5px;letter-spacing:.15em;color:var(--faint);white-space:nowrap}
+  .u-link{display:inline-flex;align-items:center;gap:10px;font-family:var(--mono);font-size:11px;
+    letter-spacing:.14em;border-bottom:1px solid var(--line2);padding-bottom:8px;color:var(--ink);
+    text-decoration:none;transition:gap .25s,border-color .25s}
+  .u-link span{color:var(--faint)}
+  .u-link:hover{gap:16px;border-color:var(--ink)}
+
+  /* ---------- carousel ---------- */
+  .carousel{position:relative}
+  .carousel::after{content:"";position:absolute;right:0;top:0;bottom:0;width:44px;pointer-events:none;
+    background:linear-gradient(90deg,transparent,var(--bg) 90%)}
+  .track{display:flex;gap:24px;overflow:hidden;padding-left:clamp(20px,5.5vw,80px)}
+  .ncard{position:relative;flex:none;width:380px;height:520px;overflow:hidden;border:1px solid var(--line2);
+    border-radius:2px;background:var(--cardbody);text-decoration:none;color:#fff;
+    transition:border-color .3s, transform .45s cubic-bezier(.2,.8,.2,1)}
+  .cover{position:absolute;left:0;top:0;width:100%;height:300px;overflow:hidden;background:#161614}
+  .cover img{width:100%;height:100%;object-fit:cover;
+    filter:grayscale(1) contrast(1.05) brightness(.84);transform:scale(1.001);
+    transition:transform .8s cubic-bezier(.2,.8,.2,1), filter .5s}
+  .scrim{position:absolute;left:0;top:0;width:100%;height:300px;pointer-events:none;
+    background:linear-gradient(180deg,rgba(10,10,10,.5) 0%,rgba(10,10,10,.12) 30%,rgba(10,10,10,.38) 72%,var(--cardbody) 100%)}
+  .top{position:absolute;left:18px;right:18px;top:18px;display:flex;align-items:flex-start;justify-content:space-between;gap:12px}
+  .cat{font-family:var(--mono);font-size:9.5px;letter-spacing:.14em;color:rgba(255,255,255,.94);
+    border:1px solid rgba(255,255,255,.55);background:rgba(10,10,10,.42);backdrop-filter:blur(6px);
+    padding:4px 8px;white-space:nowrap}
+  .idx{font-family:var(--mono);font-size:10px;letter-spacing:.12em;color:rgba(255,255,255,.6);padding-top:4px}
+  .ncard .body{position:absolute;left:0;right:0;top:300px;bottom:0;padding:18px 22px;
+    display:flex;flex-direction:column;background:var(--cardbody)}
+  .ncard .date{font-family:var(--mono);font-size:10px;letter-spacing:.1em;color:rgba(255,255,255,.62)}
+  .ncard .date i{font-style:normal;color:rgba(255,255,255,.3);margin:0 7px}
+  .ncard h3{margin-top:8px;font-size:21px;font-weight:600;line-height:1.42;letter-spacing:-.012em;color:#fff;
+    display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+  .ncard .ex{margin-top:9px;font-size:12.5px;line-height:1.8;color:rgba(255,255,255,.64);
+    display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+  .ncard .foot{margin-top:auto;padding-top:13px;border-top:1px solid rgba(255,255,255,.18);
+    display:flex;align-items:center;justify-content:space-between;
+    font-family:var(--mono);font-size:9.5px;letter-spacing:.14em;color:rgba(255,255,255,.8)}
+  .ncard .foot .arw{font-size:12px;transition:transform .3s}
+  .ncard:hover{transform:translateY(-4px);border-color:var(--ink)}
+  .ncard:hover .cover img{transform:scale(1.05);filter:grayscale(1) contrast(1.08) brightness(.96)}
+  .ncard:hover .foot .arw{transform:translateX(5px)}
+
+  /* card without a usable cover: paper + grid + ghost index, same body */
+  .ncard.no-cover .cover{background:var(--paper2)}
+  .ncard.no-cover .cover::before{content:"";position:absolute;inset:0;
+    background:repeating-linear-gradient(90deg,transparent 0 47px,var(--grid) 47px 48px),
+               repeating-linear-gradient(0deg,transparent 0 47px,var(--grid) 47px 48px)}
+  .ncard.no-cover .big{position:absolute;left:18px;bottom:16px;font-family:var(--mono);
+    font-size:118px;line-height:.8;font-weight:500;letter-spacing:-.06em;color:var(--ghost)}
+  .ncard.no-cover .scrim{display:none}
+  .ncard.no-cover .cat{color:var(--ink);border-color:var(--line2);background:transparent;backdrop-filter:none}
+  .ncard.no-cover .idx{color:var(--faint)}
+
+  /* ---------- controls ---------- */
+  .news-ctrl{display:flex;align-items:center;gap:26px;margin-top:34px}
+  .counter{font-family:var(--mono);font-size:10.5px;letter-spacing:.12em;color:var(--faint);white-space:nowrap}
+  .counter b{color:var(--ink);font-weight:500;font-size:13px}
+  .rail{position:relative;flex:1;max-width:380px;height:2px;background:var(--line)}
+  .rail i{position:absolute;left:0;top:0;height:2px;width:8%;background:var(--ink)}
+  .rail::after{content:"";position:absolute;left:8%;top:-3px;width:1px;height:8px;background:var(--ink)}
+  .auto{margin-left:auto;display:flex;align-items:center;gap:8px;
+    font-family:var(--mono);font-size:9px;letter-spacing:.16em;color:var(--faint);white-space:nowrap}
+  .auto .dot{width:5px;height:5px;border-radius:50%;background:var(--ink);animation:pulse 2s ease-in-out infinite}
+  @keyframes pulse{0%,100%{opacity:.25}50%{opacity:1}}
+  .arrows{display:flex;gap:8px}
+  .arrows button{width:44px;height:44px;border:1px solid var(--line2);background:transparent;color:var(--ink);
+    font-size:14px;font-family:var(--mono);cursor:pointer;transition:background .2s,color .2s,border-color .2s}
+  .arrows button:hover{background:var(--inv);color:var(--inv-t);border-color:var(--inv)}
+  .arrows button.off{color:var(--faint);border-color:var(--line)}
+
+  /* ---------- mobile board ---------- */
+  .mobile-stage{width:390px;background:#fff;overflow:hidden;border:1px solid rgba(10,10,10,.14);
+    box-shadow:24px 40px 80px -60px rgba(0,0,0,.55)}
+  .mobile-stage img{display:block;width:390px;height:auto}
+  .side-note{width:520px;font-size:12.5px;line-height:1.95;color:#4A4A46}
+  .side-note h3{font-family:var(--mono);font-size:10px;letter-spacing:.16em;color:#0A0A0A;
+    border-bottom:1px solid rgba(10,10,10,.25);padding-bottom:10px;margin-bottom:14px}
+  .side-note ul{list-style:none}
+  .side-note li{position:relative;padding-left:18px;margin-bottom:11px}
+  .side-note li::before{content:"—";position:absolute;left:0;color:#9C9C97}
+  .side-note b{font-weight:600;color:#0A0A0A}
+  .mobile-row{display:flex;gap:48px;align-items:flex-start;width:1440px}
+
+  /* ---------- spec sheet ---------- */
+  .spec{width:1440px;background:#fff;border:1px solid rgba(10,10,10,.14);padding:48px 56px;color:#0A0A0A;
+    display:grid;grid-template-columns:repeat(2,1fr);gap:26px 64px}
+  .spec .cell h4{font-family:var(--mono);font-size:10px;letter-spacing:.16em;color:#6E6E6A;
+    border-bottom:1px solid rgba(10,10,10,.18);padding-bottom:10px;margin-bottom:14px}
+  .spec .cell p{font-size:12.5px;line-height:1.95;color:#3B3B38}
+  .spec .cell p + p{margin-top:8px}
+  .spec .cell b{font-weight:600;color:#0A0A0A}
+  .spec .cell code{font-family:var(--mono);font-size:11px;background:#F4F4F1;padding:1px 5px}
+  .flowmap{display:flex;flex-wrap:wrap;gap:6px;margin:4px 0 12px}
+  .flowmap span{font-family:var(--mono);font-size:9px;letter-spacing:.1em;border:1px solid rgba(10,10,10,.2);
+    padding:5px 8px;color:#6E6E6A}
+  .flowmap span.on{background:#0A0A0A;color:#fff;border-color:#0A0A0A}
+  .decisions{grid-column:1 / -1;border-top:1px solid rgba(10,10,10,.18);padding-top:20px;margin-top:4px;
+    display:flex;flex-wrap:wrap;gap:12px 40px;font-size:12.5px;color:#3B3B38}
+  .decisions b{font-family:var(--mono);font-size:9.5px;letter-spacing:.14em;color:#6E6E6A;display:block;margin-bottom:4px}
+  .decisions > div{min-width:250px}
+  .hint{font-family:var(--mono);font-size:9px;letter-spacing:.12em;color:#9C9C97}
+  .a5row{display:flex;gap:28px;align-items:flex-start}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <b>COREFIX PRO · 官网</b>
+  <span>首页新增「企业资讯」轮播 · 效果稿</span>
+  <span class="sp"></span>
+  <span class="chip">DESKTOP 1440</span>
+  <span class="chip">MOBILE 390</span>
+  <span class="chip">2026.11.11</span>
+</div>
+
+<div class="canvas">
+
+  <!-- ============ A1 浅色 ============ -->
+  <div class="board-wrap">
+    <div class="board-label"><b>A1</b><span>首页 · 企业资讯（浅色主题）</span><em>1440 W</em></div>
+    <div class="board">
+      <section class="news-section">
+        <div class="u-container">
+          <div class="news-head">
+            <div>
+              <p class="u-label">NEWS</p>
+              <h2>企业资讯</h2>
+              <p class="news-sub">公司动态、交付现场与技术观察，来自「集培优」公众号。</p>
+            </div>
+            <div class="news-side">
+              <span class="meta">16 ARTICLES · UPDATED 2026.08.18</span>
+              <a class="u-link" href="#news">全部资讯 <span>→</span></a>
+            </div>
+          </div>
+        </div>
+
+        <div class="carousel">
+          <div class="track">
+            <a class="ncard" href="#">
+              <div class="cover"><img src="../public/news/ai-training-efficiency/img-01.png" alt="" /></div>
+              <div class="scrim"></div>
+              <div class="top"><span class="cat">行业观察</span><span class="idx">01</span></div>
+              <div class="body">
+                <p class="date">2026.08.18<i>·</i>9 MIN READ</p>
+                <h3>GPU 越来越多，为什么 AI 训练效率没有同步提升？</h3>
+                <p class="ex">某互联网企业把 AI 训练集群从 80 卡扩到 300 多卡，训练速度没有同步提升，GPU 平均利用率只有 40% 出头。</p>
+                <div class="foot"><span>阅读全文</span><span class="arw">→</span></div>
+              </div>
+            </a>
+
+            <a class="ncard" href="#">
+              <div class="cover"><img src="../public/news/ecc-repairable/img-02.png" alt="" /></div>
+              <div class="scrim"></div>
+              <div class="top"><span class="cat">技术讲座</span><span class="idx">02</span></div>
+              <div class="body">
+                <p class="date">2026.07.31<i>·</i>6 MIN READ</p>
+                <h3>GPU维修系列讲座｜认知篇：ECC能不能修？</h3>
+                <p class="ex">ECC 不是一个可以直接「修」的故障件，它需要先归因、再决策。</p>
+                <div class="foot"><span>阅读全文</span><span class="arw">→</span></div>
+              </div>
+            </a>
+
+            <a class="ncard" href="#">
+              <div class="cover"><img src="../public/news/waic-2026/img-01.png" alt="" style="object-position:center 30%" /></div>
+              <div class="scrim"></div>
+              <div class="top"><span class="cat">公司动态</span><span class="idx">03</span></div>
+              <div class="body">
+                <p class="date">2026.07.15<i>·</i>2 MIN READ</p>
+                <h3>集培优与你相约 WAIC 2026</h3>
+                <p class="ex">7 月 17–20 日，上海世博展览馆，展位 H4-027。</p>
+                <div class="foot"><span>阅读全文</span><span class="arw">→</span></div>
+              </div>
+            </a>
+
+            <a class="ncard" href="#">
+              <div class="cover"><img src="../public/news/gpu-series-05/img-02.png" alt="" /></div>
+              <div class="scrim"></div>
+              <div class="top"><span class="cat">技术讲座</span><span class="idx">04</span></div>
+              <div class="body">
+                <p class="date">2026.07.03<i>·</i>7 MIN READ</p>
+                <h3>GPU维修系列讲座｜第5讲：ECC错误（上）——从读懂日志到做对决策</h3>
+                <p class="ex">把常见关键的 ECC 场景，整理成一套完整的决策框架。</p>
+                <div class="foot"><span>阅读全文</span><span class="arw">→</span></div>
+              </div>
+            </a>
+          </div>
+        </div>
+
+        <div class="u-container">
+          <div class="news-ctrl">
+            <span class="counter"><b>01</b> / 16</span>
+            <div class="rail"><i></i></div>
+            <span class="auto"><i class="dot"></i>AUTO 6S</span>
+            <div class="arrows"><button aria-label="上一条">←</button><button aria-label="下一条">→</button></div>
+          </div>
+        </div>
+      </section>
+    </div>
+  </div>
+
+  <!-- ============ A2 深色 ============ -->
+  <div class="board-wrap">
+    <div class="board-label"><b>A2</b><span>首页 · 企业资讯（深色主题）</span><em>1440 W</em></div>
+    <div class="board theme-dark">
+      <section class="news-section">
+        <div class="u-container">
+          <div class="news-head">
+            <div>
+              <p class="u-label">NEWS</p>
+              <h2>企业资讯</h2>
+              <p class="news-sub">公司动态、交付现场与技术观察，来自「集培优」公众号。</p>
+            </div>
+            <div class="news-side">
+              <span class="meta">16 ARTICLES · UPDATED 2026.08.18</span>
+              <a class="u-link" href="#news">全部资讯 <span>→</span></a>
+            </div>
+          </div>
+        </div>
+
+        <div class="carousel">
+          <div class="track">
+            <a class="ncard" href="#">
+              <div class="cover"><img src="../public/news/ai-training-efficiency/img-01.png" alt="" /></div>
+              <div class="scrim"></div>
+              <div class="top"><span class="cat">行业观察</span><span class="idx">01</span></div>
+              <div class="body">
+                <p class="date">2026.08.18<i>·</i>9 MIN READ</p>
+                <h3>GPU 越来越多，为什么 AI 训练效率没有同步提升？</h3>
+                <p class="ex">某互联网企业把 AI 训练集群从 80 卡扩到 300 多卡，训练速度没有同步提升，GPU 平均利用率只有 40% 出头。</p>
+                <div class="foot"><span>阅读全文</span><span class="arw">→</span></div>
+              </div>
+            </a>
+
+            <a class="ncard" href="#">
+              <div class="cover"><img src="../public/news/ecc-repairable/img-02.png" alt="" /></div>
+              <div class="scrim"></div>
+              <div class="top"><span class="cat">技术讲座</span><span class="idx">02</span></div>
+              <div class="body">
+                <p class="date">2026.07.31<i>·</i>6 MIN READ</p>
+                <h3>GPU维修系列讲座｜认知篇：ECC能不能修？</h3>
+                <p class="ex">ECC 不是一个可以直接「修」的故障件，它需要先归因、再决策。</p>
+                <div class="foot"><span>阅读全文</span><span class="arw">→</span></div>
+              </div>
+            </a>
+
+            <a class="ncard" href="#">
+              <div class="cover"><img src="../public/news/waic-2026/img-01.png" alt="" style="object-position:center 30%" /></div>
+              <div class="scrim"></div>
+              <div class="top"><span class="cat">公司动态</span><span class="idx">03</span></div>
+              <div class="body">
+                <p class="date">2026.07.15<i>·</i>2 MIN READ</p>
+                <h3>集培优与你相约 WAIC 2026</h3>
+                <p class="ex">7 月 17–20 日，上海世博展览馆，展位 H4-027。</p>
+                <div class="foot"><span>阅读全文</span><span class="arw">→</span></div>
+              </div>
+            </a>
+
+            <a class="ncard" href="#">
+              <div class="cover"><img src="../public/news/gpu-series-05/img-02.png" alt="" /></div>
+              <div class="scrim"></div>
+              <div class="top"><span class="cat">技术讲座</span><span class="idx">04</span></div>
+              <div class="body">
+                <p class="date">2026.07.03<i>·</i>7 MIN READ</p>
+                <h3>GPU维修系列讲座｜第5讲：ECC错误（上）——从读懂日志到做对决策</h3>
+                <p class="ex">把常见关键的 ECC 场景，整理成一套完整的决策框架。</p>
+                <div class="foot"><span>阅读全文</span><span class="arw">→</span></div>
+              </div>
+            </a>
+          </div>
+        </div>
+
+        <div class="u-container">
+          <div class="news-ctrl">
+            <span class="counter"><b>01</b> / 16</span>
+            <div class="rail"><i></i></div>
+            <span class="auto"><i class="dot"></i>AUTO 6S</span>
+            <div class="arrows"><button aria-label="上一条">←</button><button aria-label="下一条">→</button></div>
+          </div>
+        </div>
+      </section>
+    </div>
+  </div>
+
+  <!-- ============ A3 移动端 ============ -->
+  <div class="mobile-row">
+    <div>
+      <div class="board-label" style="width:390px"><b>A3</b><span>移动端 390</span></div>
+      <div class="mobile-stage"><img src="./news-carousel-mobile.png" alt="移动端效果" /></div>
+    </div>
+
+    <div class="side-note" style="padding-top:36px">
+      <h3>为什么是这一版</h3>
+      <ul>
+        <li><b>三张竖版卡 + 右侧露出下一张</b>，一眼看出「还能往右」，是轮播而不是静态栅格。</li>
+        <li><b>封面统一黑白</b>，把公众号里风格各异的彩色长图收进同一套视觉；hover 时轻微放大、提亮，克制不花哨。</li>
+        <li><b>图上文下、深色文字区</b>：封面只负责吸引，标题和摘要永远落在纯色底上，不担心亮底图片压不住字。</li>
+        <li><b>整卡可点</b>，信息按「分类 → 日期 → 标题 → 摘要 → 阅读」排列，右上角序号与底部计数条一起构成浏览进度。</li>
+        <li><b>没有可用封面的文章</b>自动降级为「纸面 + 大号序号」封面（A5），排版骨架不变，轮播不会跳动。</li>
+        <li>沿用站点现有栅格：80px 页边距、1px 细线、等宽数字、50px 区块标题，与「客户案例 / 六步流程」同一套语言。</li>
+      </ul>
+      <p class="hint" style="margin-top:18px">默认位置：首页「六步闭环」之后、页脚之前</p>
+    </div>
+  </div>
+
+  <!-- ============ A4 规范 ============ -->
+  <div class="board-wrap">
+    <div class="board-label"><b>A4</b><span>交互与降级规则</span><em>SPEC</em></div>
+    <div class="spec">
+
+      <div class="cell">
+        <h4>01 · 页面位置</h4>
+        <div class="flowmap">
+          <span>首屏</span><span>核心业务</span><span>客户案例</span><span>服务网络</span><span>六步流程</span><span class="on">企业资讯</span><span>页脚</span>
+        </div>
+        <p>放在首页叙事收尾处：先讲能力、案例、网络与流程，最后用「持续输出的资讯」收束信任，再进页脚。</p>
+      </div>
+
+      <div class="cell">
+        <h4>02 · 轮播行为</h4>
+        <p>横向 <code>scroll-snap</code>：桌面一屏 3 张（380px 卡 + 24px 间距，右侧露出下一张），移动端 1.15 张；可拖拽、可触控板横滑。</p>
+        <p>左右箭头一次走一张；自动轮播 6s，悬停 / 聚焦 / 拖拽 / 切到后台即暂停，用户手动操作后不再自动前进。</p>
+        <p>底部计数 <code>01 / 16</code> 与细进度条同步；<code>prefers-reduced-motion</code> 下关闭自动轮播与位移动画。</p>
+      </div>
+
+      <div class="cell">
+        <h4>03 · 数据来源</h4>
+        <p>直接读现有 <code>content/news/*.md</code>，按日期倒序全部进入轮播；新增或更新文章，首页自动同步，无需二次维护。</p>
+        <p>首页只传标题 / 日期 / 分类 / 摘要 / 封面，正文不进首页；封面出 800px 缩略图并懒加载。</p>
+        <p>front matter 新增可选 <code>cover:</code> 与 <code>readTime:</code>；缺省时取正文首图、按字数估算。</p>
+      </div>
+
+      <div class="cell">
+        <h4>04 · 无封面降级</h4>
+        <p>没有可用图片的文章，封面区换成纸面底色 + 网格 + 大号序号，标题与摘要仍在深色文字区，位置完全对齐。</p>
+        <p>预览：下方 A5 板。深色主题自动反相，无需单独配置。</p>
+      </div>
+
+      <div class="decisions">
+        <div><b>待确认</b>位置：六步流程后（默认）/ 客户案例后</div>
+        <div><b>待确认</b>自动轮播：开（6s）/ 关</div>
+        <div><b>待确认</b>卡片比例：380×520（默认）/ 更矮的 380×460</div>
+        <div><b>待确认</b>轮播范围：全部 16 篇（默认）/ 最新 8 篇</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ A5 无封面卡 ============ -->
+  <div class="board-wrap" style="width:auto">
+    <div class="board-label" style="width:900px"><b>A5</b><span>无封面降级卡</span><em>380 × 520</em></div>
+    <div class="a5row">
+      <a class="ncard no-cover" href="#" style="width:380px;height:520px">
+        <div class="cover"><span class="big">05</span></div>
+        <div class="top"><span class="cat">技术讲座</span><span class="idx">05</span></div>
+        <div class="body">
+          <p class="date">2026.06.24<i>·</i>7 MIN READ</p>
+          <h3>GPU维修系列讲座｜第3讲：显存故障（上）——HBM 显存的损坏与修复</h3>
+          <p class="ex">HBM 的失效模式与可修复边界：哪些能换、哪些只能降级使用。</p>
+          <div class="foot"><span>阅读全文</span><span class="arw">→</span></div>
+        </div>
+      </a>
+      <div class="side-note" style="width:600px;padding-top:8px">
+        <h3>降级规则</h3>
+        <ul>
+          <li>封面字段为空，或正文首图不是有效图片时触发。</li>
+          <li>保持与图片卡相同的外框、分类 chip、日期、标题、摘要与阅读入口，只把照片换成「纸面 + 网格 + 大序号」。</li>
+          <li>深色主题下纸面自动变成 #171715、序号变白 13%，与整站主题一起切换。</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>

@@ -70,12 +70,7 @@ export default async function CareersPage({ params }: { params: Promise<{ locale
               data-reveal={String(i * 0.03)}
             >
               <div className="flex flex-wrap items-baseline justify-between gap-x-6 gap-y-3">
-                <div className="flex min-w-0 items-baseline gap-4">
-                  <span className="u-mono text-[11px] tracking-[0.1em] text-faint">
-                    {String(i + 1).padStart(2, '0')}
-                  </span>
-                  <h3 className="text-[24px] font-semibold leading-tight">{job.title}</h3>
-                </div>
+                <h3 className="min-w-0 text-[24px] font-semibold leading-tight">{job.title}</h3>
                 <b className="u-mono text-[19px] font-semibold tracking-tight">{job.salary}</b>
               </div>
 

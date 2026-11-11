@@ -7,6 +7,8 @@ import SlaTable from '@/components/SlaTable'
 import ServerModel from '@/components/server-model/ServerModel'
 import ServerRevealVideo from '@/components/ServerRevealVideo'
 import { SectionHead, CtaBand } from '@/components/Sections'
+import NewsCarousel from '@/components/NewsCarousel'
+import { formatNewsDate, getAllNews } from '@/lib/news'
 
 export function generateStaticParams() {
   return locales.map((locale) => ({ locale }))
@@ -21,6 +23,17 @@ const SHOW_B300_MODEL = false
 export default async function HomePage({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = await params
   const d = getDict(locale)
+
+  // one source of truth: every article in content/news/*.md, newest first
+  const newsItems = getAllNews().map((n) => ({
+    slug: n.slug,
+    title: n.title,
+    date: formatNewsDate(n.date),
+    category: d.page.news.categories[n.category] ?? n.category,
+    excerpt: n.excerpt,
+    cover: n.cover,
+    readTime: n.readTime,
+  }))
 
   return (
     <>
@@ -273,6 +286,20 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
           <ProcessFlow flow={d.process.flow} />
         </div>
       </section>
+
+      {newsItems.length > 0 && (
+        <NewsCarousel
+          locale={locale}
+          items={newsItems}
+          eyebrow={d.page.news.eyebrow}
+          title={d.page.news.title}
+          desc={d.page.news.homeDesc}
+          allLabel={d.page.news.listLabel}
+          readMore={d.page.news.readMore}
+          prevLabel={d.page.news.prev}
+          nextLabel={d.page.news.next}
+        />
+      )}
 
       <CtaBand
         eyebrow={d.cta.eyebrow}

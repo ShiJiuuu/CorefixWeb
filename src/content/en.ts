@@ -747,16 +747,17 @@ export const en: Dict = {
     about: {
       eyebrow: 'ABOUT',
       title: 'We treat GPUs as precision instruments',
-      desc: 'Founded in September 2025 with RMB 50 million in registered capital, Shanghai CoreFix Pro is based in Changning District and focuses on professional GPU repair, maintenance and tuning.',
+      desc: 'Founded in 2025 with RMB 50 million in registered capital, Shanghai CoreFix Pro is headquartered in Changning District and focuses on third-party GPU server repair, maintenance and operations support across the full hardware lifecycle.',
       paras: [
-        'We built the lab before we sold the service. The 2,000㎡ four-floor repair base in Lingang, Shanghai houses X-ray inspection and BGA rework equipment, giving component-level GPU repair and fault diagnosis a solid technical floor.',
-        'The team is 60+ strong: 4 principal engineers with 20 years of GPU development support each, 22 repair engineers handling card faults and reballing, and 35 operations engineers building and running intelligent computing centres.',
-        'For clients this means a predictable delivery: faults are graded, turnaround is bounded, results come with a report, and warranty is a commitment.',
+        'Shanghai CoreFix Pro Information Technology Co., Ltd. was founded in 2025 with RMB 50 million in registered capital and is headquartered in Changning District, Shanghai. The company focuses on third-party GPU server repair, maintenance and operations support, helping data centres and AI companies safeguard compute hardware across its full lifecycle and solve the practical pain points of hardware operations.',
+        'On the service side, CoreFix Pro has built a full-lifecycle system spanning repair, maintenance, operations and delivery. It covers standardised fault diagnosis and component-level repair as well as remote technical support, spare parts in advance and on-site support; routine inspections and early fault warnings connect operations with repair in one loop. It also provides professional delivery services such as acceptance testing for new machines and inspection of second-hand servers, keeping customer equipment stable end to end.',
+        'The CoreFix Pro GPU Repair Centre in Lingang, Shanghai, covers 2,500 m² and is the largest GPU repair base in East China. It houses an electronic repair area, a cleanroom soldering area, a testing and calibration area, a spare-parts warehouse and a customer service centre. Its equipment includes X-ray inspection systems, thermal imagers, and BGA rework and reballing stations, supporting damage-free rework of H100/H200 chips with a reballing yield above 99%. A 1,000 m² Class 10,000 cleanroom and temperature- and humidity-controlled storage cabinets provide the environment and technical backbone for precise component-level GPU repair.',
+        'Talent and technology are the core competitive advantage of CoreFix Pro. The company has a 40-strong technical team with more than 10 years of average industry experience, led by Taiwan-based technical experts with over 20 years of experience who lead system building and the final review of complex cases. Senior engineers specialise in NVIDIA GPU architecture and fault isolation, while the FAE team provides rapid response and on-site support. To date the team has repaired more than 2,000 GPU servers, delivering complex cases in under 10 days and restoring GPU compute to over 98% of factory performance.',
       ],
       facts: [
-        { v: '2025.9', l: 'Founded' },
+        { v: '2025', l: 'Founded' },
         { v: 'RMB 50M', l: 'Registered capital' },
-        { v: '60+', l: 'Engineers' },
+        { v: '40+', l: 'Engineers' },
       ],
       qualsTitle: 'Certifications',
     },
@@ -844,8 +845,11 @@ export const en: Dict = {
     news: {
       eyebrow: 'NEWS',
       title: 'Company news',
-      desc: 'Announcements, delivery notes and technical write-ups, imported from our WeChat account and listed newest first. Articles are published in Simplified Chinese.',
+      desc: 'Announcements, delivery notes and technical write-ups. Articles are published in Simplified Chinese.',
       listLabel: 'All articles',
+      homeDesc:
+        'Company updates, delivery stories and technical notes. Follow our new centres, services and every hand-over, plus fault reviews, repair methods and compute-assurance lessons from our engineers.',
+      readMore: 'Read article',
       back: 'Back to news',
       sourceLabel: 'Read the original',
       updatedLabel: 'Published',

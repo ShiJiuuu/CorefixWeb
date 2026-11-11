@@ -40,19 +40,22 @@ export default async function CapabilityPage({ params }: { params: Promise<{ loc
         {d.cap.items.map((c, i) => (
           <article
             key={c.no}
-            className="flex flex-col gap-6 border-b border-line py-10 lg:flex-row lg:items-start lg:gap-8 lg:py-12"
+            className="flex flex-col gap-6 border-b border-line py-10 lg:flex-row lg:items-center lg:gap-8 lg:py-12"
             data-reveal={String(i * 0.03)}
           >
-            <span className="u-mono text-[11px] tracking-[0.1em] text-faint lg:w-[70px] lg:shrink-0">{c.no}</span>
+            <div className="flex flex-col gap-6 lg:shrink-0 lg:flex-row lg:items-start lg:gap-8">
+              <span className="u-mono text-[11px] tracking-[0.1em] text-faint lg:w-[70px] lg:shrink-0">
+                {c.no}
+              </span>
 
-            <div className="lg:w-[300px] lg:shrink-0">
-              <h2 className="text-[26px] font-semibold leading-tight">{c.title}</h2>
-              <p className="u-mono mt-2 text-[9.5px] tracking-[0.16em] text-faint">{c.en}</p>
-              <div className="mt-6 flex items-baseline gap-2 border-t border-line pt-4 lg:mt-8">
-                <span className="u-mono text-[26px] font-semibold leading-none tracking-tight">
-                  {c.metric}
-                </span>
-                <span className="text-[10.5px] leading-tight text-faint">{c.metricLabel}</span>
+              <div className="lg:w-[300px] lg:shrink-0">
+                <h2 className="text-[26px] font-semibold leading-tight">{c.title}</h2>
+                <div className="mt-6 flex items-baseline gap-2 border-t border-line pt-4 lg:mt-8">
+                  <span className="u-mono text-[26px] font-semibold leading-none tracking-tight">
+                    {c.metric}
+                  </span>
+                  <span className="text-[10.5px] leading-tight text-faint">{c.metricLabel}</span>
+                </div>
               </div>
             </div>
 

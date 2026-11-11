@@ -212,6 +212,10 @@ export type Dict = {
     }
     news: PageHero & {
       listLabel: string
+      /** Longer intro used by the homepage carousel; `desc` stays on /news. */
+      homeDesc: string
+      /** Card CTA on the homepage carousel. */
+      readMore: string
       back: string
       sourceLabel: string
       updatedLabel: string
