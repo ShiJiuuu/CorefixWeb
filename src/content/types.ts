@@ -221,6 +221,8 @@ export type Dict = {
       updatedLabel: string
       prev: string
       next: string
+      /** Shown on an article that has not been translated into this locale yet. */
+      fallbackNote: string
       categories: Record<'company' | 'tech' | 'guide' | 'industry' | 'service' | 'case', string>
     }
   }

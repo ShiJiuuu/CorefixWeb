@@ -3,7 +3,7 @@ import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import { locales, isLocale, type Locale } from '@/lib/i18n'
 import { caseSlugs, getDict } from '@/content'
-import { pageMetadata, SITE_TITLE } from '@/lib/seo'
+import { pageMetadata, siteTitle } from '@/lib/seo'
 import { CtaBand } from '@/components/Sections'
 
 /** Only the slugs generated below exist; anything else falls through to the 404 page. */
@@ -26,7 +26,7 @@ export async function generateMetadata({
     locale: isLocale(locale) ? locale : 'zh-cn',
     path: `/cases/${slug}/`,
     description: item.summary,
-    title: `${item.title} — ${SITE_TITLE}`,
+    title: `${item.title} — ${siteTitle(isLocale(locale) ? locale : 'zh-cn')}`,
   })
 }
 

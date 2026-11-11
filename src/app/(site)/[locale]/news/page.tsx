@@ -29,7 +29,7 @@ export default async function NewsPage({ params }: { params: Promise<{ locale: s
   const { locale } = await params
   const d = getDict(locale)
   const p = d.page.news
-  const items = getAllNews()
+  const items = getAllNews(locale as Locale)
 
   return (
     <>

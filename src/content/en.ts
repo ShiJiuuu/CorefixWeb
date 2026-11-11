@@ -3,7 +3,7 @@ import type { Dict } from './types'
 export const en: Dict = {
   meta: {
     description:
-      'Shanghai CoreFix Pro Information Technology — component-level GPU repair, driver and firmware tuning, nationwide spare-parts network and on-site maintenance. 99.2% repair success rate, compute restored to 98%+ of factory baseline.',
+      'Shanghai COREFIX PRO Information Technology — component-level GPU repair, driver and firmware tuning, nationwide spare-parts network and on-site maintenance. 99.2% repair success rate, compute restored to 98%+ of factory baseline.',
   },
   nav: {
     links: [
@@ -676,7 +676,7 @@ export const en: Dict = {
     ],
   },
   footer: {
-    company: 'Shanghai CoreFix Pro Information Technology Co., Ltd.',
+    company: 'Shanghai COREFIX PRO Information Technology Co., Ltd.',
     address: 'Floor 5, Building 3, 299 Youle Road, Changning District, Shanghai',
     labels: { address: 'Address: ', phone: 'Tel: ' },
     phone: '021-5176-8787',
@@ -747,12 +747,12 @@ export const en: Dict = {
     about: {
       eyebrow: 'ABOUT',
       title: 'We treat GPUs as precision instruments',
-      desc: 'Founded in 2025 with RMB 50 million in registered capital, Shanghai CoreFix Pro is headquartered in Changning District and focuses on third-party GPU server repair, maintenance and operations support across the full hardware lifecycle.',
+      desc: 'Founded in 2025 with RMB 50 million in registered capital, Shanghai COREFIX PRO is headquartered in Changning District and focuses on third-party GPU server repair, maintenance and operations support across the full hardware lifecycle.',
       paras: [
-        'Shanghai CoreFix Pro Information Technology Co., Ltd. was founded in 2025 with RMB 50 million in registered capital and is headquartered in Changning District, Shanghai. The company focuses on third-party GPU server repair, maintenance and operations support, helping data centres and AI companies safeguard compute hardware across its full lifecycle and solve the practical pain points of hardware operations.',
-        'On the service side, CoreFix Pro has built a full-lifecycle system spanning repair, maintenance, operations and delivery. It covers standardised fault diagnosis and component-level repair as well as remote technical support, spare parts in advance and on-site support; routine inspections and early fault warnings connect operations with repair in one loop. It also provides professional delivery services such as acceptance testing for new machines and inspection of second-hand servers, keeping customer equipment stable end to end.',
-        'The CoreFix Pro GPU Repair Centre in Lingang, Shanghai, covers 2,500 m² and is the largest GPU repair base in East China. It houses an electronic repair area, a cleanroom soldering area, a testing and calibration area, a spare-parts warehouse and a customer service centre. Its equipment includes X-ray inspection systems, thermal imagers, and BGA rework and reballing stations, supporting damage-free rework of H100/H200 chips with a reballing yield above 99%. A 1,000 m² Class 10,000 cleanroom and temperature- and humidity-controlled storage cabinets provide the environment and technical backbone for precise component-level GPU repair.',
-        'Talent and technology are the core competitive advantage of CoreFix Pro. The company has a 40-strong technical team with more than 10 years of average industry experience, led by Taiwan-based technical experts with over 20 years of experience who lead system building and the final review of complex cases. Senior engineers specialise in NVIDIA GPU architecture and fault isolation, while the FAE team provides rapid response and on-site support. To date the team has repaired more than 2,000 GPU servers, delivering complex cases in under 10 days and restoring GPU compute to over 98% of factory performance.',
+        'Shanghai COREFIX PRO Information Technology Co., Ltd. was founded in 2025 with RMB 50 million in registered capital and is headquartered in Changning District, Shanghai. The company focuses on third-party GPU server repair, maintenance and operations support, helping data centres and AI companies safeguard compute hardware across its full lifecycle and solve the practical pain points of hardware operations.',
+        'On the service side, COREFIX PRO has built a full-lifecycle system spanning repair, maintenance, operations and delivery. It covers standardised fault diagnosis and component-level repair as well as remote technical support, spare parts in advance and on-site support; routine inspections and early fault warnings connect operations with repair in one loop. It also provides professional delivery services such as acceptance testing for new machines and inspection of second-hand servers, keeping customer equipment stable end to end.',
+        'The COREFIX PRO GPU Repair Centre in Lingang, Shanghai, covers 2,500 m² and is the largest GPU repair base in East China. It houses an electronic repair area, a cleanroom soldering area, a testing and calibration area, a spare-parts warehouse and a customer service centre. Its equipment includes X-ray inspection systems, thermal imagers, and BGA rework and reballing stations, supporting damage-free rework of H100/H200 chips with a reballing yield above 99%. A 1,000 m² Class 10,000 cleanroom and temperature- and humidity-controlled storage cabinets provide the environment and technical backbone for precise component-level GPU repair.',
+        'Talent and technology are the core competitive advantage of COREFIX PRO. The company has a 40-strong technical team with more than 10 years of average industry experience, led by Taiwan-based technical experts with over 20 years of experience who lead system building and the final review of complex cases. Senior engineers specialise in NVIDIA GPU architecture and fault isolation, while the FAE team provides rapid response and on-site support. To date the team has repaired more than 2,000 GPU servers, delivering complex cases in under 10 days and restoring GPU compute to over 98% of factory performance.',
       ],
       facts: [
         { v: '2025', l: 'Founded' },
@@ -845,7 +845,7 @@ export const en: Dict = {
     news: {
       eyebrow: 'NEWS',
       title: 'Company news',
-      desc: 'Announcements, delivery notes and technical write-ups. Articles are published in Simplified Chinese.',
+      desc: 'Announcements, delivery notes and technical write-ups from our repair centre and field engineers.',
       listLabel: 'All articles',
       homeDesc:
         'Company updates, delivery stories and technical notes. Follow our new centres, services and every hand-over, plus fault reviews, repair methods and compute-assurance lessons from our engineers.',
@@ -855,9 +855,10 @@ export const en: Dict = {
       updatedLabel: 'Published',
       prev: 'Previous',
       next: 'Next',
+      fallbackNote: 'This article is currently available in Simplified Chinese only.',
       categories: {
         company: 'Company',
-        tech: 'Lectures',
+        tech: 'Technical',
         guide: 'Playbook',
         industry: 'Industry',
         service: 'Service',

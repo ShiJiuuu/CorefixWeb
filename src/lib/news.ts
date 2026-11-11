@@ -1,6 +1,7 @@
 import fs from 'node:fs'
 import path from 'node:path'
 import { marked } from 'marked'
+import type { Locale } from '@/lib/i18n'
 
 export type NewsCategory = 'company' | 'tech' | 'guide' | 'industry' | 'service' | 'case'
 
@@ -17,10 +18,14 @@ export type NewsArticle = {
   cover: string
   /** Whole minutes, estimated from the body when `readTime:` is absent. */
   readTime: number
+  /** False when this locale falls back to the Simplified Chinese article. */
+  translated: boolean
   html: string
 }
 
-const DIR = path.join(process.cwd(), 'content', 'news')
+/** Every article is authored in Simplified Chinese; other locales override file by file. */
+const BASE: Locale = 'zh-cn'
+const ROOT = path.join(process.cwd(), 'content', 'news')
 const COVER_DIR = path.join(process.cwd(), 'public', 'news-covers')
 
 const MD_IMAGE = /!\[[^\]]*\]\(\s*<?([^)\s>]+)[^)]*\)/i
@@ -95,43 +100,62 @@ function excerptOf(body: string) {
   return ''
 }
 
-let cache: NewsArticle[] | null = null
+function readLocale(locale: Locale) {
+  const dir = path.join(ROOT, locale)
+  const out = new Map<string, NewsArticle>()
+  if (!fs.existsSync(dir)) return out
 
-/** All articles, newest first. Read once per build from content/news/*.md. */
-export function getAllNews(): NewsArticle[] {
-  if (cache) return cache
+  for (const file of fs.readdirSync(dir).filter((f) => f.endsWith('.md'))) {
+    const raw = fs.readFileSync(path.join(dir, file), 'utf8')
+    const { meta, body } = parseFrontMatter(raw)
+    const declaredRead = Number.parseInt(meta.readTime || '', 10)
+    const cover = coverOf(meta, body)
+    out.set(meta.slug, {
+      slug: meta.slug,
+      title: meta.title,
+      date: meta.date,
+      category: meta.category as NewsCategory,
+      source: meta.source ?? '',
+      excerpt: (meta.excerpt || '').trim() || excerptOf(body),
+      cover: cardCover(meta.slug, cover),
+      readTime: Number.isFinite(declaredRead) && declaredRead > 0 ? declaredRead : estimateReadTime(body),
+      translated: meta.translated !== 'false',
+      html: marked.parse(body, { gfm: true, async: false }) as string,
+    })
+  }
+  return out
+}
 
-  cache = fs
-    .readdirSync(DIR)
-    .filter((file) => file.endsWith('.md'))
-    .map((file) => {
-      const raw = fs.readFileSync(path.join(DIR, file), 'utf8')
-      const { meta, body } = parseFrontMatter(raw)
-      const declaredRead = Number.parseInt(meta.readTime || '', 10)
-      const cover = coverOf(meta, body)
-      return {
-        slug: meta.slug,
-        title: meta.title,
-        date: meta.date,
-        category: meta.category as NewsCategory,
-        source: meta.source ?? '',
-        excerpt: excerptOf(body),
-        cover: cardCover(meta.slug, cover),
-        readTime: Number.isFinite(declaredRead) && declaredRead > 0 ? declaredRead : estimateReadTime(body),
-        html: marked.parse(body, { gfm: true, async: false }) as string,
-      }
+const baseArticles = readLocale(BASE)
+const localeCache = new Map<Locale, NewsArticle[]>()
+
+/**
+ * Articles for one locale, newest first. Any slug without a file in that locale
+ * falls back to the Simplified Chinese original and is flagged `translated: false`,
+ * so the page can tell the reader instead of silently mixing languages.
+ */
+export function getAllNews(locale: Locale = BASE): NewsArticle[] {
+  const cached = localeCache.get(locale)
+  if (cached) return cached
+
+  const localised = locale === BASE ? null : readLocale(locale)
+  const list = [...baseArticles.values()]
+    .map((base) => {
+      const local = localised?.get(base.slug)
+      return local ?? { ...base, translated: locale === BASE }
     })
     .sort((a, b) => (a.date < b.date ? 1 : -1))
 
-  return cache
+  localeCache.set(locale, list)
+  return list
 }
 
 export function getNewsSlugs() {
-  return getAllNews().map((a) => a.slug)
+  return [...baseArticles.keys()]
 }
 
-export function getNews(slug: string) {
-  return getAllNews().find((a) => a.slug === slug)
+export function getNews(slug: string, locale: Locale = BASE) {
+  return getAllNews(locale).find((a) => a.slug === slug)
 }
 
 /** 2026-06-16 → 2026.06.16 */

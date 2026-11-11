@@ -855,6 +855,7 @@ export const zhTW: Dict = {
       updatedLabel: '發佈於',
       prev: '上一篇',
       next: '下一篇',
+      fallbackNote: '本文暫未提供繁體版本，以下為簡體原文。',
       categories: {
         company: '公司動態',
         tech: '技術講座',

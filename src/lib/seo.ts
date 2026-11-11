@@ -42,28 +42,43 @@ export function alternates(locale: Locale, path = '/') {
   return { canonical: absolute(`/${locale}${normalizePath(path)}`), languages: languageAlternates(path) }
 }
 
-/** The tab title is the company name on every route, in every language. */
-export const SITE_TITLE = '上海集培优信息科技有限公司'
+/**
+ * Company name used in tab titles and share cards. It has to follow the locale:
+ * an English page titled with Chinese characters reads as a broken page in search
+ * results and social cards.
+ */
+export const SITE_TITLES: Record<Locale, string> = {
+  'zh-cn': '上海集培优信息科技有限公司',
+  'zh-tw': '上海集培優信息科技有限公司',
+  en: 'COREFIX PRO',
+}
+
+export const siteTitle = (locale: Locale) => SITE_TITLES[locale]
+
+/** Default for the non-localised entry points (the `/` hand-off and the 404). */
+export const SITE_TITLE = SITE_TITLES['zh-cn']
 
 /** Shared per-page metadata so every route ships canonical, hreflang and Open Graph. */
 export function pageMetadata({
   locale,
   path = '/',
   description,
-  title = SITE_TITLE,
+  title,
 }: {
   locale: Locale
   path?: string
   description: string
-  /** Defaults to the company name; case detail pages pass their own headline. */
+  /** Defaults to the locale's company name; case/news pages pass their own headline. */
   title?: string
 }): Metadata {
+  const resolved = title ?? siteTitle(locale)
   return {
-    title,
+    title: resolved,
     description,
     alternates: alternates(locale, path),
     openGraph: {
-      title,
+      title: resolved,
+      siteName: siteTitle(locale),
       description,
       url: absolute(`/${locale}${normalizePath(path)}`),
       locale: hreflang[locale],

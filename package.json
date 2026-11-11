@@ -17,6 +17,7 @@
     "eslint": "^9.39.4",
     "eslint-config-next": "^15.5.29",
     "mp4-muxer": "^5.2.1",
+    "opencc-js": "^1.4.2",
     "sharp": "^0.35.5",
     "tailwindcss": "^4.3.4",
     "typescript": "^5.9.3"
@@ -26,8 +27,10 @@
   "version": "1.0.0",
   "scripts": {
     "covers": "node scripts/build-news-covers.mjs",
-    "predev": "npm run covers",
-    "prebuild": "npm run covers",
+    "zh-tw": "node scripts/build-news-zh-tw.mjs",
+    "zh-tw": "node scripts/build-news-zh-tw.mjs",
+    "predev": "npm run covers && npm run zh-tw",
+    "prebuild": "npm run covers && npm run zh-tw",
     "dev": "next dev",
     "build": "next build",
     "start": "npx serve out",

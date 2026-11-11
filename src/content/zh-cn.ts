@@ -855,6 +855,7 @@ export const zhCN: Dict = {
       updatedLabel: '发布于',
       prev: '上一篇',
       next: '下一篇',
+      fallbackNote: '本文暂无其他语言版本。',
       categories: {
         company: '公司动态',
         tech: '技术讲座',

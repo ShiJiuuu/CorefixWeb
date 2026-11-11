@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import { locales } from '@/lib/i18n'
+import { locales, type Locale } from '@/lib/i18n'
 import { getDict } from '@/content'
 import { CaseGrid } from '@/components/CaseCards'
 import ProcessFlow from '@/components/ProcessFlow'
@@ -25,7 +25,7 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
   const d = getDict(locale)
 
   // one source of truth: every article in content/news/*.md, newest first
-  const newsItems = getAllNews().map((n) => ({
+  const newsItems = getAllNews(locale as Locale).map((n) => ({
     slug: n.slug,
     title: n.title,
     date: formatNewsDate(n.date),

@@ -1,9 +1,9 @@
 import Link from 'next/link'
 import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
-import { locales, isLocale } from '@/lib/i18n'
+import { locales, isLocale, type Locale } from '@/lib/i18n'
 import { getDict } from '@/content'
-import { pageMetadata, SITE_TITLE } from '@/lib/seo'
+import { hreflang, pageMetadata, siteTitle } from '@/lib/seo'
 import { formatNewsDate, getAllNews, getNews, getNewsSlugs } from '@/lib/news'
 import { CtaBand } from '@/components/Sections'
 
@@ -19,14 +19,14 @@ export async function generateMetadata({
   params: Promise<{ locale: string; slug: string }>
 }): Promise<Metadata> {
   const { locale, slug } = await params
-  const article = getNews(slug)
+  const article = getNews(slug, locale as Locale)
   if (!article) return {}
 
   return pageMetadata({
     locale: isLocale(locale) ? locale : 'zh-cn',
     path: `/news/${slug}/`,
     description: article.excerpt || article.title,
-    title: `${article.title} — ${SITE_TITLE}`,
+    title: `${article.title} — ${siteTitle(isLocale(locale) ? locale : 'zh-cn')}`,
   })
 }
 
@@ -43,10 +43,10 @@ export default async function ArticlePage({
   const { locale, slug } = await params
   const d = getDict(locale)
   const p = d.page.news
-  const article = getNews(slug)
+  const article = getNews(slug, locale as Locale)
   if (!article) notFound()
 
-  const all = getAllNews()
+  const all = getAllNews(locale as Locale)
   const index = all.findIndex((a) => a.slug === slug)
   const newer = index > 0 ? all[index - 1] : undefined
   const older = index < all.length - 1 ? all[index + 1] : undefined
@@ -62,9 +62,6 @@ export default async function ArticlePage({
             >
               ← {p.back}
             </Link>
-            <span className="u-mono text-[10.5px] tracking-[0.1em] text-faint">
-              {formatNewsDate(article.date)}
-            </span>
           </div>
 
           <header className="mt-8">
@@ -91,9 +88,15 @@ export default async function ArticlePage({
             </div>
           </header>
 
+          {!article.translated && (
+            <p className="mt-8 border-l-2 border-line2 pl-4 text-[12.5px] leading-[1.9] text-muted">
+              {p.fallbackNote}
+            </p>
+          )}
+
           <div
             className="article-body mt-10"
-            lang="zh-CN"
+            lang={hreflang[locale as Locale]}
             dangerouslySetInnerHTML={{ __html: article.html }}
           />
         </div>

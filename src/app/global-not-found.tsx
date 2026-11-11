@@ -1,10 +1,10 @@
 /* The global 404 must stand on its own: no router context, no client bundle. */
 /* eslint-disable @next/next/no-html-link-for-pages */
 import type { Metadata } from 'next'
-import { SITE_TITLE } from '@/lib/seo'
+
 
 export const metadata: Metadata = {
-  title: `404 · ${SITE_TITLE}`,
+  title: '404 · COREFIX PRO',
   robots: { index: false, follow: true },
 }
 
