@@ -56,9 +56,12 @@ export default function Nav({ locale, dict }: { locale: Locale; dict: Dict }) {
 
   return (
     <>
+    {/* The hairline is drawn with a shadow instead of a border: a border would add 1px to the
+        header box, while the hero is pulled up by exactly --dock-h, leaving a 1px gap of the
+        page background (a bright white line in light mode) above the hero. */}
     <header
       className={`sticky top-0 z-50 transition-colors duration-300 ${
-        scrolled ? 'border-b border-line bg-bg' : 'border-b border-transparent bg-transparent'
+        scrolled ? 'bg-bg shadow-[inset_0_-1px_0_var(--line)]' : 'bg-transparent'
       }`}
     >
       <div
