@@ -642,7 +642,7 @@ export const en: Dict = {
         {
           title: 'Legal specialist / assistant (intern)',
           salary: 'RMB 150–200/day',
-          meta: ['Shanghai · Changning (East Hongqiao)', 'Internship · 3 days/week', 'LL.M. student'],
+          meta: ['Shanghai · Changning (East Hongqiao)', 'LL.M. student'],
           dutiesTitle: 'Responsibilities',
           duties: [
             'Second- or third-year full-time LL.M. student at a leading law school (graduating 2027 or 2028)',
