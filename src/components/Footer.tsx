@@ -1,7 +1,7 @@
 import type { Dict } from '@/content/types'
 import SocialLinks from './SocialLinks'
 
-export default function Footer({ dict }: { dict: Dict }) {
+export default function Footer({ dict, locale }: { dict: Dict; locale: string }) {
   return (
     <footer className="border-t border-black/10 bg-[linear-gradient(to_bottom,#1e6264_0%,#123c3d_45%,#0a0a0a_100%)]">
       <div className="footer-band u-container flex flex-col gap-10 py-12 md:flex-row md:flex-wrap lg:flex-nowrap lg:gap-11">
@@ -53,7 +53,15 @@ export default function Footer({ dict }: { dict: Dict }) {
             <h4 className="u-label mb-4 font-medium">{col.t}</h4>
             <ul className="space-y-1 text-[13.5px] text-ink2">
               {col.items.map((it) => (
-                <li key={it}>{it}</li>
+                <li key={it.label}>
+                  {it.href ? (
+                    <a href={`/${locale}${it.href}/`} className="transition-colors hover:text-white">
+                      {it.label}
+                    </a>
+                  ) : (
+                    it.label
+                  )}
+                </li>
               ))}
             </ul>
           </div>

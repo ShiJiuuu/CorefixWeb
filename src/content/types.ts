@@ -21,6 +21,18 @@ export type Cap = {
   points: string[]
 }
 
+/** One open role on the careers page. */
+export type Job = {
+  title: string
+  salary: string
+  /** Location · experience · education, rendered as a single meta line. */
+  meta: string[]
+  dutiesTitle: string
+  duties: string[]
+  reqsTitle: string
+  reqs: string[]
+}
+
 /** One step of "what we did" on a case detail page. */
 export type CaseStep = { t: string; d: string }
 
@@ -166,7 +178,7 @@ export type Dict = {
     /** Brand slogan: Chinese line on top, English line underneath. */
     slogan: { zh: string; en: string }
     social: SocialLink[]
-    cols: { t: string; items: string[] }[]
+    cols: { t: string; items: { label: string; href?: string }[] }[]
     copyright: string
     icp: string
   }
@@ -185,6 +197,21 @@ export type Dict = {
       paras: string[]
       facts: Metric[]
       qualsTitle: string
+    }
+    careers: PageHero & {
+      profileTitle: string
+      profile: { k: string; v: string }[]
+      openingsTitle: string
+      openingsNote: string
+      commonPerksTitle: string
+      commonPerks: string[]
+      openings: Job[]
+      perksTitle: string
+      perks: { t: string; items: string[] }[]
+      applyTitle: string
+      apply: { k: string; v: string; href?: string }[]
+      quote: string
+      note: string
     }
     news: PageHero & {
       listLabel: string

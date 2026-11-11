@@ -75,7 +75,7 @@ export default async function LocaleLayout({
         <script dangerouslySetInnerHTML={{ __html: motionScript }} />
         <Nav locale={locale as Locale} dict={dict} />
         <main>{children}</main>
-        <Footer dict={dict} />
+        <Footer dict={dict} locale={locale} />
         <ScrollEffects />
       </body>
     </html>
