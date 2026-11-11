@@ -19,7 +19,7 @@ export const zhCN: Dict = {
   hero: {
     eyebrow: 'GPU REPAIR & MAINTENANCE',
     title: ['让每一张 GPU', '回到满算力'],
-    sub: '芯片级维修、驱动与固件调优、全国备件网络。12 小时压力测试验证，修复后算力恢复至原厂标准的 98% 以上。',
+    sub: '算力服务器维修与调优，专业压力测试验证，拥有全国备件网络。修复后算力恢复至 98% 以上。',
     ctas: [
       { label: '预约检修', href: '#contact' },
       { label: '查看服务能力', href: '/capability' },

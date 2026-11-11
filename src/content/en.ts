@@ -19,7 +19,7 @@ export const en: Dict = {
   hero: {
     eyebrow: 'GPU REPAIR & MAINTENANCE',
     title: ['Every GPU,', 'back to full compute'],
-    sub: 'Component-level repair, driver and firmware tuning, nationwide spare-parts network. Verified by a 12-hour stress test, with compute restored to 98%+ of factory baseline.',
+    sub: 'Compute-server repair and tuning, verified by professional stress testing, with a nationwide spare-parts network. Compute restored to 98%+ after repair.',
     ctas: [
       { label: 'Book a repair', href: '#contact' },
       { label: 'View capability', href: '/capability' },

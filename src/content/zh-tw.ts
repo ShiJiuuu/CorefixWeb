@@ -19,7 +19,7 @@ export const zhTW: Dict = {
   hero: {
     eyebrow: 'GPU REPAIR & MAINTENANCE',
     title: ['讓每一張 GPU', '回到滿算力'],
-    sub: '晶片級維修、驅動與韌體調校、全國備件網路。12 小時壓力測試驗證，修復後算力回復至原廠標準的 98% 以上。',
+    sub: '算力伺服器維修與調校，專業壓力測試驗證，擁有全國備件網路。修復後算力回復至 98% 以上。',
     ctas: [
       { label: '預約檢修', href: '#contact' },
       { label: '查看服務能力', href: '/capability' },
