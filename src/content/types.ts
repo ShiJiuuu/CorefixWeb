@@ -10,6 +10,8 @@ export type ServerModuleKey =
   | 'cooling'
   | 'power'
   | 'chassis'
+  | 'dimm'
+  | 'cpu-cooler'
 
 export type Cap = {
   no: string

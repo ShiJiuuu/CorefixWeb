@@ -642,7 +642,9 @@ html.js-motion [data-hero-fade] {
 .sm[data-active='storage'] .sm-mod:not([data-mod='storage']),
 .sm[data-active='cooling'] .sm-mod:not([data-mod='cooling']),
 .sm[data-active='power'] .sm-mod:not([data-mod='power']),
-.sm[data-active='chassis'] .sm-mod:not([data-mod='chassis']) {
+.sm[data-active='chassis'] .sm-mod:not([data-mod='chassis']),
+.sm[data-active='dimm'] .sm-mod:not([data-mod='dimm']),
+.sm[data-active='cpu-cooler'] .sm-mod:not([data-mod='cpu-cooler']) {
   opacity: 0.45;
 }
 
@@ -653,7 +655,9 @@ html.js-motion [data-hero-fade] {
 .sm[data-active='storage'] [data-mod='storage'] .sm-lift,
 .sm[data-active='cooling'] [data-mod='cooling'] .sm-lift,
 .sm[data-active='power'] [data-mod='power'] .sm-lift,
-.sm[data-active='chassis'] [data-mod='chassis'] .sm-lift {
+.sm[data-active='chassis'] [data-mod='chassis'] .sm-lift,
+.sm[data-active='dimm'] [data-mod='dimm'] .sm-lift,
+.sm[data-active='cpu-cooler'] [data-mod='cpu-cooler'] .sm-lift {
   transform: translateY(-5px);
 }
 
@@ -664,7 +668,9 @@ html.js-motion [data-hero-fade] {
 .sm[data-active='storage'] [data-mod='storage'] .sm-face,
 .sm[data-active='cooling'] [data-mod='cooling'] .sm-face,
 .sm[data-active='power'] [data-mod='power'] .sm-face,
-.sm[data-active='chassis'] [data-mod='chassis'] .sm-face {
+.sm[data-active='chassis'] [data-mod='chassis'] .sm-face,
+.sm[data-active='dimm'] [data-mod='dimm'] .sm-face,
+.sm[data-active='cpu-cooler'] [data-mod='cpu-cooler'] .sm-face {
   stroke: var(--sm-line-1);
 }
 

@@ -16,6 +16,8 @@ export type ServerModuleId =
   | 'cooling'
   | 'power'
   | 'chassis'
+  | 'dimm'
+  | 'cpu-cooler'
 
 type Face = 'top' | 'side' | 'front'
 type Map2 = (u: number, v: number) => [number, number]
@@ -345,14 +347,6 @@ class Scene {
       })
     })
 
-    this.module('cooling', [50, 20, -200], 0.24, () => {
-      for (const xx of [95, 150, 206, 261]) {
-        this.box(xx - 24, 98, 120, 48, 48, 26, 2)
-        this.front(120, (m) => {
-          this.fan(m, xx, 122, 21, xx * 0.01)
-        })
-      }
-    })
 
     /* ---------- power: six 6600 W supplies ---------- */
     this.module('power', [0, -15, 40], 0.28, () => {
@@ -421,29 +415,13 @@ class Scene {
       this.box(14, 76, 92, 10, 8, 786, 2)
       this.box(W - 24, 76, 92, 10, 8, 786, 2)
       this.box(24, 84, 100, W - 48, 8, 780, 3)
-      /* CPU heatsinks */
+      /* CPU sockets and DIMM slots stay on the tray; the parts themselves float
+         above as modules 10 and 09 */
       for (const xx of [60, 188]) {
-        this.box(xx, 92, 420, 68, 34, 74, 2)
-        this.top(126, (m) => {
-          for (let i = 1; i < 6; i++) {
-            this.lline(m, xx + (i * 68) / 6, 422, xx + (i * 68) / 6, 492, 'sm-detail')
-          }
-        })
         this.top(92, (m) => this.lrect(m, xx - 3, 417, 74, 80, 'sm-panel-line'))
       }
-      /* 32 DIMMs as four eight-slot banks, so they still read at hero size */
       for (const bx of [16, 132, 176, 260]) {
-        this.box(bx, 92, 350, 40, 30, 72, 3, 'sm-dimm-bank')
-        this.top(122, (m) => {
-          for (let i = 1; i < 8; i++) {
-            this.lline(m, bx + (i * 40) / 8, 352, bx + (i * 40) / 8, 420, 'sm-detail')
-          }
-        })
-        this.front(350, (m) => {
-          for (let i = 1; i < 8; i++) {
-            this.lline(m, bx + (i * 40) / 8, 94, bx + (i * 40) / 8, 120, 'sm-detail')
-          }
-        })
+        this.top(92, (m) => this.lrect(m, bx - 2, 348, 44, 76, 'sm-panel-line'))
       }
       /* two PCIe switch heatsinks */
       for (const xx of [118, 186]) {
@@ -475,6 +453,49 @@ class Scene {
       })
       /* two front handles */
       for (const xx of [26, W - 66]) this.box(xx, 80, 88, 40, 6, 8, 2)
+    })
+
+    /* ---------- four internal fans: they sit above the CPU tray, so they have to be
+       painted after it, otherwise the tray face cuts across their lower half ---------- */
+
+    /* ---------- four internal fans: they sit above the CPU tray, so they have to be
+       painted after it, otherwise the tray face cuts across their lower half ---------- */
+    this.module('cooling', [50, 20, -200], 0.24, () => {
+      for (const xx of [95, 150, 206, 261]) {
+        this.box(xx - 24, 98, 120, 48, 48, 26, 2)
+        this.front(120, (m) => {
+          this.fan(m, xx, 122, 21, xx * 0.01)
+        })
+      }
+    })
+
+    /* ---------- 10 · CPU heatsinks (float above their sockets) ---------- */
+    this.module('cpu-cooler', [50, 54, -200], 0.52, () => {
+      for (const xx of [60, 188]) {
+        this.box(xx, 92, 420, 68, 34, 74, 2)
+        this.top(126, (m) => {
+          for (let i = 1; i < 6; i++) {
+            this.lline(m, xx + (i * 68) / 6, 422, xx + (i * 68) / 6, 492, 'sm-detail')
+          }
+        })
+      }
+    })
+
+    /* ---------- 09 · DIMM banks (float above their slots, in front of the heatsinks) ---------- */
+    this.module('dimm', [50, 54, -250], 0.56, () => {
+      for (const bx of [16, 132, 176, 260]) {
+        this.box(bx, 92, 350, 40, 30, 72, 3, 'sm-dimm-bank')
+        this.top(122, (m) => {
+          for (let i = 1; i < 8; i++) {
+            this.lline(m, bx + (i * 40) / 8, 352, bx + (i * 40) / 8, 420, 'sm-detail')
+          }
+        })
+        this.front(350, (m) => {
+          for (let i = 1; i < 8; i++) {
+            this.lline(m, bx + (i * 40) / 8, 94, bx + (i * 40) / 8, 120, 'sm-detail')
+          }
+        })
+      }
     })
 
     /* ---------- front bezel and lid ---------- */

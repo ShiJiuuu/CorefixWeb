@@ -125,7 +125,7 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
             <div className="flex items-start justify-between gap-4">
               <div className="min-w-0">
                 <p className="u-mono text-[9px] tracking-[0.18em] text-faint">
-                  B300 / INTERACTIVE MODEL
+                  8U / INTERACTIVE MODEL
                 </p>
                 <h3 className="mt-2 text-[19px] font-semibold leading-snug">
                   {d.hero.model.label}
@@ -142,7 +142,7 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
 
             <div className="mt-4 border-t border-line pt-3">
               <p className="u-mono text-[8.5px] leading-[1.9] tracking-[0.06em] text-faint">
-                8× B300 · 32× DDR5 · 8× OSFP 800G · 6× 6600W PSU · 12+4 FANS
+                8× GPU · 32× 内存 · 8× 800G 端口 · 6× 冗余电源 · 12+4 风扇
               </p>
             </div>
           </div>
