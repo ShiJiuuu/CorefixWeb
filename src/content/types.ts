@@ -73,6 +73,19 @@ export type Site = {
 
 export type PageHero = { eyebrow: string; title: string; desc: string }
 
+/** One clickable stage on the flow diagram and the explainer it opens. */
+export type FlowStageKey =
+  | 'unbox'
+  | 'assign'
+  | 'inspect'
+  | 'quote'
+  | 'fieldiags'
+  | 'burn'
+  | 'dcgm'
+
+/** Explainer panel: what the step is for, what standard it follows, what it leaves behind. */
+export type FlowTip = { title: string; items: string[] }
+
 /** Service-flow diagram content: five circular nodes, the labels along the arrows, and the footnote. */
 export type ProcessFlow = {
   nodes: {
@@ -98,6 +111,7 @@ export type ProcessFlow = {
     report: string
   }
   note: string[]
+  tips: Record<FlowStageKey, FlowTip>
 }
 
 export type SocialId = 'wechat' | 'mp' | 'douyin' | 'xhs'

@@ -663,6 +663,64 @@ export const en: Dict = {
         'Once you contact us, our service desk starts the process immediately and gives an initial assessment within one hour.',
         'Standard faults are repaired and shipped back within 48 hours; complex cases are delivered within 10–15 working days, keeping downtime to a minimum.',
       ],
+      tips: {
+        unbox: {
+          title: 'Unboxing video',
+          items: [
+            'Why: locks the condition on arrival, so shipping damage or missing parts cannot be disputed.',
+            'Standard: one continuous take of waybill, packaging, unpacking, labels, barcodes, accessories.',
+            'Record: the video is bound to the work order as evidence for acceptance and liability.',
+          ],
+        },
+        assign: {
+          title: 'Engineer assignment',
+          items: [
+            'Why: the unit goes to an engineer who knows that model, so nothing is misjudged.',
+            'Standard: match skill to model and fault, lead plus reviewer, dispatch time logged.',
+            'Record: owner, turnaround target and spare-part usage stay traceable.',
+          ],
+        },
+        inspect: {
+          title: 'GPU inspection',
+          items: [
+            'Why: draw the fault boundary before rework, so a board is not swapped out by default.',
+            'Standard: visual and power check, bench POST, memory and core diagnostics, all logged.',
+            'Record: a report stating the fault point and whether repair is viable.',
+          ],
+        },
+        quote: {
+          title: 'Report · quote · contract',
+          items: [
+            'Why: full evidence and price before work starts, with no mid-job surcharges.',
+            'Standard: report covers fault, plan, lead time and risk; quote matches line by line.',
+            'Record: quote and contract archived and reconciled against the work order.',
+          ],
+        },
+        fieldiags: {
+          title: 'Fieldiags test',
+          items: [
+            'Why: a functional check in the whole-server context proves the fault is gone.',
+            'Standard: model-specific Fieldiags cases covering GPU, link and memory I/O.',
+            'Record: results captured into the work order; failures go back to the bench.',
+          ],
+        },
+        burn: {
+          title: 'GPU Burn test',
+          items: [
+            'Why: sustained load exposes latent faults — "it lights up" is not a pass.',
+            'Standard: full load for the agreed duration, watching temperature and throttling.',
+            'Record: burn-in logs and curves ship with the work order.',
+          ],
+        },
+        dcgm: {
+          title: 'DCGM test',
+          items: [
+            'Why: a final health check to data-centre standards, with a quantified verdict.',
+            'Standard: DCGM diagnostics with ECC counts, XID errors and NVLink state.',
+            'Record: the diagnostic report is the release ticket for shipping.',
+          ],
+        },
+      },
     },
   },
   cta: {
