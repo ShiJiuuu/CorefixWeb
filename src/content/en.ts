@@ -771,7 +771,6 @@ export const en: Dict = {
         {
           title: 'General ledger accountant',
           salary: 'RMB 8–13K',
-          meta: ['Shanghai · Changning (East Hongqiao)', "Bachelor's or above"],
           dutiesTitle: 'Responsibilities',
           duties: [
             'Own the books end to end: vouchers, statements, tax payments',
@@ -793,7 +792,6 @@ export const en: Dict = {
         {
           title: 'HR manager / supervisor',
           salary: 'RMB 12–15K',
-          meta: ['Shanghai · Changning (East Hongqiao)', "Bachelor's or above"],
           dutiesTitle: 'Responsibilities',
           duties: [
             'Own recruitment end to end, from demand intake to onboarding, responding fast to hiring needs',
@@ -812,7 +810,6 @@ export const en: Dict = {
         {
           title: 'Legal specialist / assistant (intern)',
           salary: 'RMB 150–200/day',
-          meta: ['Shanghai · Changning (East Hongqiao)', 'LL.M. student'],
           dutiesTitle: 'Responsibilities',
           duties: [
             'Second- or third-year full-time LL.M. student at a leading law school (graduating 2027 or 2028)',

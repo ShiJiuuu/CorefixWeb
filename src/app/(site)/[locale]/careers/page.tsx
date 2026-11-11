@@ -74,15 +74,6 @@ export default async function CareersPage({ params }: { params: Promise<{ locale
                 <b className="u-mono text-[19px] font-semibold tracking-tight">{job.salary}</b>
               </div>
 
-              <div className="mt-3 flex flex-wrap items-center gap-x-3 gap-y-1.5 text-[13.5px] leading-[1.85] text-ink2">
-                {job.meta.map((m, mi) => (
-                  <span key={m} className="flex items-center gap-3">
-                    {mi > 0 && <span className="text-faint">·</span>}
-                    {m}
-                  </span>
-                ))}
-              </div>
-
               <div className="mt-7 grid gap-7 lg:grid-cols-2 lg:gap-10">
                 {[
                   { t: job.dutiesTitle, list: job.duties },

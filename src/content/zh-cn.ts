@@ -771,7 +771,6 @@ export const zhCN: Dict = {
         {
           title: '总账会计',
           salary: '8–13K',
-          meta: ['上海 · 长宁区（东虹桥中心）', '本科及以上'],
           dutiesTitle: '岗位职责',
           duties: [
             '独立处理公司账务：财务凭证编制、报表编制、税费缴纳等',
@@ -793,7 +792,6 @@ export const zhCN: Dict = {
         {
           title: '人力资源经理 / 主管',
           salary: '12–15K',
-          meta: ['上海 · 长宁区（东虹桥中心）', '本科及以上'],
           dutiesTitle: '岗位职责',
           duties: [
             '负责公司招聘，从需求对接到入职跟进全流程把控，快速响应业务部门用人需求',
@@ -812,7 +810,6 @@ export const zhCN: Dict = {
         {
           title: '法务专员 / 助理（实习）',
           salary: '150–200 元/天',
-          meta: ['上海 · 长宁区（东虹桥中心）', '法学硕士在读'],
           dutiesTitle: '岗位职责',
           duties: [
             '重点院校法学专业全日制硕士研究生二年级或三年级在读（2027 或 2028 届毕业）',

@@ -27,8 +27,6 @@ export type Cap = {
 export type Job = {
   title: string
   salary: string
-  /** Location · experience · education, rendered as a single meta line. */
-  meta: string[]
   dutiesTitle: string
   duties: string[]
   reqsTitle: string

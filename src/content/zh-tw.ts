@@ -771,7 +771,6 @@ export const zhTW: Dict = {
         {
           title: '總帳會計',
           salary: '8–13K',
-          meta: ['上海 · 長寧區（東虹橋中心）', '大學及以上'],
           dutiesTitle: '職務內容',
           duties: [
             '獨立處理公司帳務：財務憑證編製、報表編製、稅費繳納等',
@@ -793,7 +792,6 @@ export const zhTW: Dict = {
         {
           title: '人力資源經理 / 主管',
           salary: '12–15K',
-          meta: ['上海 · 長寧區（東虹橋中心）', '大學及以上'],
           dutiesTitle: '職務內容',
           duties: [
             '負責公司招募，從需求對接到入職跟進全流程控管，快速回應業務部門用人需求',
@@ -812,7 +810,6 @@ export const zhTW: Dict = {
         {
           title: '法務專員 / 助理（實習）',
           salary: '150–200 元/天',
-          meta: ['上海 · 長寧區（東虹橋中心）', '法學碩士在讀'],
           dutiesTitle: '職務內容',
           duties: [
             '重點院校法學專業全日制碩士研究生二年級或三年級在讀（2027 或 2028 屆畢業）',
