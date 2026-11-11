@@ -49,6 +49,8 @@ export type CaseStudy = {
   service: string
   /** Service window, already formatted for display. */
   date: string
+  /** Machine-readable start date (YYYY-MM-DD); drives the newest-first order on /cases. */
+  dateISO: string
   title: string
   summary: string
   /** The card shows the first two; the detail page shows all of them. */

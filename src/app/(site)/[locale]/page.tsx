@@ -196,7 +196,14 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
             <SectionHead eyebrow={d.cases.eyebrow} title={d.cases.title} />
           </div>
 
-          <CaseGrid items={d.cases.items} locale={locale} readLabel={d.cases.read} glass />
+          {/* The home section keeps showing the four original cases; the newer
+              ones live on /cases so the home grid layout stays unchanged. */}
+          <CaseGrid
+            items={d.cases.items.slice(0, 4)}
+            locale={locale}
+            readLabel={d.cases.read}
+            glass
+          />
 
           <div className="on-dark mt-7 flex flex-wrap items-center justify-between gap-4">
             <Link href={`/${locale}/cases/`} className="u-link">
