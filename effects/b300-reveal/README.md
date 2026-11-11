@@ -41,6 +41,32 @@ or linger at the edges. Deterministic debris is emitted from the shell faces,
 accelerates outward with drag and fades before the internal modules finish
 settling.
 
+## Materials
+
+Every part is assigned by what it is actually made of, through the `MAT` palette
+at the top of `src/B300Reveal.tsx`. Spread an entry straight into a primitive:
+`<Box size={[...]} {...MAT.copper} />`.
+
+| Group | Entries | Used for |
+| --- | --- | --- |
+| Copper | `copper` `copperBright` `copperShadow` | GPU vapour-chamber base plates, tray busbars, DIMM rails |
+| Gold | `gold` `goldDim` | GPU edge connector, DIMM contact fingers, board pads |
+| Silver | `nickel` `nickelWarm` | CPU lids, GPU cold plates, screw heads, polished trim |
+| Aluminium | `alu` `aluDark` | heatsink fin stacks, NVSwitch and PCIe-switch heatsinks |
+| Steel | `steel` `steelDark` `steelLight` | chassis panels, tray rails, I/O plates, PSU shells |
+| PCB | `pcb` `pcbDark` `trace` | GPU substrate, GPU baseboard, control board, DIMM bodies |
+| Plastic | `plastic` `plasticSoft` | fan frames and blades, drive bodies, slots, handles |
+| Silicon | `silicon` `siliconDie` `ceramic` `cavity` | dies, HBM stacks, capacitors, empty sockets |
+
+`clearcoat` is part of the palette on purpose: metals carry a thin lacquer, while
+PCB, plastic and ceramic are pinned to `clearcoat: 0`. A clearcoat sheen over the
+large flat boards was bleaching the green into mint.
+
+Colour is rendered with `NeutralToneMapping` (Khronos PBR Neutral) instead of the
+three.js ACES default — ACES desaturates the saturated copper and green into grey
+paste. Lights are deliberately low-key (ambient 0.2, one 2.1 key, a 0.5 fill and a
+cool 1.15 rim) so the materials rather than the lighting carry the frame.
+
 ## Preview
 
 ```bash
@@ -48,6 +74,18 @@ npm run dev
 ```
 
 Open the `B300Reveal` composition in Remotion Studio.
+
+Still frames for eyeballing a change without rendering the video:
+
+```bash
+npx remotion still B300Reveal preview/f299.png --frame=299
+```
+
+## Output
+
+`npx remotion render B300Reveal out/B300Reveal.mp4` — only when the reveal is
+signed off. The delivered file is copied verbatim to
+`public/media/ServerReveal.mp4` in the site project.
 
 ## Validation
 

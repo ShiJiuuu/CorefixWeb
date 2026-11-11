@@ -2,15 +2,62 @@ import { ThreeCanvas } from "@remotion/three";
 import { useThree } from "@react-three/fiber";
 import type { ReactNode } from "react";
 import { createContext, useContext, useLayoutEffect } from "react";
-import { Euler, PerspectiveCamera, PMREMGenerator, Vector3 } from "three";
+import { Euler, NeutralToneMapping, PerspectiveCamera, PMREMGenerator, Vector3 } from "three";
 import { RoomEnvironment } from "three/examples/jsm/environments/RoomEnvironment.js";
 import { AbsoluteFill, Easing, interpolate, useCurrentFrame } from "remotion";
 
 const ACCENT = "#efc79a";
 const SILVER = "#d2d4d1";
-const PCB = "#1f2925";
 const STAGE_X = 3.4;
 const STAGE_Y = 0.58;
+
+/**
+ * Material palette. Every part is assigned by what it is actually made of, so the
+ * exploded view reads by colour as well as by shape:
+ * copper busbars and vapour chambers, silver nickel-plated CPU lids and heatsinks,
+ * solder-mask green PCB, matte-black engineering plastic, dark silicon packages.
+ * Spread an entry straight into <Box {...MAT.copper} />.
+ */
+type Mat = {
+  readonly color: string;
+  readonly metalness: number;
+  readonly roughness: number;
+  /** Lacquer layer. Metals get a thin one, PCB and plastic must stay matte. */
+  readonly clearcoat?: number;
+};
+
+const MAT = {
+  /* copper conductors — busbars, vapour chambers, heat-pipe runs */
+  copper: { color: "#a95c2d", metalness: 1, roughness: 0.22, clearcoat: 0.12 },
+  copperBright: { color: "#c1733c", metalness: 1, roughness: 0.16, clearcoat: 0.16 },
+  copperShadow: { color: "#7a4322", metalness: 1, roughness: 0.34, clearcoat: 0.08 },
+  /* gold-plated contact fingers — DIMM slots, GPU edge connector */
+  gold: { color: "#c9a227", metalness: 1, roughness: 0.2, clearcoat: 0.14 },
+  goldDim: { color: "#967a33", metalness: 1, roughness: 0.3, clearcoat: 0.1 },
+  /* nickel-plated silver — CPU lids, screw heads, polished trim */
+  nickel: { color: "#c8ced1", metalness: 0.97, roughness: 0.13, clearcoat: 0.3 },
+  nickelWarm: { color: "#b6bcbe", metalness: 0.95, roughness: 0.18, clearcoat: 0.24 },
+  /* aluminium heatsink fins and machined plates */
+  alu: { color: "#949a9d", metalness: 0.92, roughness: 0.36, clearcoat: 0.06 },
+  aluDark: { color: "#6e7478", metalness: 0.9, roughness: 0.4, clearcoat: 0.05 },
+  /* chassis sheet metal */
+  steel: { color: "#4a5154", metalness: 0.86, roughness: 0.36, clearcoat: 0.08 },
+  steelDark: { color: "#2c3235", metalness: 0.82, roughness: 0.42 },
+  steelLight: { color: "#828a8d", metalness: 0.9, roughness: 0.3, clearcoat: 0.1 },
+  /* solder-mask green PCB, plus the lighter silkscreen traces on it.
+     No clearcoat: the lacquer is what was bleaching the green into mint. */
+  pcb: { color: "#0b3a24", metalness: 0.04, roughness: 0.62, clearcoat: 0 },
+  pcbDark: { color: "#062a19", metalness: 0.05, roughness: 0.6, clearcoat: 0 },
+  trace: { color: "#1c5c3d", metalness: 0.3, roughness: 0.5, clearcoat: 0 },
+  /* matte engineering plastic — fan frames, slots, cages */
+  plastic: { color: "#191d1f", metalness: 0.05, roughness: 0.66, clearcoat: 0 },
+  plasticSoft: { color: "#242a2c", metalness: 0.08, roughness: 0.6, clearcoat: 0 },
+  /* silicon packages and ceramic capacitors */
+  silicon: { color: "#2b3034", metalness: 0.7, roughness: 0.11, clearcoat: 0.2 },
+  siliconDie: { color: "#363c41", metalness: 0.82, roughness: 0.05, clearcoat: 0.3 },
+  ceramic: { color: "#25282a", metalness: 0.1, roughness: 0.7, clearcoat: 0 },
+  cavity: { color: "#080a0b", metalness: 0.2, roughness: 0.78, clearcoat: 0 },
+} satisfies Record<string, Mat>;
 
 // Internal hardware is 80% of the previous 0.8 layout (0.64 of the shell).
 const MODULE_SCALE = 0.64;
@@ -36,6 +83,7 @@ type BoxProps = {
   readonly color?: string;
   readonly metalness?: number;
   readonly roughness?: number;
+  readonly clearcoat?: number;
   readonly opacity?: number;
   readonly emissive?: string;
   readonly emissiveIntensity?: number;
@@ -48,6 +96,7 @@ const Box = ({
   color = SILVER,
   metalness = 0.94,
   roughness = 0.2,
+  clearcoat = 0.1,
   opacity = 1,
 }: BoxProps) => {
   const fade = useContext(ShellFade);
@@ -60,7 +109,7 @@ const Box = ({
         color={color}
         metalness={metalness}
         roughness={roughness}
-        clearcoat={0.28}
+        clearcoat={clearcoat}
         clearcoatRoughness={0.18}
         ior={1.45}
         reflectivity={0.75}
@@ -80,7 +129,13 @@ const MetalEnvironment = () => {
     const room = new RoomEnvironment();
     const target = generator.fromScene(room, 0.04);
     scene.environment = target.texture;
-    scene.environmentIntensity = 0.72;
+    scene.environmentIntensity = 0.42;
+
+    // ACES desaturates the material colours into grey paste; the Khronos PBR
+    // Neutral curve keeps the PCB green and the copper copper while still
+    // rolling off the speculars on the polished parts.
+    gl.toneMapping = NeutralToneMapping;
+    gl.toneMappingExposure = 1.12;
 
     return () => {
       scene.environment = null;
@@ -178,17 +233,19 @@ const Fan = ({
   readonly spin?: number;
   readonly dark?: boolean;
 }) => {
-  const bladeColor = dark ? "#5b5f5f" : "#a6a8a6";
+  const bladeColor = dark ? "#15181a" : "#222729";
   const fade = useContext(ShellFade);
 
   return (
     <group position={position}>
+      {/* Fan frame and blades are matte black PBT — deliberately un-metal so the
+          silver heatsinks and copper conductors stay the bright elements. */}
       <mesh rotation={[Math.PI / 2, 0, 0]}>
         <cylinderGeometry args={[radius, radius, 0.12, 40]} />
         <meshPhysicalMaterial
-          color={dark ? "#191b1b" : "#4b4e4e"}
-          metalness={0.76}
-          roughness={0.3}
+          color={dark ? "#151719" : "#222628"}
+          metalness={0.06}
+          roughness={0.64}
           transparent={fade < 1}
           opacity={fade}
         />
@@ -196,9 +253,9 @@ const Fan = ({
       <mesh position={[0, 0, 0.072]}>
         <torusGeometry args={[radius * 0.8, 0.018, 8, 44]} />
         <meshPhysicalMaterial
-          color={dark ? "#3a3d3d" : "#b7b8b5"}
-          metalness={0.7}
-          roughness={0.36}
+          color={dark ? "#232628" : "#33383a"}
+          metalness={0.1}
+          roughness={0.58}
           transparent={fade < 1}
           opacity={fade}
         />
@@ -206,9 +263,9 @@ const Fan = ({
       <mesh position={[0, 0, 0.079]}>
         <torusGeometry args={[radius * 1.02, 0.012, 8, 44]} />
         <meshPhysicalMaterial
-          color={dark ? "#4b4f4e" : "#d0d0cc"}
-          metalness={0.78}
-          roughness={0.28}
+          color={dark ? "#2b2f31" : "#3c4143"}
+          metalness={0.12}
+          roughness={0.55}
           transparent={fade < 1}
           opacity={fade}
         />
@@ -229,8 +286,8 @@ const Fan = ({
               <boxGeometry args={[radius * 0.57, radius * 0.065, 0.018]} />
               <meshPhysicalMaterial
                 color={bladeColor}
-                metalness={0.55}
-                roughness={0.42}
+                metalness={0.05}
+                roughness={0.68}
                 transparent={fade < 1}
                 opacity={fade}
               />
@@ -241,9 +298,9 @@ const Fan = ({
       <mesh position={[0, 0, 0.095]}>
         <circleGeometry args={[radius * 0.2, 28]} />
         <meshPhysicalMaterial
-          color="#1b1c1c"
-          metalness={0.5}
-          roughness={0.3}
+          color="#101213"
+          metalness={0.12}
+          roughness={0.6}
           transparent={fade < 1}
           opacity={fade}
         />
@@ -258,9 +315,9 @@ const Fan = ({
           <mesh key={index} position={[x * radius, y * radius, 0.083]}>
             <circleGeometry args={[radius * 0.075, 12]} />
             <meshPhysicalMaterial
-              color={dark ? "#777b79" : "#d6d6d1"}
-              metalness={0.78}
-              roughness={0.26}
+              color={MAT.nickel.color}
+              metalness={0.9}
+              roughness={0.22}
               transparent={fade < 1}
               opacity={fade}
             />
@@ -274,7 +331,7 @@ const Fan = ({
 const Screw = ({
   position,
   radius = 0.038,
-  color = "#b8bab7",
+  color = MAT.nickel.color,
 }: {
   readonly position: Vec3;
   readonly radius?: number;
@@ -287,8 +344,8 @@ const Screw = ({
       <cylinderGeometry args={[radius, radius, 0.018, 16]} />
       <meshPhysicalMaterial
         color={color}
-        metalness={0.86}
-        roughness={0.22}
+        metalness={0.94}
+        roughness={0.19}
         transparent={fade < 1}
         opacity={fade}
       />
@@ -299,10 +356,10 @@ const Screw = ({
 const PerforatedPanel = ({
   size,
   position,
-  color = "#2a2d2d",
+  color = MAT.steelDark.color,
   columns = 18,
   rows = 8,
-  holeColor = "#0b0c0c",
+  holeColor = MAT.cavity.color,
 }: {
   readonly size: Vec3;
   readonly position: Vec3;
@@ -348,49 +405,37 @@ const CpuModule = ({
 }) => {
   return (
     <group>
+      {/* Nickel-plated lid: the silver face that reads as "CPU". */}
+      <Box size={[0.98, 0.22, 0.88]} position={[x, y, z]} {...MAT.nickel} />
+      {/* Copper vapour chamber clipped underneath, visible once the tray separates. */}
       <Box
-        size={[0.98, 0.22, 0.88]}
-        position={[x, y, z]}
-        color="#6e7271"
-        metalness={0.82}
-        roughness={0.27}
+        size={[0.86, 0.06, 0.76]}
+        position={[x, y - 0.145, z]}
+        {...MAT.copperBright}
       />
-      {Array.from({ length: 11 }).map((_, index) => {
-        const finX = x - 0.39 + index * 0.078;
+      {Array.from({ length: 15 }).map((_, index) => {
+        const finX = x - 0.4 + index * 0.0572;
         return (
           <Box
             key={index}
-            size={[0.036, 0.36, 0.72]}
-            position={[finX, y + 0.23, z]}
-            color="#b1b3b0"
-            metalness={0.8}
-            roughness={0.25}
+            size={[0.022, 0.44, 0.72]}
+            position={[finX, y + 0.27, z]}
+            {...MAT.alu}
           />
         );
       })}
-      <Box
-        size={[0.62, 0.07, 0.56]}
-        position={[x, y - 0.13, z]}
-        color="#353938"
-        metalness={0.48}
-        roughness={0.4}
-      />
       {[-1, 1].map((side) => {
         return (
           <group key={side}>
             <Box
               size={[0.055, 0.12, 0.82]}
               position={[x + side * 0.56, y + 0.02, z]}
-              color="#b6b8b4"
-              metalness={0.82}
-              roughness={0.26}
+              {...MAT.nickelWarm}
             />
             <Box
               size={[0.1, 0.035, 0.72]}
               position={[x + side * 0.45, y + 0.19, z]}
-              color="#6f7472"
-              metalness={0.78}
-              roughness={0.28}
+              {...MAT.aluDark}
             />
           </group>
         );
@@ -424,12 +469,11 @@ const MemoryBank = ({
 }) => {
   return (
     <group>
+      {/* Green solder-mask strip the DIMMs plug into. */}
       <Box
         size={[0.92, 0.06, 0.5]}
         position={[x, y - 0.02, z]}
-        color="#262a29"
-        metalness={0.45}
-        roughness={0.45}
+        {...MAT.pcbDark}
       />
       {Array.from({ length: 8 }).map((_, index) => {
         const moduleX = x - 0.385 + index * 0.11;
@@ -438,16 +482,13 @@ const MemoryBank = ({
             <Box
               size={[0.052, 0.16, 0.42]}
               position={[moduleX, y + 0.06, z]}
-              color={index % 3 === 0 ? "#34302a" : "#242625"}
-              metalness={0.48}
-              roughness={0.43}
+              {...(index % 3 === 0 ? MAT.pcb : MAT.pcbDark)}
             />
+            {/* gold contact edge */}
             <Box
               size={[0.052, 0.025, 0.43]}
               position={[moduleX, y + 0.155, z]}
-              color="#c6a978"
-              metalness={0.55}
-              roughness={0.34}
+              {...MAT.gold}
             />
           </group>
         );
@@ -458,18 +499,14 @@ const MemoryBank = ({
             key={side}
             size={[0.045, 0.13, 0.45]}
             position={[x + side * 0.47, y + 0.06, z]}
-            color="#b8b9b5"
-            metalness={0.76}
-            roughness={0.28}
+            {...MAT.plasticSoft}
           />
         );
       })}
       <Box
         size={[0.86, 0.012, 0.035]}
         position={[x, y + 0.17, z - 0.18]}
-        color="#d5ba86"
-        metalness={0.45}
-        roughness={0.34}
+        {...MAT.copper}
       />
     </group>
   );
@@ -490,19 +527,28 @@ const GpuModule = ({
 }) => {
   return (
     <group position={[x, y, z]} rotation={rotation}>
-      <Box
-        size={[0.94, 0.11, 1.72]}
-        position={[0, 0, 0]}
-        color="#303534"
-        metalness={0.56}
-        roughness={0.4}
-      />
+      {/* Green PCB substrate — the module's own circuit board. */}
+      <Box size={[0.94, 0.11, 1.72]} position={[0, 0, 0]} {...MAT.pcb} />
+      {Array.from({ length: 6 }).map((_, lane) => {
+        return (
+          <Box
+            key={`lane-${lane}`}
+            size={[0.5, 0.006, 0.02]}
+            position={[0, 0.057, -0.3 + lane * 0.09]}
+            {...MAT.trace}
+          />
+        );
+      })}
+      {/* Die cavity with the dark silicon package sitting in it. */}
       <Box
         size={[0.35, 0.1, 0.35]}
         position={[0, 0.09, -0.55]}
-        color="#151817"
-        metalness={0.36}
-        roughness={0.35}
+        {...MAT.cavity}
+      />
+      <Box
+        size={[0.3, 0.016, 0.3]}
+        position={[0, 0.148, -0.55]}
+        {...MAT.siliconDie}
       />
       {Array.from({ length: 8 }).map((_, stack) => {
         const stackZ = -0.71 + stack * 0.095;
@@ -511,37 +557,37 @@ const GpuModule = ({
             key={stack}
             size={[0.11, 0.08, 0.075]}
             position={[stack % 2 === 0 ? -0.26 : 0.26, 0.085, stackZ]}
-            color="#4b514f"
-            metalness={0.62}
-            roughness={0.32}
+            {...MAT.silicon}
           />
         );
       })}
+      {/* Nickel-plated cold plate with aluminium fins; the copper vapour chamber
+          shows as a bright copper base plate under it. */}
       <Box
-        size={[0.82, 0.34, 1.1]}
-        position={[0, 0.25, 0.27]}
-        color="#777b79"
-        metalness={0.8}
-        roughness={0.27}
+        size={[0.92, 0.05, 1.14]}
+        position={[0, 0.058, 0.27]}
+        {...MAT.copperBright}
       />
-      {Array.from({ length: 9 }).map((_, fin) => {
+      <Box
+        size={[0.82, 0.14, 1.1]}
+        position={[0, 0.15, 0.27]}
+        {...MAT.nickelWarm}
+      />
+      {Array.from({ length: 13 }).map((_, fin) => {
         return (
           <Box
             key={fin}
-            size={[0.025, 0.31, 1.05]}
-            position={[-0.35 + fin * 0.0875, 0.48, 0.27]}
-            color="#aaadaa"
-            metalness={0.82}
-            roughness={0.24}
+            size={[0.017, 0.47, 1.05]}
+            position={[-0.35 + fin * 0.0583, 0.455, 0.27]}
+            {...MAT.alu}
           />
         );
       })}
+      {/* Gold-plated edge connector. */}
       <Box
         size={[0.86, 0.035, 0.055]}
         position={[0, 0.11, 0.82]}
-        color="#c1ad84"
-        metalness={0.58}
-        roughness={0.3}
+        {...MAT.gold}
       />
       {Array.from({ length: 10 }).map((_, pin) => {
         return (
@@ -549,9 +595,7 @@ const GpuModule = ({
             key={pin}
             size={[0.042, 0.04, 0.075]}
             position={[-0.34 + pin * 0.075, 0.125, 0.845]}
-            color="#d5ba86"
-            metalness={0.58}
-            roughness={0.28}
+            {...MAT.gold}
           />
         );
       })}
@@ -561,9 +605,7 @@ const GpuModule = ({
             key={capacitor}
             size={[0.055, 0.042, 0.055]}
             position={[-0.3 + capacitor * 0.12, 0.065, 0.66]}
-            color="#151817"
-            metalness={0.38}
-            roughness={0.38}
+            {...MAT.ceramic}
           />
         );
       })}
@@ -571,11 +613,9 @@ const GpuModule = ({
         return (
           <Box
             key={side}
-            size={[0.026, 0.32, 1.08]}
-            position={[side * 0.425, 0.27, 0.27]}
-            color="#c2c3bf"
-            metalness={0.84}
-            roughness={0.24}
+            size={[0.026, 0.49, 1.04]}
+            position={[side * 0.425, 0.45, 0.27]}
+            {...MAT.nickel}
           />
         );
       })}
@@ -623,30 +663,22 @@ const TrayRails = ({
       <Box
         size={[width, 0.1, 0.1]}
         position={[0, y, z - depth / 2]}
-        color="#9da09e"
-        metalness={0.82}
-        roughness={0.27}
+        {...MAT.steel}
       />
       <Box
         size={[width, 0.1, 0.1]}
         position={[0, y, z + depth / 2]}
-        color="#9da09e"
-        metalness={0.82}
-        roughness={0.27}
+        {...MAT.steel}
       />
       <Box
         size={[0.1, 0.1, depth]}
         position={[-width / 2, y, z]}
-        color="#737775"
-        metalness={0.78}
-        roughness={0.3}
+        {...MAT.steelDark}
       />
       <Box
         size={[0.1, 0.1, depth]}
         position={[width / 2, y, z]}
-        color="#737775"
-        metalness={0.78}
-        roughness={0.3}
+        {...MAT.steelDark}
       />
       {[
         [-width / 2 + 0.18, z - depth / 2 + 0.18],
@@ -680,12 +712,11 @@ const ComputeTray = ({ progress }: { readonly progress: number }) => {
       rotation={[0.025, 0.04, 0.012]}
     >
       <TrayRails y={y} z={z} width={5.78} depth={5.35} />
+      {/* GPU baseboard: solder-mask green with lighter copper traces. */}
       <Box
         size={[5.58, 0.12, 5.15]}
         position={[0, y - 0.06, z]}
-        color="#22322d"
-        metalness={0.34}
-        roughness={0.52}
+        {...MAT.pcb}
       />
       {Array.from({ length: 9 }).map((_, index) => {
         return (
@@ -693,9 +724,7 @@ const ComputeTray = ({ progress }: { readonly progress: number }) => {
             key={index}
             size={[0.012, 0.008, 4.2]}
             position={[-2.25 + index * 0.56, y + 0.015, -0.15]}
-            color="#52675f"
-            metalness={0.4}
-            roughness={0.45}
+            {...MAT.trace}
           />
         );
       })}
@@ -705,9 +734,7 @@ const ComputeTray = ({ progress }: { readonly progress: number }) => {
             key={side}
             size={[0.055, 0.035, 4.56]}
             position={[side * 2.55, y + 0.03, z]}
-            color="#ba9966"
-            metalness={0.48}
-            roughness={0.34}
+            {...MAT.copper}
           />
         );
       })}
@@ -717,9 +744,7 @@ const ComputeTray = ({ progress }: { readonly progress: number }) => {
             key={index}
             size={[0.15, 0.055, 0.1]}
             position={[-2.28 + index * 0.35, y + 0.03, 2.28]}
-            color={index % 4 === 0 ? "#7d6244" : "#202322"}
-            metalness={0.45}
-            roughness={0.4}
+            {...(index % 4 === 0 ? MAT.copperShadow : MAT.ceramic)}
           />
         );
       })}
@@ -756,21 +781,15 @@ const ComputeTray = ({ progress }: { readonly progress: number }) => {
         const x = -1.62 + index * 1.08;
         return (
           <group key={index} position={[x, y + 0.09, 1.98]}>
-            <Box
-              size={[0.74, 0.12, 0.58]}
-              color="#454a48"
-              metalness={0.65}
-              roughness={0.33}
-            />
-            {Array.from({ length: 7 }).map((__, fin) => {
+            {/* NVSwitch heatsinks: aluminium block, bright machined fins. */}
+            <Box size={[0.74, 0.12, 0.58]} {...MAT.aluDark} />
+            {Array.from({ length: 10 }).map((__, fin) => {
               return (
                 <Box
                   key={fin}
-                  size={[0.025, 0.2, 0.5]}
-                  position={[-0.29 + fin * 0.097, 0.15, 0]}
-                  color="#9da09d"
-                  metalness={0.8}
-                  roughness={0.26}
+                  size={[0.016, 0.2, 0.5]}
+                  position={[-0.29 + fin * 0.0644, 0.15, 0]}
+                  {...MAT.alu}
                 />
               );
             })}
@@ -798,12 +817,11 @@ const ControlTray = ({
       rotation={[-0.02, 0.034, -0.016]}
     >
       <TrayRails y={y} z={z} width={5.7} depth={4.95} />
+      {/* Control-tra board: green solder mask, copper power planes, gold pads. */}
       <Box
         size={[5.48, 0.1, 4.78]}
         position={[0, y - 0.07, z]}
-        color={PCB}
-        metalness={0.34}
-        roughness={0.5}
+        {...MAT.pcb}
       />
       {Array.from({ length: 8 }).map((_, index) => {
         return (
@@ -811,9 +829,7 @@ const ControlTray = ({
             key={index}
             size={[0.012, 0.01, 3.74]}
             position={[-2.18 + index * 0.62, y + 0.012, 0.02]}
-            color={index % 3 === 0 ? "#7f7055" : "#4a635a"}
-            metalness={0.42}
-            roughness={0.46}
+            {...(index % 3 === 0 ? MAT.goldDim : MAT.trace)}
           />
         );
       })}
@@ -835,11 +851,9 @@ const ControlTray = ({
         return (
           <Box
             key={index}
-            size={[0.65, 0.035, 0.12]}
+            size={[0.34, 0.03, 0.1]}
             position={[-2.05 + index * 0.59, y + 0.01, 0.52]}
-            color="#8b6e4a"
-            metalness={0.3}
-            roughness={0.45}
+            {...MAT.copper}
           />
         );
       })}
@@ -849,9 +863,7 @@ const ControlTray = ({
             key={index}
             size={[0.09, 0.06, 0.08]}
             position={[-2.05 + index * 0.37, y + 0.035, 0.72]}
-            color={index % 4 === 0 ? "#71593e" : "#1c1f1e"}
-            metalness={0.4}
-            roughness={0.4}
+            {...(index % 4 === 0 ? MAT.copperShadow : MAT.ceramic)}
           />
         );
       })}
@@ -861,37 +873,26 @@ const ControlTray = ({
             key={x}
             size={[0.72, 0.065, 0.2]}
             position={[x, y + 0.01, 1.72]}
-            color="#252928"
-            metalness={0.5}
-            roughness={0.38}
+            {...MAT.plastic}
           />
         );
       })}
       <Box
         size={[4.85, 0.018, 0.045]}
         position={[0, y + 0.02, 0.9]}
-        color="#9c7b51"
-        metalness={0.36}
-        roughness={0.4}
+        {...MAT.copperBright}
       />
       {[-0.72, 0.72].map((x) => {
         return (
           <group key={x} position={[x, y + 0.09, 1.12]}>
-            <Box
-              size={[0.92, 0.14, 0.66]}
-              color="#414644"
-              metalness={0.65}
-              roughness={0.34}
-            />
-            {Array.from({ length: 8 }).map((_, fin) => {
+            <Box size={[0.92, 0.14, 0.66]} {...MAT.aluDark} />
+            {Array.from({ length: 12 }).map((_, fin) => {
               return (
                 <Box
                   key={fin}
-                  size={[0.028, 0.22, 0.58]}
-                  position={[-0.36 + fin * 0.103, 0.18, 0]}
-                  color="#9fa29f"
-                  metalness={0.8}
-                  roughness={0.26}
+                  size={[0.018, 0.22, 0.58]}
+                  position={[-0.36 + fin * 0.0655, 0.18, 0]}
+                  {...MAT.alu}
                 />
               );
             })}
@@ -906,9 +907,7 @@ const ControlTray = ({
             <Box
               size={[0.88, 0.58, 0.34]}
               position={[x, y + 0.18 + (index % 2) * 0.025, fanZ]}
-              color="#333736"
-              metalness={0.62}
-              roughness={0.35}
+              {...MAT.plasticSoft}
             />
             <Fan
               position={[x, y + 0.2 + (index % 2) * 0.025, fanZ + 0.19]}
@@ -925,9 +924,7 @@ const ControlTray = ({
             key={x}
             size={[0.66, 0.055, 0.22]}
             position={[x, y + 0.02, 1.82]}
-            color="#303433"
-            metalness={0.5}
-            roughness={0.4}
+            {...MAT.plastic}
           />
         );
       })}
@@ -959,9 +956,7 @@ const NetworkStorageModules = ({ progress }: { readonly progress: number }) => {
                 <Box
                   size={[0.42, 0.24, 0.5]}
                   position={[x, 0, 0]}
-                  color="#121515"
-                  metalness={0.5}
-                  roughness={0.4}
+                  {...MAT.steelDark}
                 />
                 <Box
                   size={[0.29, 0.04, 0.025]}
@@ -975,16 +970,12 @@ const NetworkStorageModules = ({ progress }: { readonly progress: number }) => {
                 <Box
                   size={[0.3, 0.13, 0.025]}
                   position={[x, 0.025, 0.265]}
-                  color="#050707"
-                  metalness={0.32}
-                  roughness={0.55}
+                  {...MAT.cavity}
                 />
                 <Box
                   size={[0.07, 0.055, 0.035]}
                   position={[x + 0.14, 0.07, 0.28]}
-                  color="#b5b6b2"
-                  metalness={0.76}
-                  roughness={0.3}
+                  {...MAT.nickel}
                 />
               </group>
             );
@@ -1018,23 +1009,17 @@ const NetworkStorageModules = ({ progress }: { readonly progress: number }) => {
                 <Box
                   size={[0.58, 0.25, 0.68]}
                   position={[x, y, 0]}
-                  color="#252827"
-                  metalness={0.58}
-                  roughness={0.36}
+                  {...MAT.plasticSoft}
                 />
                 <Box
                   size={[0.6, 0.035, 0.05]}
                   position={[x, y + 0.1, 0.36]}
-                  color="#8a8e8b"
-                  metalness={0.7}
-                  roughness={0.3}
+                  {...MAT.steelLight}
                 />
                 <Box
                   size={[0.4, 0.075, 0.045]}
                   position={[x, y + 0.12, 0.36]}
-                  color="#b8b9b5"
-                  metalness={0.72}
-                  roughness={0.3}
+                  {...MAT.nickel}
                 />
                 <mesh
                   position={[x + 0.23, y + 0.03, 0.355]}
@@ -1058,16 +1043,12 @@ const NetworkStorageModules = ({ progress }: { readonly progress: number }) => {
                 <Box
                   size={[0.78, 0.055, 0.26]}
                   position={[x, -0.39, 0.04]}
-                  color="#2e3231"
-                  metalness={0.45}
-                  roughness={0.4}
+                  {...MAT.plastic}
                 />
                 <Box
                   size={[0.55, 0.02, 0.035]}
                   position={[x, -0.35, 0.185]}
-                  color="#9d7b51"
-                  metalness={0.3}
-                  roughness={0.4}
+                  {...MAT.copper}
                 />
                 {Array.from({ length: 3 }).map((_, chip) => {
                   return (
@@ -1075,9 +1056,7 @@ const NetworkStorageModules = ({ progress }: { readonly progress: number }) => {
                       key={chip}
                       size={[0.12, 0.025, 0.1]}
                       position={[x - 0.22 + chip * 0.21, -0.315, 0.04]}
-                      color="#151817"
-                      metalness={0.38}
-                      roughness={0.42}
+                      {...MAT.ceramic}
                     />
                   );
                 })}
@@ -1139,16 +1118,12 @@ const CoolingPowerModules = ({
                 <group key={`${column}-${row}`} position={[x, y, 0]}>
                   <Box
                     size={[0.88, 0.6, 1.08]}
-                    color="#5f6462"
-                    metalness={0.72}
-                    roughness={0.32}
+                    {...MAT.steel}
                   />
                   <Box
                     size={[0.5, 0.32, 0.035]}
                     position={[0, 0, 0.555]}
-                    color="#202322"
-                    metalness={0.45}
-                    roughness={0.4}
+                    {...MAT.cavity}
                   />
                   <Fan
                     position={[0, 0.03, 0.58]}
@@ -1171,18 +1146,14 @@ const CoolingPowerModules = ({
                         key={vent}
                         size={[0.04, 0.32, 0.018]}
                         position={[-0.3 + vent * 0.15, 0.02, 0.56]}
-                        color="#111414"
-                        metalness={0.35}
-                        roughness={0.52}
+                        {...MAT.cavity}
                       />
                     );
                   })}
                   <Box
                     size={[0.5, 0.045, 0.05]}
                     position={[-0.15, 0.25, 0.58]}
-                    color="#a2a4a0"
-                    metalness={0.76}
-                    roughness={0.28}
+                    {...MAT.steelLight}
                   />
                   <Screw position={[-0.36, 0.23, 0.58]} radius={0.025} />
                   <Screw position={[0.36, 0.23, 0.58]} radius={0.025} />
@@ -1209,21 +1180,14 @@ const FrontServicePanels = ({ progress }: { readonly progress: number }) => {
         fadeAfter={0.66}
       >
         <group position={[0, 1.72, 3.73]}>
-          <Box
-            size={[6.18, 0.66, 0.15]}
-            color="#777a79"
-            metalness={0.78}
-            roughness={0.3}
-          />
+          <Box size={[6.18, 0.66, 0.15]} {...MAT.steelLight} />
           {Array.from({ length: 8 }).map((_, index) => {
             return (
               <group key={index}>
                 <Box
                   size={[0.38, 0.18, 0.08]}
                   position={[-2.45 + index * 0.7, 0, 0.11]}
-                  color="#111313"
-                  metalness={0.4}
-                  roughness={0.5}
+                  {...MAT.cavity}
                 />
                 <Box
                   size={[0.27, 0.035, 0.02]}
@@ -1253,17 +1217,13 @@ const FrontServicePanels = ({ progress }: { readonly progress: number }) => {
         <PerforatedPanel
           size={[5.8, 1.72, 0.15]}
           position={[0, 0.47, 3.73]}
-          color="#555958"
           columns={25}
           rows={11}
-          holeColor="#0e1010"
         />
         <Box
           size={[5.86, 0.055, 0.17]}
           position={[0, -0.39, 3.74]}
-          color="#b2b3b0"
-          metalness={0.86}
-          roughness={0.24}
+          {...MAT.nickel}
         />
       </ExplodedPiece>
 
@@ -1278,12 +1238,7 @@ const FrontServicePanels = ({ progress }: { readonly progress: number }) => {
         fadeAfter={0.66}
       >
         <group position={[-1.78, -1.57, 3.74]}>
-          <Box
-            size={[2.38, 0.75, 0.16]}
-            color="#707372"
-            metalness={0.78}
-            roughness={0.28}
-          />
+          <Box size={[2.38, 0.75, 0.16]} {...MAT.steel} />
           {Array.from({ length: 8 }).map((_, index) => {
             const x = -0.92 + (index % 4) * 0.61;
             const y = index < 4 ? 0.16 : -0.18;
@@ -1292,9 +1247,7 @@ const FrontServicePanels = ({ progress }: { readonly progress: number }) => {
                 <Box
                   size={[0.5, 0.23, 0.09]}
                   position={[x, y, 0.12]}
-                  color="#171919"
-                  metalness={0.55}
-                  roughness={0.36}
+                  {...MAT.cavity}
                 />
                 <Box
                   size={[0.03, 0.08, 0.015]}
@@ -1322,12 +1275,7 @@ const FrontServicePanels = ({ progress }: { readonly progress: number }) => {
         fadeAfter={0.66}
       >
         <group position={[1.58, -1.57, 3.74]}>
-          <Box
-            size={[2.76, 0.75, 0.16]}
-            color="#666a69"
-            metalness={0.78}
-            roughness={0.28}
-          />
+          <Box size={[2.76, 0.75, 0.16]} {...MAT.steel} />
           {Array.from({ length: 7 }).map((_, index) => {
             const x = -0.99 + index * 0.33;
             return (
@@ -1335,18 +1283,14 @@ const FrontServicePanels = ({ progress }: { readonly progress: number }) => {
                 key={index}
                 size={[0.17, 0.18, 0.06]}
                 position={[x, 0.12, 0.12]}
-                color="#111313"
-                metalness={0.5}
-                roughness={0.45}
+                {...MAT.cavity}
               />
             );
           })}
           <Box
             size={[0.55, 0.37, 0.11]}
             position={[0.92, -0.12, 0.12]}
-            color="#242626"
-            metalness={0.42}
-            roughness={0.42}
+            {...MAT.plastic}
           />
           <Box
             size={[0.46, 0.02, 0.015]}
@@ -1376,9 +1320,7 @@ const FrontServicePanels = ({ progress }: { readonly progress: number }) => {
             <Box
               size={[0.19, 4.54, 0.22]}
               position={[side * 3.35, 0, 3.7]}
-              color="#a2a3a0"
-              metalness={0.83}
-              roughness={0.25}
+              {...MAT.steelLight}
             />
           </ExplodedPiece>
         );
@@ -1406,12 +1348,7 @@ const RearAssembly = ({
       fadeAfter={0.66}
     >
       <group position={[0, 0, -3.73]}>
-        <Box
-          size={[6.5, 4.48, 0.15]}
-          color="#464a49"
-          metalness={0.72}
-          roughness={0.35}
-        />
+        <Box size={[6.5, 4.48, 0.15]} {...MAT.steelDark} />
         {Array.from({ length: 2 }).flatMap((__, row) => {
           return Array.from({ length: 6 }).map((_, column) => {
             return (
@@ -1432,18 +1369,11 @@ const RearAssembly = ({
                 key={`${column}-${row}`}
                 position={[-2.02 + column * 2.02, -1.02 - row * 0.75, -0.12]}
               >
-                <Box
-                  size={[1.78, 0.57, 0.2]}
-                  color="#777a78"
-                  metalness={0.77}
-                  roughness={0.3}
-                />
+                <Box size={[1.78, 0.57, 0.2]} {...MAT.steelLight} />
                 <Box
                   size={[0.18, 0.3, 0.05]}
                   position={[0.72, 0, -0.13]}
-                  color="#171919"
-                  metalness={0.5}
-                  roughness={0.4}
+                  {...MAT.cavity}
                 />
                 <Box
                   size={[0.06, 0.2, 0.02]}
@@ -1630,23 +1560,17 @@ const Chassis = ({
                 <Box
                   size={[0.14, 4.48, 7.46]}
                   position={[side * 3.18, 0, 0]}
-                  color="#525756"
-                  metalness={0.63}
-                  roughness={0.38}
+                  {...MAT.steelDark}
                 />
                 <Box
                   size={[0.24, 0.12, 7.58]}
                   position={[side * 3.08, 2.22, 0]}
-                  color="#9a9d9b"
-                  metalness={0.83}
-                  roughness={0.26}
+                  {...MAT.steelLight}
                 />
                 <Box
                   size={[0.24, 0.12, 7.58]}
                   position={[side * 3.08, -2.22, 0]}
-                  color="#9a9d9b"
-                  metalness={0.83}
-                  roughness={0.26}
+                  {...MAT.steelLight}
                 />
               </ExplodedPiece>
             );
@@ -1665,16 +1589,12 @@ const Chassis = ({
             <Box
               size={[6.52, 0.1, 7.46]}
               position={[0, 2.2, 0]}
-              color="#777a79"
-              metalness={0.75}
-              roughness={0.32}
+              {...MAT.steel}
             />
             <Box
               size={[6.07, 0.025, 6.98]}
               position={[0, 2.27, -0.06]}
-              color="#292c2c"
-              metalness={0.55}
-              roughness={0.4}
+              {...MAT.cavity}
             />
           </ExplodedPiece>
 
@@ -1691,16 +1611,12 @@ const Chassis = ({
             <Box
               size={[6.52, 0.13, 7.46]}
               position={[0, -2.2, 0]}
-              color="#414544"
-              metalness={0.72}
-              roughness={0.34}
+              {...MAT.steelDark}
             />
             <Box
               size={[5.85, 0.075, 0.17]}
               position={[0, -2.12, 3.4]}
-              color="#9d9f9c"
-              metalness={0.8}
-              roughness={0.27}
+              {...MAT.steelLight}
             />
           </ExplodedPiece>
 
@@ -1720,9 +1636,7 @@ const Chassis = ({
                 <Box
                   size={[0.13, 3.95, 0.13]}
                   position={[side * 2.7, 0, -2.85]}
-                  color="#686c6b"
-                  metalness={0.72}
-                  roughness={0.32}
+                  {...MAT.steel}
                 />
               </ExplodedPiece>
             );
@@ -1784,17 +1698,25 @@ const ServerScene = () => {
     >
       <color attach="background" args={["#050505"]} />
       <MetalEnvironment />
-      <ambientLight intensity={1.15} />
-      <hemisphereLight color="#f4f3ef" groundColor="#161817" intensity={0.55} />
+      {/* Low ambient so the material colours do the reading: the green board and
+          copper conductors stay saturated, while the rim light keeps the black
+          plastic from disappearing into the background. */}
+      <ambientLight intensity={0.2} />
+      <hemisphereLight color="#f4f3ef" groundColor="#0a0f0e" intensity={0.16} />
       <directionalLight
         position={[7.5, 9.5, 9]}
-        intensity={1.9}
+        intensity={2.1}
         color="#fffdf8"
       />
       <directionalLight
         position={[-7, 5, 3]}
-        intensity={0.85}
-        color="#d5d8d6"
+        intensity={0.5}
+        color="#ccd6d8"
+      />
+      <directionalLight
+        position={[-5.5, 2.6, -8.5]}
+        intensity={1.15}
+        color="#cfe1ff"
       />
 
       <group
