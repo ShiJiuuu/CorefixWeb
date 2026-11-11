@@ -55,49 +55,12 @@ export default async function CareersPage({ params }: { params: Promise<{ locale
         </div>
       </section>
 
-      {/* ---------- company profile ---------- */}
-      <section className="u-container py-14 lg:py-18">
-        <div className="flex flex-col gap-10 lg:flex-row lg:gap-16">
-          <div className="lg:w-[240px] lg:shrink-0">
-            <h2 className="text-[20px] font-semibold">{p.profileTitle}</h2>
-            <p className="u-mono mt-3 text-[9.5px] tracking-[0.16em] text-faint">PROFILE</p>
-          </div>
-
-          <dl className="grid min-w-0 flex-1 grid-cols-1 gap-px border border-line2 bg-line sm:grid-cols-2">
-            {p.profile.map((row, i) => (
-              <div
-                key={row.k}
-                className={`flex flex-col gap-1.5 bg-bg px-5 py-4 ${
-                  i === p.profile.length - 1 && p.profile.length % 2 === 1 ? 'sm:col-span-2' : ''
-                }`}
-              >
-                <dt className="u-mono text-[10px] tracking-[0.1em] text-faint">{row.k}</dt>
-                <dd className="text-[14px] leading-[1.7] text-ink2">{row.v}</dd>
-              </div>
-            ))}
-          </dl>
-        </div>
-      </section>
-
       {/* ---------- open roles ---------- */}
-      <section className="border-y border-line2 bg-bg2/40">
+      <section className="border-b border-line2">
         <div className="u-container py-14 lg:py-18">
           <div className="flex flex-wrap items-baseline justify-between gap-3 border-b border-line2 pb-4">
             <h2 className="text-[20px] font-semibold">{p.openingsTitle}</h2>
             <span className="u-mono text-[10px] tracking-[0.12em] text-faint">{p.openingsNote}</span>
-          </div>
-
-          {/* one set of terms shared by every role, stated once instead of repeated on each posting */}
-          <div className="mt-5 flex flex-col gap-3 border border-line2 px-5 py-4 sm:flex-row sm:items-start sm:gap-8">
-            <p className="u-label shrink-0 sm:w-[92px] sm:pt-0.5">{p.commonPerksTitle}</p>
-            <ul className="flex flex-wrap gap-x-6 gap-y-2 text-[12.5px] leading-[1.8] text-muted">
-              {p.commonPerks.map((item) => (
-                <li key={item} className="flex items-start gap-2">
-                  <span className="mt-[7px] h-[3px] w-[8px] shrink-0 bg-line2" />
-                  {item}
-                </li>
-              ))}
-            </ul>
           </div>
 
           {p.openings.map((job, i) => (
@@ -116,7 +79,7 @@ export default async function CareersPage({ params }: { params: Promise<{ locale
                 <b className="u-mono text-[19px] font-semibold tracking-tight">{job.salary}</b>
               </div>
 
-              <div className="mt-3 flex flex-wrap items-center gap-x-3 gap-y-1.5 text-[12px] text-muted">
+              <div className="mt-3 flex flex-wrap items-center gap-x-3 gap-y-1.5 text-[13.5px] leading-[1.85] text-ink2">
                 {job.meta.map((m, mi) => (
                   <span key={m} className="flex items-center gap-3">
                     {mi > 0 && <span className="text-faint">·</span>}
@@ -134,7 +97,10 @@ export default async function CareersPage({ params }: { params: Promise<{ locale
                     <p className="u-label mb-3.5">{block.t}</p>
                     <ol className="space-y-2.5">
                       {block.list.map((item, idx) => (
-                        <li key={item} className="flex items-start gap-2.5 text-[13.5px] leading-[1.85] text-ink2">
+                        <li
+                          key={item}
+                          className="flex items-start gap-2.5 text-[13.5px] leading-[1.85] text-ink2"
+                        >
                           <span className="u-mono mt-[2px] shrink-0 text-[10.5px] text-faint">
                             {String(idx + 1).padStart(2, '0')}
                           </span>
@@ -150,34 +116,8 @@ export default async function CareersPage({ params }: { params: Promise<{ locale
         </div>
       </section>
 
-      {/* ---------- benefits & growth ---------- */}
-      <section className="u-container py-14 lg:py-18">
-        <div className="flex flex-wrap items-baseline justify-between gap-3 border-b border-line2 pb-4">
-          <h2 className="text-[20px] font-semibold">{p.perksTitle}</h2>
-          <span className="u-mono text-[10px] tracking-[0.12em] text-faint">BENEFITS</span>
-        </div>
-
-        <div className="mt-8 grid gap-10 lg:grid-cols-2 lg:gap-16">
-          {p.perks.map((group) => (
-            <div key={group.t}>
-              <p className="u-label mb-4">{group.t}</p>
-              <ul className="flex flex-wrap gap-2">
-                {group.items.map((item) => (
-                  <li
-                    key={item}
-                    className="border border-line2 px-3 py-2 text-[12.5px] text-ink2"
-                  >
-                    {item}
-                  </li>
-                ))}
-              </ul>
-            </div>
-          ))}
-        </div>
-      </section>
-
       {/* ---------- apply ---------- */}
-      <section className="border-t border-line2 bg-bg2/40">
+      <section className="bg-bg2/40">
         <div className="u-container py-14 lg:py-18">
           <div className="flex flex-col gap-10 lg:flex-row lg:gap-16">
             <div className="lg:w-[240px] lg:shrink-0">
@@ -208,9 +148,6 @@ export default async function CareersPage({ params }: { params: Promise<{ locale
 
               <p className="mt-7 max-w-[720px] border-l-2 border-line2 pl-5 text-[14px] leading-[1.95] text-muted">
                 {p.quote}
-              </p>
-              <p className="u-mono mt-6 text-[10.5px] leading-[1.8] tracking-[0.02em] text-faint">
-                {p.note}
               </p>
             </div>
           </div>

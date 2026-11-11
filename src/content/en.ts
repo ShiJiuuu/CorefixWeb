@@ -595,26 +595,13 @@ export const en: Dict = {
       eyebrow: 'CAREERS',
       title: 'Join us',
       desc: 'A full-stack compute services company: turnkey EPC compute build-out, energy optimisation, security upgrades and cloud integration. Beyond the technical work, we care whether each customer\'s need is actually met.',
-      profileTitle: 'Company profile',
-      profile: [
-        { k: 'Industry', v: 'Internet · compute infrastructure' },
-        { k: 'Headcount', v: '20–99' },
-        { k: 'Office', v: 'Tower T3, 5F, East Hongqiao Center, 299 Youle Rd, Changning, Shanghai' },
-        { k: 'Hours', v: '10:00–19:00 · weekends off' },
-      ],
       openingsTitle: 'Open roles',
       openingsNote: '3 open positions · updated 11 Nov 2026',
-      commonPerksTitle: 'Benefits',
-      commonPerks: [
-        'Salary set by capability (one-month probation)',
-        'Social insurance and housing fund paid from day one',
-        'Afternoon tea, holiday dinners and holiday allowances',
-      ],
       openings: [
         {
           title: 'General ledger accountant',
           salary: 'RMB 8–13K',
-          meta: ['Shanghai · Changning (East Hongqiao)', '3–5 years', "Bachelor's"],
+          meta: ['Shanghai · Changning (East Hongqiao)', "Bachelor's or above"],
           dutiesTitle: 'Responsibilities',
           duties: [
             'Own the books end to end: vouchers, statements, tax payments',
@@ -636,7 +623,7 @@ export const en: Dict = {
         {
           title: 'HR manager / supervisor',
           salary: 'RMB 12–15K',
-          meta: ['Shanghai · Changning (East Hongqiao)', '3–5 years', "Bachelor's"],
+          meta: ['Shanghai · Changning (East Hongqiao)', "Bachelor's or above"],
           dutiesTitle: 'Responsibilities',
           duties: [
             'Own recruitment end to end, from demand intake to onboarding, responding fast to hiring needs',
@@ -676,56 +663,14 @@ export const en: Dict = {
           ],
         },
       ],
-      perksTitle: 'Benefits & growth',
-      perks: [
-        {
-          t: 'Benefits',
-          items: [
-            'Social insurance & housing fund',
-            'Supplementary medical cover',
-            'Annual bonus',
-            'Performance bonus',
-            'Guaranteed base pay',
-            'Base plus commission',
-            'Company travel',
-            'Snacks & afternoon tea',
-            'Team dinners & outings',
-            'Wi-Fi at work',
-            'Holiday perks',
-            'Birthday perks',
-          ],
-        },
-        {
-          t: 'Growth',
-          items: [
-            'Review-based promotion',
-            'Project bonus',
-            'Team bonus',
-            'Individual bonus',
-            'Performance commission',
-            'Buddy system',
-            'One-to-one mentor',
-            'Paid onboarding training',
-            'Regular internal training',
-            'Professional skills training',
-            'Network building',
-          ],
-        },
-      ],
       applyTitle: 'How to apply',
       apply: [
         { k: 'CV to', v: 'hr@aspiretec.com.cn', href: 'mailto:hr@aspiretec.com.cn' },
-        { k: 'Phone', v: '+86 21-5176 8787', href: 'tel:+862151768787' },
+        { k: 'Phone', v: '+86 021-5176-8787', href: 'tel:+862151768787' },
         { k: 'Address', v: 'Tower T3, 5F, Aspire Center, Lane 299 Youle Rd, Changning, Shanghai' },
-        {
-          k: 'BOSS Zhipin',
-          v: 'View the company page',
-          href: 'https://www.zhipin.com/gongsi/2bbbea78137cddbb1HJz3d-4ElY~.html',
-        },
       ],
       quote:
         'We hire on character first and put people where they are strongest. Comfortable offices, real room to grow and competitive pay — we would like you to grow with us.',
-      note: 'Roles are collected from the company\'s official BOSS Zhipin page, updated 11 Nov 2026; BOSS Zhipin remains the source of truth.',
     },
     news: {
       eyebrow: 'NEWS',

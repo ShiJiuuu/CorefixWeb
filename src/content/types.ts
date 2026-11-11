@@ -199,19 +199,12 @@ export type Dict = {
       qualsTitle: string
     }
     careers: PageHero & {
-      profileTitle: string
-      profile: { k: string; v: string }[]
       openingsTitle: string
       openingsNote: string
-      commonPerksTitle: string
-      commonPerks: string[]
       openings: Job[]
-      perksTitle: string
-      perks: { t: string; items: string[] }[]
       applyTitle: string
       apply: { k: string; v: string; href?: string }[]
       quote: string
-      note: string
     }
     news: PageHero & {
       listLabel: string
