@@ -409,7 +409,9 @@ class Scene {
     })
 
     this.module('gpu', [0, 180, -20], 0.16, () => {
-      for (const zz of [250, 460]) {
+      // Painter's algorithm: larger z sits further back, so the rear row has to be
+      // laid down first — otherwise it paints over the front row's heatsinks.
+      for (const zz of [460, 250]) {
         for (const xx of [34, 108, 182, 256]) this.gpuModule(xx, zz)
       }
     })
