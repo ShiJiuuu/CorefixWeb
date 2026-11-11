@@ -148,7 +148,7 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
           </div>
 
           {/* 8 capability titles: horizontal rows, no supporting copy */}
-          <div className="grid gap-2 lg:grid-cols-2 xl:col-span-5 xl:flex xl:flex-col">
+          <div className="grid gap-2 lg:grid-cols-2 xl:col-span-5 xl:flex xl:flex-col" data-reveal-group>
             {d.cap.items.map((c, i) => (
               <Link
                 key={c.no}

@@ -70,8 +70,31 @@ export default function ScrollEffects() {
         }
       }
 
+      // grouped reveals: one trigger for the whole group, so short items near the
+      // bottom of a tall block don't wait for their own (much later) scroll position
+      const grouped = new Set<Element>()
+      gsap.utils.toArray<HTMLElement>('[data-reveal-group]').forEach((group) => {
+        const items = gsap.utils.toArray<HTMLElement>('[data-reveal]', group)
+        items.forEach((item) => grouped.add(item))
+        if (!items.length) return
+        if (reduce) {
+          gsap.set(items, { opacity: 1, y: 0 })
+          return
+        }
+        gsap.set(items, { opacity: 0, y: 26 })
+        gsap.to(items, {
+          opacity: 1,
+          y: 0,
+          duration: 0.8,
+          stagger: 0.05,
+          ease: 'power3.out',
+          scrollTrigger: { trigger: group, start: 'top 92%', once: true },
+        })
+      })
+
       // scroll reveals
       gsap.utils.toArray<HTMLElement>('[data-reveal]').forEach((el) => {
+        if (grouped.has(el)) return
         if (reduce) {
           gsap.set(el, { opacity: 1, y: 0 })
           return

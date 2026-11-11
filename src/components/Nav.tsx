@@ -74,9 +74,11 @@ export default function Nav({ locale, dict }: { locale: Locale; dict: Dict }) {
             height={231}
             className="h-10 w-10 shrink-0 object-contain"
           />
-          <span className="flex flex-col leading-none">
-            <span className="text-[18px] font-semibold tracking-[0.14em]">集培优</span>
-            <span className="u-mono mt-[5px] text-[10.5px] tracking-[0.12em] text-faint">
+          <span className="flex flex-col justify-center leading-none">
+            <span className="whitespace-nowrap text-[16px] font-semibold tracking-[0.02em]">
+              集培优
+            </span>
+            <span className="u-mono mt-1 whitespace-nowrap text-[8px] tracking-[0.16em] text-faint">
               COREFIX PRO
             </span>
           </span>

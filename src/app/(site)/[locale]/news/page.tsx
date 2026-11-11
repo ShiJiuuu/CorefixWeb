@@ -47,17 +47,12 @@ export default async function NewsPage({ params }: { params: Promise<{ locale: s
           <Link
             key={item.slug}
             href={`/${locale}/news/${item.slug}/`}
-            className="group grid gap-x-10 gap-y-3 border-b border-line py-7 transition-colors hover:bg-bg2 lg:grid-cols-[132px_1fr_52px] lg:items-start lg:py-8"
+            className="group grid gap-x-10 gap-y-3 border-b border-line py-7 transition-colors hover:bg-bg2 lg:grid-cols-[132px_1fr] lg:items-start lg:py-8"
             data-reveal={String(Math.min(i, 6) * 0.03)}
           >
-            <div className="flex items-center gap-3 lg:block">
-              <p className="u-mono text-[11px] tracking-[0.1em] text-muted">
-                {formatNewsDate(item.date)}
-              </p>
-              <p className="u-mono text-[9.5px] tracking-[0.14em] text-faint lg:mt-2">
-                {p.categories[item.category]}
-              </p>
-            </div>
+            <p className="u-mono text-[16px] tracking-[0.05em] text-muted">
+              {formatNewsDate(item.date)}
+            </p>
 
             <div className="min-w-0">
               <h2 className="text-[19px] font-semibold leading-[1.55] lg:text-[22px]">
@@ -67,10 +62,6 @@ export default async function NewsPage({ params }: { params: Promise<{ locale: s
                 {item.excerpt}
               </p>
             </div>
-
-            <span className="u-mono hidden justify-self-end pt-1 text-[12px] text-faint transition-transform duration-200 group-hover:translate-x-1 lg:block">
-              →
-            </span>
           </Link>
         ))}
       </section>
