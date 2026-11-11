@@ -220,7 +220,6 @@ export type Dict = {
       openings: Job[]
       applyTitle: string
       apply: { k: string; v: string; href?: string }[]
-      quote: string
     }
     news: PageHero & {
       listLabel: string
