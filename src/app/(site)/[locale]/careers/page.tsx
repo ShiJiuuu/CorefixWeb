@@ -131,10 +131,6 @@ export default async function CareersPage({ params }: { params: Promise<{ locale
                   </div>
                 ))}
               </dl>
-
-              <p className="mt-7 max-w-[720px] border-l-2 border-line2 pl-5 text-[14px] leading-[1.95] text-muted">
-                {p.quote}
-              </p>
             </div>
           </div>
         </div>

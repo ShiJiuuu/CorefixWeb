@@ -836,8 +836,6 @@ export const en: Dict = {
         { k: 'Phone', v: '+86 021-5176-8787', href: 'tel:+862151768787' },
         { k: 'Address', v: 'Tower T3, 5F, Aspire Center, Lane 299 Youle Rd, Changning, Shanghai' },
       ],
-      quote:
-        'We hire on character first and put people where they are strongest. Comfortable offices, real room to grow and competitive pay — we would like you to grow with us.',
     },
     news: {
       eyebrow: 'NEWS',
