@@ -420,7 +420,7 @@ export const en: Dict = {
         device: 'NVIDIA A100',
         tag: 'Power path',
         service: 'Power-on inspection + module replacement + verdict',
-        date: '8 — 17 June 2026',
+        date: '8 June 2026',
         dateISO: '2026-06-08',
         title: 'NVIDIA A100 no-boot: U9 module replacement and core damage verdict',
         summary:
@@ -573,7 +573,7 @@ export const en: Dict = {
         device: 'GIGABYTE motherboards × 5',
         tag: 'Board-level repair',
         service: 'Board-level inspection + cold-joint repair',
-        date: '10 August 2026 — 14 August 2026',
+        date: '10 August 2026',
         dateISO: '2026-08-10',
         title: 'GIGABYTE CPU0 cold solder joints: five boards repaired and bench-verified',
         summary:

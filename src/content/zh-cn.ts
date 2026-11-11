@@ -420,7 +420,7 @@ export const zhCN: Dict = {
         device: 'NVIDIA A100',
         tag: '供电故障',
         service: '上电检测 + 供电模块更换 + 故障定论',
-        date: '2026 年 6 月 8 日 — 6 月 17 日',
+        date: '2026 年 6 月 8 日',
         dateISO: '2026-06-08',
         title: 'NVIDIA A100 不开机：U9 电源模块更换与核心损伤判定',
         summary:
@@ -573,7 +573,7 @@ export const zhCN: Dict = {
         device: '技嘉主板 × 5',
         tag: '板级返修',
         service: '板级检测 + 空焊修复',
-        date: '2026 年 8 月 10 日 — 8 月 14 日',
+        date: '2026 年 8 月 10 日',
         dateISO: '2026-08-10',
         title: '技嘉主板 CPU0 空焊：5 片板级修复与上机验证',
         summary:

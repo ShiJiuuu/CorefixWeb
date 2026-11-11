@@ -420,7 +420,7 @@ export const zhTW: Dict = {
         device: 'NVIDIA A100',
         tag: '供電故障',
         service: '上電檢測 + 供電模組更換 + 故障定論',
-        date: '2026 年 6 月 8 日 — 6 月 17 日',
+        date: '2026 年 6 月 8 日',
         dateISO: '2026-06-08',
         title: 'NVIDIA A100 不開機：U9 電源模組更換與核心損傷判定',
         summary:
@@ -573,7 +573,7 @@ export const zhTW: Dict = {
         device: '技嘉主機板 × 5',
         tag: '板級返修',
         service: '板級檢測 + 空焊修復',
-        date: '2026 年 8 月 10 日 — 8 月 14 日',
+        date: '2026 年 8 月 10 日',
         dateISO: '2026-08-10',
         title: '技嘉主機板 CPU0 空焊：5 片板級修復與上機驗證',
         summary:
