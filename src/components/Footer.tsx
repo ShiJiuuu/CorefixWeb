@@ -55,8 +55,16 @@ export default function Footer({ dict, locale }: { dict: Dict; locale: string })
               {col.items.map((it) => (
                 <li key={it.label}>
                   {it.href ? (
-                    <a href={`/${locale}${it.href}/`} className="transition-colors hover:text-white">
+                    /* linked labels: on hover a dot appears at the centre and stretches into an underline */
+                    <a
+                      href={`/${locale}${it.href}/`}
+                      className="group relative inline-block transition-colors hover:text-white"
+                    >
                       {it.label}
+                      <span
+                        aria-hidden="true"
+                        className="pointer-events-none absolute -bottom-[3px] left-1/2 h-px w-full -translate-x-1/2 scale-x-0 bg-white transition-transform duration-[420ms] ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-x-100"
+                      />
                     </a>
                   ) : (
                     it.label

@@ -1,15 +1,49 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
+import gsap from 'gsap'
+import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import type { SocialLink } from '@/content/types'
 import SocialIcon from './SocialIcons'
+
+gsap.registerPlugin(ScrollTrigger)
 
 /**
  * Footer platform buttons: each one opens its QR code / contact card in a lightbox.
  * Images live in public/social and are referenced from the dictionary.
+ *
+ * When the row scrolls into view the four circles hop one after another — a single
+ * travelling wave that reads like items moving down a line — then settle. It replays
+ * each time the row re-enters the viewport, and stays still for reduced-motion users.
  */
 export default function SocialLinks({ items }: { items: SocialLink[] }) {
   const [open, setOpen] = useState<SocialLink | null>(null)
+  const rowRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    const row = rowRef.current
+    if (!row) return
+    const buttons = row.querySelectorAll<HTMLButtonElement>('button')
+    if (!buttons.length) return
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
+
+    const ctx = gsap.context(() => {
+      // Up and back down, one button after the next; the stagger is what makes it read as a wave.
+      const wave = gsap.timeline({ paused: true })
+      wave
+        .to(buttons, { y: -10, duration: 0.3, ease: 'power2.out', stagger: 0.085 })
+        .to(buttons, { y: 0, duration: 0.4, ease: 'power2.inOut', stagger: 0.085 }, 0.42)
+
+      ScrollTrigger.create({
+        trigger: row,
+        start: 'top 92%',
+        onEnter: () => wave.restart(),
+        onEnterBack: () => wave.restart(),
+      })
+    }, row)
+
+    return () => ctx.revert()
+  }, [])
 
   useEffect(() => {
     if (!open) return
@@ -27,7 +61,7 @@ export default function SocialLinks({ items }: { items: SocialLink[] }) {
 
   return (
     <>
-      <div className="flex items-center gap-2 pt-4">
+      <div ref={rowRef} className="flex items-center gap-2 pt-4">
         {items.map((s) => (
           <button
             key={s.id}
